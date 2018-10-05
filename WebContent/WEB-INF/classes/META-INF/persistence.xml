@@ -5,12 +5,12 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="DerbyDB"
 		transaction-type="RESOURCE_LOCAL">
-		<class>model.JPAClass1</class>
+		<class>model.exampleJPAEntity</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver"
 				value="org.apache.derby.jdbc.EmbeddedDriver" />
 			<property name="javax.persistence.jdbc.url"
-				value="jdbc:derby:./database/DerbyDb" />
+				value="jdbc:derby:./database/DerbyDb;create=true" />
 			<property name="javax.persistence.jdbc.user" value="jpa" />
 			<property name="javax.persistence.jdbc.password" value="sql" />
 			

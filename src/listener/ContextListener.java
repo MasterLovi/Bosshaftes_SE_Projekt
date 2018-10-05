@@ -38,6 +38,13 @@ public class ContextListener implements ServletContextListener {
      * Prepare the EntityManagerFactory & Enhance:
      */
     public void contextInitialized(ServletContextEvent context)  { 
+    	
+    	// Decide on the db system directory: <userhome>/.addressbook/
+    	String userHomeDir = System.getProperty("user.home", ".");
+    	String systemDir = userHomeDir + "/.database";
+    	// Set the db system directory.
+    	System.setProperty("derby.system.home", systemDir);
+    	
     	EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
         context.getServletContext().setAttribute("emf", emf);
     }
