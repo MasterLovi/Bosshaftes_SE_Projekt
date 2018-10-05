@@ -15,7 +15,7 @@
 
         <hr><ol> <%
             @SuppressWarnings("unchecked") 
-            List<exampleJPAEntity> exampleList = (List<exampleJPAEntity>)request.getAttribute("exampleJPAEntity");
+            List<exampleJPAEntity> exampleList = (List<exampleJPAEntity>)request.getAttribute("example");
             if (exampleList != null) {
             	for (exampleJPAEntity exampleObject : exampleList) { %>
                 	<li> <%= exampleObject %> </li> <%

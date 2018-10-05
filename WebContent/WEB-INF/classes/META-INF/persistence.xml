@@ -10,7 +10,7 @@
 			<property name="javax.persistence.jdbc.driver"
 				value="org.apache.derby.jdbc.EmbeddedDriver" />
 			<property name="javax.persistence.jdbc.url"
-				value="jdbc:derby:./database/DerbyDb;create=true" />
+				value="jdbc:derby:DerbyDb;create=true" />
 			<property name="javax.persistence.jdbc.user" value="jpa" />
 			<property name="javax.persistence.jdbc.password" value="sql" />
 			
