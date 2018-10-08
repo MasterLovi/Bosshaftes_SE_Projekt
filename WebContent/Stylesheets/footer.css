@@ -1,0 +1,22 @@
+@charset "ISO-8859-1";
+
+#footer{
+	background-color: 	grey;
+	list-style-type:	none;
+	overflow: 			hidden;
+}
+
+#footer li section{
+	display: 		block;
+	padding: 		16px;
+	color:			white;
+	text-align:		center;
+}
+
+.leftFloat{
+	float: left;
+}
+
+.rightFloat{
+	float: right;
+}

@@ -5,13 +5,17 @@
 <html>
     <head>
         <title>JPA Guest Book Web Application Tutorial</title>
+        <link rel="stylesheet" type="text/css" href="Stylesheets/main.css">
+        <link rel="stylesheet" type="text/css" href="Stylesheets/header.css">
+		<link rel="stylesheet" type="text/css" href="Stylesheets/footer.css">
+		
     </head>
 
-    <body>
+    <body style="height: 800px;">
+    	<%@ include file="utilities/header.jsp" %>
         <form method="POST" action="ExampleServlet">
             Name: <input type="text" name="name" />
             <input type="submit" value="Add" />
-        </form>
 
         <hr><ol> <%
             @SuppressWarnings("unchecked") 
@@ -25,5 +29,7 @@
  
         <iframe src="http://www.objectdb.com/pw.html?web-eclipse"
             frameborder="0" scrolling="no" width="100%" height="30"> </iframe>
+            
+        <%@ include file="utilities/footer.jsp" %>
      </body>
  </html>
