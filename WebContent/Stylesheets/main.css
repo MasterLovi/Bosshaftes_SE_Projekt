@@ -6,3 +6,72 @@
 	font-family: 	arial;
 	color: 			#000000;
 }
+
+body{
+	
+}
+
+center{
+	display: block;
+	text-align: -webkit-center;
+}
+
+hr{
+	width: 50%;
+}
+
+#logoWrapper{
+	margin-top: 0;
+}
+
+#mainLogo{
+	padding-top: 30px;
+	padding-bottom:	30px;
+	width:		180px;
+}
+
+#headMsgWrapper{
+	margin-top: 30px;
+}
+
+.optionImg{
+	width:	150px;
+	height: 150px;
+	padding-right: 15px;
+	padding-bottom: 15px;
+}
+
+#opOne{
+	width: 40%;
+}
+
+#opTwo{
+	width:	40%;
+}
+
+.centered{
+	display: block;
+	text-align: -webkit-center;
+}
+
+.optionInfo{
+	text-align: justify;
+	padding-bottom: 10px;
+}
+
+h2{
+	padding-bottom:	20px;
+	padding-top:	10px;
+}
+
+.actionButton{
+	height:		30px;
+	width:		100%;
+	font-size:	15px;
+	
+}
+
+.buttonWrapper{
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
