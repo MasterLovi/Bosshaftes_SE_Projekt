@@ -32,6 +32,7 @@ hr{
 
 #headMsgWrapper{
 	margin-top: 30px;
+	display: inline;
 }
 
 .optionImg{
@@ -74,4 +75,35 @@ h2{
 .buttonWrapper{
 	padding-top: 15px;
 	padding-bottom: 15px;
+}
+
+#loginArea{
+	width: 50%;
+	float: right;
+	
+}
+
+#otherHeader{
+	width: 50%;
+	float:left;
+}
+
+#loginForm{
+	text-align:	-webkit-right;
+
+}
+
+#headerbar{
+	width: 40%;
+	display: inline-block;
+	padding: 15px 0px 15px 0px;
+}
+
+.inputText{
+	width:	40%;
+	
+}
+
+.inputSubmit{
+	width: 10%;
 }

@@ -9,9 +9,24 @@
     </head>
 
     <body>
+    	<center>
+    	<div id='headerbar'>
+    	<div id='otherHeader'>
+    		
+    	</div>
+    	<div id='loginArea'>
+   			<form id='loginForm'>
+   				<input type='text' name='username' class='inputText' placeholder='Username' />
+   				<input type='password' name='password' class='inputText' placeholder='Password' />
+   				<input type='submit' class='inputSubmit' title='Login'/>
+   			</form>
+   		</div>
+   		</div>
+   		</center>
 	    <center>
 	    	<div id='headMsgWrapper'>
 	    		<h1 id='headMsg'>Your time is precious! Use it to ... </h1>
+	    		
 	    	</div>
 	        <div id='logoWrapper'>
 	        	<img id='mainLogo' src='utilities\pic\testLogo.jpg'>
