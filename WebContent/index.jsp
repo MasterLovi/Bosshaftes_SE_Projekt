@@ -6,19 +6,29 @@
     <head>
         <title>Test JSP</title>
         <link rel="stylesheet" type="text/css" href="Stylesheets/main.css">
+        <link rel="stylesheet" type="text/css" href="Stylesheets/footer.css">
     </head>
 
     <body>
     	<center>
     	<div id='headerbar'>
     	<div id='otherHeader'>
-    		
+    		<div id='logoWrapper'>
+	        	<img id='mainLogo' src='utilities\pic\testLogo.jpg'>
+	        </div>
     	</div>
     	<div id='loginArea'>
    			<form id='loginForm'>
-   				<input type='text' name='username' class='inputText' placeholder='Username' />
-   				<input type='password' name='password' class='inputText' placeholder='Password' />
-   				<input type='submit' class='inputSubmit' title='Login'/>
+   				<table>
+   				<tr>
+   					<td><input type='text' name='username' class='inputText' placeholder='Username' /></td>
+   					<td><input type='password' name='password' class='inputText' placeholder='Password' /></td>
+   				</tr>
+   				<tr>
+   					<td><button id='linkButton' class='inputSubmit'>Registrieren</button></td>
+   					<td><input type='submit' class='inputSubmit' name='Login'/></td>
+   				</tr>
+   				</table>
    			</form>
    		</div>
    		</div>
@@ -28,10 +38,7 @@
 	    		<h1 id='headMsg'>Your time is precious! Use it to ... </h1>
 	    		
 	    	</div>
-	        <div id='logoWrapper'>
-	        	<img id='mainLogo' src='utilities\pic\testLogo.jpg'>
-	        </div>
-	        <hr>
+	        
 	   	</center>
 	   	
    		<center>
@@ -46,7 +53,6 @@
         		</div>
         	</div>
         </div>
-        <hr>
          <div id='opTwo' class='centered'> 
         	<div id='opTwoWrapper' class='centered'>
         		<h2>Culture</h2>
@@ -59,5 +65,8 @@
         	</div>
         </div>
         </center>
+
+         <%@ include file="utilities/footer.jsp" %>
+
      </body>
  </html>
