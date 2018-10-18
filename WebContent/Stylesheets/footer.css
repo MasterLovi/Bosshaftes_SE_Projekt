@@ -2,10 +2,10 @@
 
 #footer{
 	position: absolute;
+	margin-top:			30px;
   	right: 0;
   	bottom: 0;
   	left: 0;
-	margin-top:			30px;
 	background-color: 	grey;
 	list-style-type:	none;
 	overflow: 			hidden;

@@ -1,0 +1,56 @@
+* {
+	font-family: arial;
+	color: #000000;
+}
+
+body {
+	background-color: #bfbfbf;
+}
+
+h2 {
+	background-color: #000099;
+	color: #ffffff;
+	box-shadow: 0px 5px 10px grey;
+	border-radius: 10px;
+}
+
+#headMsg {
+	background-color: #ffffff;
+	border-radius: 10px;
+	box-shadow: 10px 5px 10px grey;
+}
+#opOne {
+	background-color: #ffffff;
+	border-radius: 6px;
+	box-shadow: 10px 5px 10px grey;
+}
+
+#opTwo {
+	background-color: #ffffff;
+	border-radius: 6px;
+	box-shadow: 10px 5px 10px grey;
+}
+
+#headerbar {
+	background-color: #ffffff;
+	border-radius: 10px;
+	box-shadow: 10px 5px 10px grey;
+}
+
+#optionPane{
+	background-color:	#ffffff;	
+}
+
+.actionButton {
+	font-size: 15px;
+}
+
+
+.inputText {
+	border-bottom: 1px solid grey;
+}
+
+.optionImg {
+	border-radius: 50%;
+	box-shadow: 0px 5px 10px grey;
+}

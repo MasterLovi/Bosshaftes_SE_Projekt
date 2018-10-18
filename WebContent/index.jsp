@@ -5,8 +5,10 @@
 <html>
     <head>
         <title>Test JSP</title>
-        <link rel="stylesheet" type="text/css" href="Stylesheets/main.css">
+        <link rel="stylesheet" type="text/css" href="Stylesheets/positioning.css">
         <link rel="stylesheet" type="text/css" href="Stylesheets/footer.css">
+        <link rel="stylesheet" type="text/css" href="Stylesheets/design.css">
+    	
     </head>
 
     <body>
