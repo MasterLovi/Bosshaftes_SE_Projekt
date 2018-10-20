@@ -14,21 +14,15 @@
 html {
 	height: 100%;
 	box-sizing: border-box;
+	text-align: -moz-center;
+	text-align: -webkit-center;
+ 	text-align: center;
+
 }
 
 body {
 	position: relative;
 	min-height: 100%;
-}
-
-center {
-	display: block;
-	text-align: -webkit-center;
-}
-
-
-hr {
-	width: 50%;
 }
 
 td {
@@ -42,9 +36,6 @@ h2 {
 	padding-bottom: 10px;
 }
 
-div{
-	display: block;
-}
 
 #logoWrapper {
 	margin-top: 0;
@@ -55,33 +46,24 @@ div{
 	float: left;
 }
 
+#userIcon {
+	width:	50px;
+	float: right;
+	
+}
+
 #headMsgWrapper {
 	display: inline;
 	margin-top: 30px;
 }
 
 #headMsg {
-	width: 40%;
+	display: inline-block;
+	width: 60%;
 	margin-bottom: 15px;
 	padding: 0 2% 0 2%;
 	padding-top: 10px;
 	padding-bottom: 10px;
-}
-
-#opOne {
-	width: 40%;
-	margin-bottom: 15px;
-	padding-right: 2%;
-	padding-left: 2%;
-	padding-top: 10px;
-}
-
-#opTwo {
-	width: 40%;
-	margin-bottom: 10px;
-	padding-right: 2%;
-	padding-left: 2%;
-	padding-top: 10px;
 }
 
 #loginArea {
@@ -96,13 +78,14 @@ div{
 }
 
 #loginForm {
+	text-align: -moz-right;
 	text-align: -webkit-right;
+	text-align: right;
 }
-
 
 #headerbar {
 	display: inline-block;
-	width: 40%;
+	width: 60%;
 	margin: 15px 0px 15px 0px;
 	padding: 0 1% 0 1%;
 	padding-bottom: 15px;
@@ -117,19 +100,37 @@ div{
 #mapWrapper{
 	display: inline-block;
 	width:	60%;
+	margin-bottom: 15px;
 }
 
 #optionPane{
 	position: fixed;
-	height:	100%;
+	width: 15%;
+	padding: 10px;
 	right: 0;
 	top:	0;
-	width: 15%;
+}
+
+#mapHeader{
+	padding-bottom: 0;
+}
+
+.optionPanel {
+	display:inline-block;
+	width: 60%;
+	margin-bottom: 15px;
+	padding-right: 2%;
+	padding-left: 2%;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	text-align: center;
 }
 
 .centered {
 	display: block;
+	text-align: -moz-center;
 	text-align: -webkit-center;
+	text-align: center;
 }
 
 .optionInfo {
@@ -139,15 +140,18 @@ div{
 
 
 .actionButton {
-	width: 100%;
+	width: 50%;
 	height: 30px;
+	right: 0;
 }
 
 .buttonWrapper {
 	padding-top: 15px;
 	padding-bottom: 15px;
+	text-align: -moz-right;
+	text-align: -webkit-right;
+	text-align: right;
 }
-
 
 .inputText {
 	width: 100%;
@@ -157,7 +161,6 @@ div{
 	margin-top: 3px;
 	width: 100%;
 }
-
 
 .optionImg {
 	width: 150px;

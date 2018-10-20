@@ -7,27 +7,10 @@ body {
 	background-color: #bfbfbf;
 }
 
-h2 {
-	background-color: #000099;
-	color: #ffffff;
-	box-shadow: 0px 5px 10px grey;
-	border-radius: 10px;
-}
 
 #headMsg {
 	background-color: #ffffff;
 	border-radius: 10px;
-	box-shadow: 10px 5px 10px grey;
-}
-#opOne {
-	background-color: #ffffff;
-	border-radius: 6px;
-	box-shadow: 10px 5px 10px grey;
-}
-
-#opTwo {
-	background-color: #ffffff;
-	border-radius: 6px;
 	box-shadow: 10px 5px 10px grey;
 }
 
@@ -41,12 +24,48 @@ h2 {
 	background-color:	#ffffff;	
 }
 
+#mapWrapper{
+	background-color: #ffffff;
+	box-shadow: 10px 5px 10px grey;
+	border-radius: 10px;
+}
+
+#demoMap{
+	border-radius: 10px;
+}
+
+#optionPane{
+	margin-top: 15px;
+	background-color: #ffffff;
+	box-shadow: 10px 5px 10px grey;
+	border-bottom-left-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+#userIcon {
+	border-radius: 50%;
+}
+
+.opWrapper h2 {
+	background-color: #000099;
+	color: #ffffff;
+	box-shadow: 0px 5px 10px grey;
+	border-radius: 10px;
+}
+
+.optionPanel {
+	background-color: #ffffff;
+	border-radius: 6px;
+	box-shadow: 10px 5px 10px grey;
+}
+
 .actionButton {
 	font-size: 15px;
 }
 
 
 .inputText {
+	border: none;
 	border-bottom: 1px solid grey;
 }
 

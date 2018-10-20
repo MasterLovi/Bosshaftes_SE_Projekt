@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<meta charset="ISO-8859-1">
@@ -12,23 +12,33 @@
  		integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
    		crossorigin=""/>
     	
-		<title>Select</title>
+		<title>Map Demo</title>
 	</head>
 	<body>
-		<center>
-			<div id='headerbar'>
-		    	<div id='otherHeader'>
-		    		<div id='logoWrapper'>
-			        	<img id='mainLogo' src='utilities\pic\testLogo.jpg'>
-			        </div>
-		    	</div>
+		<div id='headerbar'>
+    		<div id='logoWrapper'>
+	        	<img id='mainLogo' src='utilities\pic\testLogo.jpg'>
+	        </div>
+	        <div id='userManagement'>
+	    		<a href='#'><img id='userIcon' src='utilities\pic\userIcon.png'></a>
 	    	</div>
-	    	<div id='mapWrapper'>
-		    	<div id='demoMap'>
-		    	
-		    	</div>
+	        <div id='otherMapHeader'>
+	    		<h2 id='mapHeader'><%= request.getParameter("type")  %></h2>
 	    	</div>
- 	    </center>
+	    	
+    	</div>
+    	<div id='mapWrapper'>
+	    	<div id='demoMap'>
+	    	
+	    	</div>
+    	</div>
+    	<div class='optionPanel'>
+    		<p>This is were the tour details will be shown</p>
+    	</div>
+    	
+    	<div class='optionPanel'>
+    		<p>This is were the tour details will be shown</p>
+    	</div>
     	<div id='optionPane'>
     		<h3>Optionen</h3>
     		<form action='#'>
