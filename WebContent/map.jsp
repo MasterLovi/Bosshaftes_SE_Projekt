@@ -5,7 +5,6 @@
 	<head>
 		<meta charset="ISO-8859-1">
 		<link rel="stylesheet" type="text/css" href="Stylesheets/positioning.css">
-        <link rel="stylesheet" type="text/css" href="Stylesheets/footer.css">
         <link rel="stylesheet" type="text/css" href="Stylesheets/design.css">
         
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
@@ -19,8 +18,8 @@
     		<div id='logoWrapper'>
 	        	<img id='mainLogo' src='utilities\pic\testLogo.jpg'>
 	        </div>
-	        <div id='userManagement'>
-	    		<a href='#'><img id='userIcon' src='utilities\pic\userIcon.png'></a>
+	        <div id='rightIcon'>
+	    		<a href='#'><img class='rightIcon' src='utilities\pic\userIcon.png'></a>
 	    	</div>
 	        <div id='otherMapHeader'>
 	    		<h2 id='mapHeader'><%= request.getParameter("type")  %></h2>
@@ -67,7 +66,7 @@
 			</select>
     		</form>
     	</div>
-   	    	
+   	    <%@ include file="/utilities/footer.jsp" %>
   	 	<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
   		integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
    		crossorigin="">

@@ -6,7 +6,6 @@
     <head>
         <title>Test JSP</title>
         <link rel="stylesheet" type="text/css" href="Stylesheets/positioning.css">
-        <link rel="stylesheet" type="text/css" href="Stylesheets/footer.css">
         <link rel="stylesheet" type="text/css" href="Stylesheets/design.css">
     	
     </head>
@@ -27,8 +26,8 @@
 	   					<td><input type='password' name='password' class='inputText' placeholder='Password' /></td>
 	   				</tr>
 	   				<tr>
-	   					<td><button id='linkButton' class='inputSubmit'>Registrieren</button></td>
-	   					<td><input type='submit' class='inputSubmit' name='Login'/></td>
+	   					<td><a href='register.jsp'>Registrieren</a></td>
+	   					<td><input type='submit' class='inputSubmit' value='Login'/></td>
 	   				</tr>
 	   				</table>
 	   			</form>
@@ -61,6 +60,6 @@
         		</div>
         	</div>
         </div>
-
+		<%@ include file="/utilities/footer.jsp" %>
      </body>
  </html>

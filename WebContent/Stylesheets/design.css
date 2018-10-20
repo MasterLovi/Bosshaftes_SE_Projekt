@@ -46,6 +46,11 @@ body {
 	border-radius: 50%;
 }
 
+#footerPplList{
+	list-style-type: none;
+}
+
+
 .opWrapper h2 {
 	background-color: #000099;
 	color: #ffffff;
