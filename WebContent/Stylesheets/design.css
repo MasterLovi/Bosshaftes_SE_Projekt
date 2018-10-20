@@ -48,8 +48,12 @@ body {
 
 #footerPplList{
 	list-style-type: none;
+    font-size: 12px;
 }
 
+#footerRight{
+	font-size: 12px;	
+}
 
 .opWrapper h2 {
 	background-color: #000099;

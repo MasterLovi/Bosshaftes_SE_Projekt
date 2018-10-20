@@ -16,7 +16,7 @@
 	<body>
 		<div id='headerbar'>
     		<div id='logoWrapper'>
-	        	<img id='mainLogo' src='utilities\pic\testLogo.jpg'>
+	        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\testLogo.jpg'></a>
 	        </div>
 	        <div id='rightIcon'>
 	    		<a href='#'><img class='rightIcon' src='utilities\pic\userIcon.png'></a>

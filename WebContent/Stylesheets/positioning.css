@@ -115,6 +115,10 @@ td {
 	padding-bottom: 0;
 }
 
+#footerPplList{
+	width: 70%;
+}
+
 #footerPplList li{
 	display: inline;
 	margin-right: 5px;
@@ -122,7 +126,9 @@ td {
 }
 
 #footerRight{
+	width: 30%;
 	float: right;
+	text-align: right;
 }
 
 .optionPanel {
