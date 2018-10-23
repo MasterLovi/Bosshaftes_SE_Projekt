@@ -2,7 +2,14 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 public class Route {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
 	private int id;
 	private String name;
 	private ArrayList<Location> stops;
