@@ -6,6 +6,11 @@
 	<persistence-unit name="DerbyDB"
 		transaction-type="RESOURCE_LOCAL">
 		<class>model.exampleJPAEntity</class>
+		<class>model.Address</class>
+		<class>model.Feedback</class>
+		<class>model.Location</class>
+		<class>model.Route</class>
+		<class>model.User</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver"
 				value="org.apache.derby.jdbc.EmbeddedDriver" />
