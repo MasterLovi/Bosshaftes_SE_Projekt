@@ -92,7 +92,7 @@ public class RegistrationServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			em.close();
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
 }
