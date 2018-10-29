@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.User;
+import model.Users;
 
 /**
  * Servlet implementation class LoginServlet
@@ -34,7 +34,6 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -52,8 +51,8 @@ public class LoginServlet extends HttpServlet {
         
         try {
         	//Search for User
-        	Query query = em.createQuery("SELECT u FROM USER u WHERE u.username = '" + username + "'");
-        	User resultUser = (User) query.getSingleResult();
+        	Query query = em.createQuery("SELECT u FROM Users u WHERE u.username = '" + username + "'");
+        	Users resultUser = (Users) query.getSingleResult();
         	
         	HttpSession session = request.getSession();
         	

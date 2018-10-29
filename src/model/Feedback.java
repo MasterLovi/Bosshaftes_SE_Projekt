@@ -1,31 +1,32 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "FEEDBACK")
 public class Feedback {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private int id;
-	private Route route;
-	private Location location;
 	private String comment;
 	private int rating;
-	private User author;
+	
+	@OneToOne
+	@JoinColumn(name = "AUTHOR_ID")
+	private Users author;
 
 	// getter
 	public int getId() {
 		return id;
-	}
-
-	public Route getRoute() {
-		return route;
-	}
-
-	public Location getLocation() {
-		return location;
 	}
 
 	public String getComment() {
@@ -36,17 +37,8 @@ public class Feedback {
 		return rating;
 	}
 
-	public User getAuthor() {
+	public Users getAuthor() {
 		return author;
-	}
-
-	// setter
-	public void setRoute(Route route) {
-		this.route = route;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
 	}
 
 	public void setComment(String comment) {
@@ -57,7 +49,7 @@ public class Feedback {
 		this.rating = rating;
 	}
 
-	public void setAuthor(User author) {
+	public void setAuthor(Users author) {
 		this.author = author;
 	}
 

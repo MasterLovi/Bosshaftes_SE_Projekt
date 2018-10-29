@@ -1,22 +1,26 @@
 package model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "ADDRESS")
 public class Address {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private int id;
 	private String country;
 	private int postCode;
 	private String cityName;
 	private String streetName;
 	private int houseNumber;
-
+	
 	// getter
 	public Address getAddress() {
 		return this;
