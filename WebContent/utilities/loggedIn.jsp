@@ -3,4 +3,4 @@
 <!DOCTYPE html>
 <div id='rightIcon'>
 	<a href='#'><img class='rightIcon' src='utilities\pic\userIcon.png'></a>
-</div>>
+</div>
