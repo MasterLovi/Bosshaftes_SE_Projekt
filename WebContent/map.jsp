@@ -18,9 +18,22 @@
     		<div id='logoWrapper'>
 	        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\testLogo.jpg'></a>
 	        </div>
-	        <div id='rightIcon'>
-	    		<a href='#'><img class='rightIcon' src='utilities\pic\userIcon.png'></a>
-	    	</div>
+	        <div id='loginArea'>
+	        <% 
+					if (session.getAttribute("loggedin") != null){
+		   				%>
+		   					<jsp:include page="utilities\loggedIn.jsp"></jsp:include>
+	   					<%
+						
+					} else {
+						
+						%>
+							<jsp:include page="utilities\logIn.jsp"></jsp:include>
+						<%
+					}
+				
+			%>	
+			</div>
 	        <div id='otherMapHeader'>
 	    		<h2 id='mapHeader'><%= request.getParameter("type")  %></h2>
 	    	</div>

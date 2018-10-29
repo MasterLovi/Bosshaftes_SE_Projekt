@@ -1,19 +1,43 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "ROUTE")
 public class Route {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private int id;
 	private String name;
-	private ArrayList<Location> stops;
-	private User owner;
+	
+	@OneToMany
+	@JoinColumn(name = "FEEDBACK_ID")
+	private List<Feedback> feedback;
+	
+	@ManyToMany
+	@JoinTable(
+	   name="ROUTES_LOCATION",
+	   joinColumns= @JoinColumn(name="ROUTE_ID", referencedColumnName="ID"),
+	   inverseJoinColumns= @JoinColumn(name="LOCATION_ID", referencedColumnName="ID"))
+	private List<Location> stops;
+	
+	@ManyToOne
+	@JoinColumn(name="OWNER_ID")
+	private Users owner;
 
 	// getter
 	public int getId() {
@@ -24,7 +48,7 @@ public class Route {
 		return name;
 	}
 
-	public ArrayList<Location> getStops() {
+	public List<Location> getStops() {
 		return stops;
 	}
 
@@ -32,7 +56,7 @@ public class Route {
 		return stops.get(index);
 	}
 
-	public User getOwner() {
+	public Users getOwner() {
 		return owner;
 	}
 
@@ -41,7 +65,7 @@ public class Route {
 		this.name = name;
 	}
 
-	public void setOwner(User owner) {
+	public void setOwner(Users owner) {
 		this.owner = owner;
 	}
 
@@ -56,6 +80,14 @@ public class Route {
 
 	public void removeStopAtIndex(int index) {
 		this.stops.remove(index);
+	}
+	
+	public List<Feedback> getFeedback() {
+		return feedback;
+	}
+	
+	public void setFeedback(List<Feedback> feedback) {
+		this.feedback = feedback;
 	}
 
 }
