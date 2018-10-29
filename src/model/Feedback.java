@@ -53,8 +53,12 @@ public class Feedback {
 		this.comment = comment;
 	}
 
-	public void setRating(int rating) {
-		this.rating = rating;
+	public void setRating(int rating) throws Exception {
+		if (rating > 0 && rating < 6) {
+			this.rating = rating;
+		} else {
+			throw new Exception("Rating can only be in the range 1..5");
+		}
 	}
 
 	public void setAuthor(User author) {

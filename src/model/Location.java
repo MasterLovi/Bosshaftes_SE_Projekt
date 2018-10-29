@@ -14,6 +14,8 @@ public class Location {
 	private String name;
 	private long longitude;
 	private long latitude;
+	private String type;
+	private int timeInMinutes;
 	private Address address;
 
 	public int getId() {
@@ -32,6 +34,14 @@ public class Location {
 		return latitude;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public int getTimeInMinutes() {
+		return timeInMinutes;
+	}
+
 	public Address getAddress() {
 		return address;
 	}
@@ -47,6 +57,18 @@ public class Location {
 
 	public void setLatitude(long latitude) {
 		this.latitude = latitude;
+	}
+
+	public void setType(String type) throws Exception {
+		if (type.equals("Kultur") || type.equals("Party")) {
+			this.type = type;
+		} else {
+			throw new Exception("You can only add Locations of type \"Kultur\" or \"Party\"");
+		}
+	}
+
+	public void setTimeInMinutes(int timeInMinutes) {
+		this.timeInMinutes = timeInMinutes;
 	}
 
 	public void setAddress(Address address) {
