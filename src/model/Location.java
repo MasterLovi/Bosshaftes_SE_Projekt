@@ -1,22 +1,37 @@
 package model;
 
+import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "LOCATION")
 public class Location {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private int id;
 	private String name;
 	private long longitude;
 	private long latitude;
 	private String type;
 	private int timeInMinutes;
+	@OneToOne
+	@JoinColumn(name = "ADDRESS_ID")
 	private Address address;
+	
+	@OneToMany
+	@JoinColumn(name = "FEEDBACK_ID")
+	private List<Feedback> feedback;
 
 	public int getId() {
 		return id;
@@ -74,6 +89,14 @@ public class Location {
 	public void setAddress(Address address) {
 		address.setAddress(address);
 		;
+	}
+	
+	public List<Feedback> getFeedback() {
+		return feedback;
+	}
+	
+	public void setFeedback(List<Feedback> feedback) {
+		this.feedback = feedback;
 	}
 
 }

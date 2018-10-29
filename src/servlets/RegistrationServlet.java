@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.User;
+import model.Users;
 
 @WebServlet("/LoginServlet")
 public class RegistrationServlet extends HttpServlet {
@@ -52,7 +52,7 @@ public class RegistrationServlet extends HttpServlet {
 
 		try {
 
-			User user = new User();
+			Users user = new Users();
 			user.setUsername(request.getParameter("username"));
 			user.setEmail(request.getParameter("email"));
 
@@ -71,8 +71,8 @@ public class RegistrationServlet extends HttpServlet {
 
 			// Second check: username taken?
 			// Search for User
-			Query query = em.createQuery("SELECT u FROM USER u WHERE u.username = '" + user.getUsername() + "'");
-			User resultUser = (User) query.getSingleResult();
+			Query query = em.createQuery("SELECT u FROM Users u WHERE u.username = '" + user.getUsername() + "'");
+			Users resultUser = (Users) query.getSingleResult();
 			if (resultUser != null) {
 				throw new Exception("Username schon vergeben!");
 			}
@@ -80,7 +80,7 @@ public class RegistrationServlet extends HttpServlet {
 			// Third check: account with email existing?
 			// Search for email
 			query = em.createQuery("SELECT u FROM USER u WHERE u.email = '" + user.getEmail() + "'");
-			resultUser = (User) query.getSingleResult();
+			resultUser = (Users) query.getSingleResult();
 			if (resultUser != null) {
 				throw new Exception("Es existiert schon ein Account mit dieser E-Mail!");
 			}

@@ -2,8 +2,6 @@ package listener;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -11,8 +9,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import model.User;
-import model.exampleJPAEntity;
+import model.Users;
 
 /**
  * Application Lifecycle Listener implementation class ContextListener
@@ -62,7 +59,7 @@ public class ContextListener implements ServletContextListener {
 
 		try {
 			em.getTransaction().begin();
-			User user = new User();
+			Users user = new Users();
 			user.setUsername("test");
 			user.setEmail("test@test.com");
 			String password = "test";
