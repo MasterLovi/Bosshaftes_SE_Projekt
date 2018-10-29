@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.User;
 
@@ -88,6 +89,11 @@ public class RegistrationServlet extends HttpServlet {
 			em.getTransaction().begin();
 			em.persist(user);
 			em.getTransaction().commit();
+
+			HttpSession session = request.getSession();
+			session.setAttribute("userid", resultUser.getId());
+			session.setAttribute("username", resultUser.getUsername());
+			session.setAttribute("loggedin", true);
 
 		} catch (Exception e) {
 			e.printStackTrace();
