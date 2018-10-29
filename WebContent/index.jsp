@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="java.util.*"%>
+<%
+	if (session.getAttribute("loggedIn") =! null){
+		boolean loggedIn = (boolean) session.getAttribute("loggedIn");
+	}
+
+	
+%>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -19,18 +27,17 @@
 		        </div>
 	    	</div>
 	    	<div id='loginArea'>
-	   			<form id='loginForm'>
-	   				<table>
-	   				<tr>
-	   					<td><input type='text' name='username' class='inputText' placeholder='Username' /></td>
-	   					<td><input type='password' name='password' class='inputText' placeholder='Password' /></td>
-	   				</tr>
-	   				<tr>
-	   					<td><a href='register.jsp'>Registrieren</a></td>
-	   					<td><input type='submit' class='inputSubmit' value='Login'/></td>
-	   				</tr>
-	   				</table>
-	   			</form>
+	    	
+	   			<% if(loggedIn){ %>	
+	   			
+	   			<%@ include file="/utilities/loggedIn.jsp" %> 
+	   			
+	   			<% } else { %>
+	   				
+	   			<%@	include file="/utilities/logIn.jsp" %>
+	   			
+	   			<% } %>
+	   			
 	   		</div>
    		</div>
 
