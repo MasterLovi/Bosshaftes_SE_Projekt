@@ -9,7 +9,8 @@
         <title>Test JSP</title>
         <link rel="stylesheet" type="text/css" href="stylesheets/positioning.css">
         <link rel="stylesheet" type="text/css" href="stylesheets/design.css">
-    	
+        <link rel="stylesheet" type="text/css" href="stylesheets/icon.css">
+     	
     </head>
 
     <body>

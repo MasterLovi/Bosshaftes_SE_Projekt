@@ -2,5 +2,5 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <div id='rightIcon'>
-	<a href='#'><img class='rightIcon' src='utilities\pic\userIcon.png'></a>
+	<a href='#'><i class="bigIcon material-icons">account_circle</i></a>
 </div>

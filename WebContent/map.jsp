@@ -38,8 +38,10 @@
 <html>
 	<head>
 		<meta charset="ISO-8859-1">
-		<link rel="stylesheet" type="text/css" href="stylesheets/positioning.css">
+		
         <link rel="stylesheet" type="text/css" href="stylesheets/design.css">
+        <link rel="stylesheet" type="text/css" href="stylesheets/positioning.css">
+        <link rel="stylesheet" type="text/css" href="stylesheets/icon.css">
         
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
  		integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
@@ -94,7 +96,7 @@
     			<input type="radio" id="opParty" name="searchType" value="party" <%= partyTag %>>
     			<lable for="opParty">Party</lable>
     			<br>
-    			<input type="radio" id="opCulutre" name="searchType" value="culture" <%= cultureTag %>>
+    			<input type="radio" id="opCulture" name="searchType" value="culture" <%= cultureTag %>>
     			<lable for="opCulture">Kultur</lable>
     		<hr>
     		<input type="checkbox" name="demo1" value="demo1">Option1<br>
@@ -126,7 +128,7 @@
   	 	</script>
   	 	
   	 	<script>
-  	 		var mymap = L.map('demoMap').setView([51.505, -0.09], 13);
+  	 		var mymap = L.map('demoMap').setView([49.47, 8.42], 13);
   	 		
   	 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
   	 		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
