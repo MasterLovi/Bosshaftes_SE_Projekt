@@ -5,8 +5,8 @@
 <head>
 	<meta charset="ISO-8859-1">
 		<title>Registrieren</title>
-		<link rel="stylesheet" type="text/css" href="Stylesheets/positioning.css">
-        <link rel="stylesheet" type="text/css" href="Stylesheets/design.css">
+		<link rel="stylesheet" type="text/css" href="stylesheets/positioning.css">
+        <link rel="stylesheet" type="text/css" href="stylesheets/design.css">
 	</head>
 	<body>
 		<div id='headerbar'>
@@ -23,7 +23,7 @@
     	</div>
     	<div class='optionPanel'>
     		<h2>Pleas enter the following information</h2>
-    		<form id='regForm' action='#'>
+    		<form id='regForm' action='RegistrationServlet' method='post'>
     			<input type='text' name='username' class='regText' placeholder='Username' /><br/>
     			<input type='email' name='email' class='regText' placeholder='E-Mail-Address' /><br/>
     			<input type='password' name='password' class='regText' placeholder='Password' /><br/>

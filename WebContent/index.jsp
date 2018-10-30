@@ -7,8 +7,8 @@
 <html>
     <head>
         <title>Test JSP</title>
-        <link rel="stylesheet" type="text/css" href="Stylesheets/positioning.css">
-        <link rel="stylesheet" type="text/css" href="Stylesheets/design.css">
+        <link rel="stylesheet" type="text/css" href="stylesheets/positioning.css">
+        <link rel="stylesheet" type="text/css" href="stylesheets/design.css">
     	
     </head>
 
@@ -50,7 +50,7 @@
         		<div class='infoWrapper'>
 	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\OP1.jpg' />Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is. Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.</p>
 	        		<div class='buttonWrapper'>
-	        			<a href="map.jsp?type=partey"><button class='actionButton' onClick=>Find a tour that fits your time</button></a>
+	        			<a href="map.jsp?type=party"><button class='actionButton' onClick=>Find a tour that fits your time</button></a>
 	        		</div>
         		</div>
         	</div>

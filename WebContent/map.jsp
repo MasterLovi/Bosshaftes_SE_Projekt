@@ -1,15 +1,52 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<%! 
+	// All variables that we need to use all over the page have to be declared in this section so they have a global scope.
+	public String title;
+	public String partyTag;
+	public String cultureTag;
+%>
+
+<%
+	// Checking if the get parameter 'type' was set
+	if (request.getParameter("type") != null){
+		
+		// Checking if the get parameter is set to 'party'. If so set all variables to party
+		if(request.getParameter("type").equals("party")){
+			title = "Party";
+			partyTag = "checked";
+			cultureTag = "";
+			
+		// Checking if the get parmater is set to 'culture' If so  set all variables to culture
+		} else if (request.getParameter("type").equals("culture")){
+			title = "Kultur";
+			partyTag = "";
+			cultureTag =  "checked";
+		
+		// If the get parameter is neither 'party' nor 'culture' set all the variables to default (party)
+		} else {
+			title = "Party";
+			partyTag = "checked";
+			cultureTag = "";
+		}
+		
+	}
+%>
+
 <html>
 	<head>
 		<meta charset="ISO-8859-1">
-		<link rel="stylesheet" type="text/css" href="Stylesheets/positioning.css">
-        <link rel="stylesheet" type="text/css" href="Stylesheets/design.css">
+		<link rel="stylesheet" type="text/css" href="stylesheets/positioning.css">
+        <link rel="stylesheet" type="text/css" href="stylesheets/design.css">
         
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
  		integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
    		crossorigin=""/>
+    	
+    	<script src="utilities/javaScript/jquery-3.3.1.min.js"></script>
+    	<script src="utilities/javaScript/modifier.js"></script>
     	
 		<title>Map Demo</title>
 	</head>
@@ -35,7 +72,7 @@
 			%>	
 			</div>
 	        <div id='otherMapHeader'>
-	    		<h2 id='mapHeader'><%= request.getParameter("type")  %></h2>
+	    		<h2 id='mapHeader'><% out.print(title); %></h2>
 	    	</div>
 	    	
     	</div>
@@ -54,10 +91,11 @@
     	<div id='optionPane'>
     		<h3>Optionen</h3>
     		<form action='#'>
-    		<input type="checkbox" name="demo1" value="demo1">Option1<br>
-    		<input type="checkbox" name="demo2" value="demo2">Option2<br>
-    		<input type="checkbox" name="demo3" value="demo3">Option3<br>
-    		<input type="checkbox" name="demo4" value="demo4">Option4<br>
+    			<input type="radio" id="opParty" name="searchType" value="party" <%= partyTag %>>
+    			<lable for="opParty">Party</lable>
+    			<br>
+    			<input type="radio" id="opCulutre" name="searchType" value="culture" <%= cultureTag %>>
+    			<lable for="opCulture">Kultur</lable>
     		<hr>
     		<input type="checkbox" name="demo1" value="demo1">Option1<br>
     		<input type="checkbox" name="demo2" value="demo2">Option2<br>
@@ -77,6 +115,8 @@
 			  <option value="Tour3">Tour3</option>
 			  <option value="Tour4">Tour4</option>
 			</select>
+			<br>
+			<input type="submit" value="Suchen">
     		</form>
     	</div>
    	    <%@ include file="/utilities/footer.jsp" %>

@@ -69,6 +69,8 @@ public class LoginServlet extends HttpServlet {
         		session.setAttribute("loggedin", false);
         	}
         	em.close();
+        	System.out.println(request.getHeader("Referer"));
+        	
         	request.getRequestDispatcher("/index.jsp")
             .forward(request, response);
         }

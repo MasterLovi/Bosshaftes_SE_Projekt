@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpSession;
 
 import model.Users;
 
-@WebServlet("/LoginServlet")
+@WebServlet("/RegistrationServlet")
 public class RegistrationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -72,16 +73,16 @@ public class RegistrationServlet extends HttpServlet {
 			// Second check: username taken?
 			// Search for User
 			Query query = em.createQuery("SELECT u FROM Users u WHERE u.username = '" + user.getUsername() + "'");
-			Users resultUser = (Users) query.getSingleResult();
-			if (resultUser != null) {
+			List<Users> resultUser = query.getResultList();
+			if (resultUser.size() > 0) {
 				throw new Exception("Username schon vergeben!");
 			}
 
 			// Third check: account with email existing?
 			// Search for email
-			query = em.createQuery("SELECT u FROM USER u WHERE u.email = '" + user.getEmail() + "'");
-			resultUser = (Users) query.getSingleResult();
-			if (resultUser != null) {
+			query = em.createQuery("SELECT u FROM Users u WHERE u.email = '" + user.getEmail() + "'");
+			resultUser = query.getResultList();
+			if (resultUser.size() > 0) {
 				throw new Exception("Es existiert schon ein Account mit dieser E-Mail!");
 			}
 
@@ -91,10 +92,12 @@ public class RegistrationServlet extends HttpServlet {
 			em.getTransaction().commit();
 
 			HttpSession session = request.getSession();
-			session.setAttribute("userid", resultUser.getId());
-			session.setAttribute("username", resultUser.getUsername());
+			session.setAttribute("userid", user.getId());
+			session.setAttribute("username", user.getUsername());
 			session.setAttribute("loggedin", true);
-
+			
+			request.getRequestDispatcher("/index.jsp").forward(request, response);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			em.close();
