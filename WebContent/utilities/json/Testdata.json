@@ -1,0 +1,12 @@
+{
+"type": "Feature",
+    "properties": {
+        "name": "Hochschule Ludwigshagen",
+        "amenity": "Baseball Stadium",
+        "popupContent": "Based on your IP-Address"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [49.4730952, 8.4214122]
+    }
+}

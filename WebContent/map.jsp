@@ -49,6 +49,7 @@
     	
     	<script src="utilities/javaScript/jquery-3.3.1.min.js"></script>
     	<script src="utilities/javaScript/modifier.js"></script>
+   	    <script src="utilities/javaScript/mapLoader.js"></script>
     	
 		<title>Map Demo</title>
 	</head>
@@ -132,6 +133,7 @@
 			<input type="submit" value="Suchen">
     		</form>
     	</div>
+    	
    	    <%@ include file="/utilities/footer.jsp" %>
   	 	<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
   		integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
@@ -147,6 +149,10 @@
   	 		    id: 'mapbox.streets',
   	 		    accessToken: 'pk.eyJ1IjoiYW1ubmV5IiwiYSI6ImNqbmVjeDdnZDA2dGYzcm1pYjZienZyMDgifQ.hVVhNmhJ6sM2kUKlSVPN5Q'
   	 		}).addTo(mymap);
+  	 		
+  	 		var hs = loadJson();
+  	 		L.geoJSON(hs).addTo(mymap).bindPopup("Tracked based on IP-Address");
+  	 		
   	 	</script>
 	</body>
 </html>
