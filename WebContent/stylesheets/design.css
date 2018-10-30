@@ -84,6 +84,13 @@ body {
 }
 
 .bigIcon{
-	
 	font-size: 50px !important;
+}
+
+.optionDetails{
+	display:none;
+}
+
+.optionHeader{
+	font-size: 24px;
 }

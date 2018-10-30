@@ -84,11 +84,22 @@
 	    	</div>
     	</div>
     	<div class='optionPanel'>
-    		<p>This is were the tour details will be shown</p>
+    		<p class='optionHeader'><i class="optionArrow floatLeft material-icons">keyboard_arrow_down </i>This is were the tour details will be shown</p>
+    		<div class='optionDetails'>
+    			<p>blablablablablablablablablablablablablablablablablablablablabla</p>
+    			<p>blablablablablablablablablablablablablablablablablablablablabla</p>
+    			<p>blablablablablablablablablablablablablablablablablablablablabla</p>
+    		</div>
     	</div>
     	
+    	
     	<div class='optionPanel'>
-    		<p>This is were the tour details will be shown</p>
+    		<p class='optionHeader'><i class="optionArrow floatLeft material-icons">keyboard_arrow_down </i>This is were the tour details will be shown</p>
+    		<div class='optionDetails'>
+    			<p>blablablablablablablablablablablablablablablablablablablablabla</p>
+    			<p>blablablablablablablablablablablablablablablablablablablablabla</p>
+    			<p>blablablablablablablablablablablablablablablablablablablablabla</p>
+    		</div>
     	</div>
     	<div id='optionPane'>
     		<h3>Optionen</h3>
