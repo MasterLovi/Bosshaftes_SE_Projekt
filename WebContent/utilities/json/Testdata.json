@@ -1,12 +1,61 @@
-{
-"type": "Feature",
-    "properties": {
-        "name": "Hochschule Ludwigshagen",
-        "amenity": "Baseball Stadium",
-        "popupContent": "Based on your IP-Address"
-    },
-    "geometry": {
-        "type": "Point",
-        "coordinates": [49.4730952, 8.4214122]
-    }
-}
+[
+	{
+		"type": "Feature",
+		"properties": {
+			"name": "Hochschule Ludwigshafen",
+			"popupContent": "Based on your IP-Address"
+		},
+		"geometry": {
+			"type": "Point",
+			"coordinates": [
+				8.4219807,
+				49.4775206
+			]
+		}
+	},
+	{
+		"type": "Feature",
+		"properties": {
+			"name": "Hochschule Ludwigshagen",
+			"amenity": "Baseball Stadium",
+			"popupContent": "Based on your IP-Address"
+		},
+		"geometry": {
+			"type": "Point",
+			"coordinates": [
+				8.394641872728245,
+				49.47303236240146
+			]
+		}
+	},
+	{
+		"type": "Feature",
+		"properties": {
+			"name": "Hochschule Ludwigshagen",
+			"amenity": "Baseball Stadium",
+			"popupContent": "Based on your IP-Address"
+		},
+		"geometry": {
+			"type": "Point",
+			"coordinates": [
+				8.41655731201172,
+				49.45674385539652
+			]
+		}
+	},
+	{
+		"type": "Feature",
+		"properties": {
+			"name": "Hochschule Ludwigshagen",
+			"amenity": "Baseball Stadium",
+			"popupContent": "Based on your IP-Address"
+		},
+		"geometry": {
+			"type": "Point",
+			"coordinates": [
+				8.44139098422602,
+				49.47035517151213
+			]
+		}
+	}
+]

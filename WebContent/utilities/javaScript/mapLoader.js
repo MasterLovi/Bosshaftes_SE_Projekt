@@ -1,18 +1,22 @@
+var file;
+
 function loadJson(){
-	var test = {
-		"type": "Feature",
-	    "properties": {
-	        "name": "Hochschule Ludwigshafen",
-	        "popupContent": "Based on your IP-Address"
-	    },
-	    "geometry": {
-	        "type": "Point",
-	        "coordinates": [8.4219807, 49.4775206]
-	    }
-	};
-//	$.getJSON("utilities/json/Testdata.json", function(data) {
-//		test = data;
-//	});
-//	console.log(JSON.stringify(test));
-	return test;
+	
+	
+	
+	$.ajax( 'utilities/json/Testdata.json', {
+		  type: 'GET',
+		  dataType: 'json',
+		  async: false,
+		  success: function( data ) {
+		    file = data;
+		  },
+		  error: function( req, status, err ) {
+		    console.log( 'something went wrong', status, err );
+		  }
+	});
+	
+	console.log(file);
+	return file;
 }
+	
