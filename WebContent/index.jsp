@@ -24,7 +24,7 @@
 	    	<div id='loginArea'>
 				<% 
 				
-					if (session.getAttribute("loggedin") != null){
+					if (session.getAttribute("loggedin") != null && Boolean.valueOf(session.getAttribute("loggedin").toString())){
 		   				%>
 		   					<jsp:include page="utilities\loggedIn.jsp"></jsp:include>
 	   					<%

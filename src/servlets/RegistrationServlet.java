@@ -96,7 +96,7 @@ public class RegistrationServlet extends HttpServlet {
 			session.setAttribute("username", user.getUsername());
 			session.setAttribute("loggedin", true);
 			
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
+			request.getRequestDispatcher(request.getRequestURI()).forward(request, response);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
