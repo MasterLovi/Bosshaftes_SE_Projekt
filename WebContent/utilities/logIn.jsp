@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
-<form id='loginForm' action='LoginServlet' method='post'>
+<form id='loginForm' action='UserSessionServlet' method='post'>
 	<table>
 	<tr>
 		<td><input type='text' name='username' class='inputText' placeholder='Username' /></td>

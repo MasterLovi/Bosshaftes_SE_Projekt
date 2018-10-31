@@ -1,5 +1,6 @@
 package servlets;
 
+import java.util.List;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -17,16 +18,16 @@ import javax.servlet.http.HttpSession;
 import model.Users;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class UserSessionServlet
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/UserSessionServlet")
+public class UserSessionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public UserSessionServlet() {
         super();
     }
 
@@ -34,7 +35,20 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		//get URI Parameter for logout and retrieve session
+		String sLogout = request.getParameter("logout");
+		HttpSession session = request.getSession();
+		
+		//check if user needs to be logged out
+		if (sLogout.equals("true") && session.getAttribute("loggedin").equals("true")) {
+			session.setAttribute("userid", null);
+			session.setAttribute("username", null);
+			session.setAttribute("loggedin", false);
+		}
+		
+		//forward back to request page
+		response.sendRedirect(request.getHeader("referer"));
 	}
 
 	/**
@@ -52,32 +66,37 @@ public class LoginServlet extends HttpServlet {
         try {
         	//Search for User
         	Query query = em.createQuery("SELECT u FROM Users u WHERE u.username = '" + username + "'");
-        	Users resultUser = (Users) query.getSingleResult();
+        	List<Users> resultUser = query.getResultList();
         	
+        	//retrieve session object
         	HttpSession session = request.getSession();
         	
+        	//hash user´s password input
         	MessageDigest digest = MessageDigest.getInstance("SHA-256");
         	byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
         	String hashedPW = new String(hash);
         	
-        	if (resultUser != null && resultUser.getPassword().equals(hashedPW)) {
-        				session.setAttribute("userid", resultUser.getId());
-        				session.setAttribute("username", resultUser.getUsername());
+        	//compare user input with user password in db
+        		// set session if user input is correct
+        	System.out.println(resultUser.get(0).getEmail());
+        	if (resultUser.size() > 0 && resultUser.get(0).getPassword().equals(hashedPW)) {
+        				Users resUser = resultUser.get(0);
+        				session.setAttribute("userid", resUser.getId());
+        				session.setAttribute("username", resUser.getUsername());
         				session.setAttribute("loggedin", true);
         	} 
+        		//otherwise set session false
         	else {
         		session.setAttribute("loggedin", false);
+        		throw new Exception("Passwort oder Nutzername ist inkorrekt.");
         	}
         	em.close();
-        	System.out.println(request.getHeader("Referer"));
-        	
-        	request.getRequestDispatcher("/index.jsp")
-            .forward(request, response);
+        	response.sendRedirect(request.getHeader("referer"));
         }
         catch(Exception e) {
         	e.printStackTrace();
         	em.close();
-        	response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        	response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
 	}
 
