@@ -142,7 +142,7 @@
   	 	
   	 	<script>
   	 		var mymap = L.map('demoMap').setView([49.47, 8.42], 13);
-  	 		//Initialize the map
+  	 		
   	 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
   	 		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
   	 		    maxZoom: 18,
@@ -150,27 +150,8 @@
   	 		    accessToken: 'pk.eyJ1IjoiYW1ubmV5IiwiYSI6ImNqbmVjeDdnZDA2dGYzcm1pYjZienZyMDgifQ.hVVhNmhJ6sM2kUKlSVPN5Q'
   	 		}).addTo(mymap);
   	 		
-  	 		//Loading all the Markers
   	 		var hs = loadJson();
-  	 		
-  	 		//Putting the markers on the map
-  	 		for(var i = 0; i < hs.length; i++){
-	  	 		var geojsonLayer = L.geoJSON(hs[i]).addTo(mymap);
-	  	 		geojsonLayer.bindPopup(hs[i]['properties']['popupContent']);
-  	 		}	
-  	 		
-  	 		var marker;
-  	 		mymap.on('click', function(e){
-  	 			
-  	 			//Remove the last set marker if it was not safed 
-  	 			if(marker != null){mymap.removeLayer(marker)};
-  	 			
-  	 			// Creates a new marker and gives it a popup
-  	 		    marker = new L.marker(e.latlng, {draggable: true}).addTo(mymap).bindPopup("<button onClick='console.log(marker.getLatLng()); marker=null'>Add to Map</button>").openPopup();
-  	  	 		
-  	 			// Adds a layer so it can be removed later on
-  	 		    mymap.addLayer(marker);
-  	 		});
+  	 		L.geoJSON(hs).addTo(mymap).bindPopup("Tracked based on IP-Address");
   	 		
   	 	</script>
 	</body>
