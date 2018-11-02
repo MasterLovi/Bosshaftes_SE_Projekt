@@ -3,4 +3,5 @@
 <!DOCTYPE html>
 <div id='rightIcon'>
 	<a href='#'><i class="bigIcon material-icons">account_circle</i></a>
+	<a href='UserSessionServlet?logout=true' title="Logout"><i class="floatRight bigIcon material-icons">exit_to_app</i></a>
 </div>

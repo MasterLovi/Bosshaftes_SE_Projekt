@@ -35,16 +35,16 @@ public class UserSessionServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		//get URI Parameter for logout and retrieve session
 		String sLogout = request.getParameter("logout");
 		HttpSession session = request.getSession();
 		
 		//check if user needs to be logged out
-		if (sLogout.equals("true") && session.getAttribute("loggedin").equals("true")) {
+		if (sLogout.equals("true") && (boolean) session.getAttribute("loggedin")) {
 			session.setAttribute("userid", null);
 			session.setAttribute("username", null);
 			session.setAttribute("loggedin", false);
+			session.invalidate();
 		}
 		
 		//forward back to request page
@@ -55,7 +55,6 @@ public class UserSessionServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		String username = request.getParameter("username");
 		String password	= request.getParameter("password");
 		
@@ -84,6 +83,7 @@ public class UserSessionServlet extends HttpServlet {
         				session.setAttribute("userid", resUser.getId());
         				session.setAttribute("username", resUser.getUsername());
         				session.setAttribute("loggedin", true);
+        				
         	} 
         		//otherwise set session false
         	else {

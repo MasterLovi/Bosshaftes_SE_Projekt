@@ -1,8 +1,6 @@
 var file;
-
+//This file will load a json file with the preloaded markers.
 function loadJson(){
-	
-	
 	
 	$.ajax( 'utilities/json/Testdata.json', {
 		  type: 'GET',
@@ -15,8 +13,7 @@ function loadJson(){
 		    console.log( 'something went wrong', status, err );
 		  }
 	});
-	
-	console.log(file);
+//	console.log(file);
 	return file;
 }
 	
