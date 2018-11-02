@@ -59,8 +59,7 @@
   	 	</script>
   	 	<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
     	<!--<script src="utilities/javaScript/leaflet-routing-machine.min.js"></script>-->
-    	<script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6"></script>
-		<script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6"></script>
+
     	
     	
 		<title>Map Demo</title>
@@ -184,19 +183,10 @@
 	  	 		layer.bindPopup(hs[i].properties.popupContent);
   	 		}	
 			
-  	 		var dir = MQ.routing.directions();
-  	 		
-  	 		dir.route({
-  	 		  locations: [
-  	 			{ latLng: { lat: 49.4775206, lng: 8.4219807 }},
-  	 			{ latLng: { lat: 49.47303236240146 , lng: 8.394641872728245 }}
-  	 		  ]
-  	 		});
- 
-  	 		mymap.addLayer(MQ.routing.routeLayer({
-  	 		  directions: dir,
-  	 		  fitBounds: true
-  	 		}));
+  	 	 L.mapquest.directions().route({
+  	          start: 'Ludwigshafen',
+  	          end: 'Mannheim'
+  	        });
   	 		
   	 		var marker;
   	 		mymap.on('click', function(e){
