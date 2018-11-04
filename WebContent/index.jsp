@@ -18,7 +18,7 @@
     	<div id='headerbar'>
 	    	<div id='otherHeader'>
 	    		<div id='logoWrapper'>
-		        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\testLogo.jpg'></a>
+		        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\Title_round.png'></a>
 		        </div>
 	    	</div>
 	    	<div id='loginArea'>
@@ -49,7 +49,7 @@
         	<div class='opWrapper'>
         		<h2>Parteyyyy</h2>
         		<div class='infoWrapper'>
-	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\OP1.jpg' />Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is. Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.</p>
+	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\Party_round.png' />Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is. Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.</p>
 	        		<div class='buttonWrapper'>
 	        			<a href="map.jsp?type=party"><button class='actionButton' onClick=>Find a tour that fits your time</button></a>
 	        		</div>
@@ -60,7 +60,7 @@
         	<div class='opWrapper'>
         		<h2>Culture</h2>
         		<div class='infoWrapper'>
-	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\OP2.jpg' />Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is. Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.</p>
+	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\Culture_round.png' />Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is. Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.</p>
 	        		<div class='buttonWrapper'>
 	        			<a href="map.jsp?type=culture"><button class='actionButton' onClick=>Find a tour that fits your time</button></a>
 	        		</div>

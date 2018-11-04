@@ -67,7 +67,7 @@
 	<body>
 		<div id='headerbar'>
     		<div id='logoWrapper'>
-	        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\testLogo.jpg'></a>
+	        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\Title.png'></a>
 	        </div>
 	        <div id='loginArea'>
 	        <% 		
@@ -184,9 +184,18 @@
   	 		}	
 			
   	 	 L.mapquest.directions().route({
-  	          start: 'Ludwigshafen',
-  	          end: 'Mannheim'
-  	        });
+  	 	  "locations": [
+  	 	    "Ludwigshafen",
+  	 	    "Mannheim",
+  	 	    "Heidelberg",
+  	 	    "Schwetzingen",
+  	 	    "Mundenheim",
+  	 	    "Mutterstadt, Birkenstraße 16"
+  	 	  ],
+  	 	  "options": {
+  	 	    "allToAll": true
+  	 	  }
+  	 	});
   	 		
   	 		var marker;
   	 		mymap.on('click', function(e){
