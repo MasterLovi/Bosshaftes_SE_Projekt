@@ -41,8 +41,9 @@ public class LocationServlet extends HttpServlet {
 	     
 	     try {
 	    	 
+	    	 String paramType = request.getParameter("type");
 	    	 //Select Location from database table
-	    	 Query query = em.createQuery("SELECT l FROM Location l");
+	    	 Query query = em.createQuery("SELECT l FROM Location l WHERE l.type = '" + paramType + "'");
 	         List<Location> result = query.getResultList();
 	         String JSONData;
 	         
