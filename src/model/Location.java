@@ -21,8 +21,8 @@ public class Location {
 	@Column(name = "ID")
 	private int id;
 	private String name;
-	private long longitude;
-	private long latitude;
+	private double longitude;
+	private double latitude;
 	private String type;
 	private int timeInMinutes;
 	@OneToOne
@@ -41,11 +41,11 @@ public class Location {
 		return name;
 	}
 
-	public long getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public long getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
@@ -66,11 +66,11 @@ public class Location {
 		this.name = name;
 	}
 
-	public void setLongitude(long longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
-	public void setLatitude(long latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
