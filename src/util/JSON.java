@@ -13,6 +13,11 @@ import model.Users;
  **/
 public class JSON {
 	
+	
+	
+	
+	//TODO Die ganzen Ids muss ich noch irgendwie getten
+	
 	/**
      * Get the Value of a single property which is formatted in JSON-String. Therefore uses a substring of a JSON-String.
      * @param substr - String containing at least the name of the property and it's value, split by the ":" character (like in JSON format).

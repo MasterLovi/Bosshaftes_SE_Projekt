@@ -52,6 +52,7 @@ public class LocationServlet extends HttpServlet {
 					resultlocation.setType(location.getType());
 					resultlocation.setLatitude(location.getLatitude());
 					resultlocation.setLongitude(location.getLongitude());
+					//TODO set feedback and address and owner
 				} else {
 					//TODO error handling
 				}
