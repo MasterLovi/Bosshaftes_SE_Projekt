@@ -71,6 +71,7 @@ public class JSON {
 						+ "\n" + "  {"
 						+ "\n" + "    \"type\": \"Feature\","
 						+ "\n" + "    \"properties\": {"
+						+ "\n" + "      \"id\": " + location.getId() + ","
 						+ "\n" + "      \"name\": \"" + location.getName() + "\","
 						+ "\n" + "      \"location_type\": \"" + location.getType() + "\","
 						+ "\n" + "      \"time\": " + location.getTimeInMinutes() + ","
@@ -131,6 +132,7 @@ public class JSON {
 				
 				json = json
 						+ "\n" + "        {"
+						+ "\n" + "          \"id\": " + feedback.getId() + ","
 						+ "\n" + "          \"author\": \"" + feedback.getAuthor().getUsername() + "\","
 						+ "\n" + "          \"comment\": \"" + feedback.getComment() + "\","
 						+ "\n" + "          \"rating\": " + feedback.getRating()
