@@ -1,6 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
+
+<%! 
+	// All variables that we need to use all over the page have to be declared in this section so they have a global scope.
+	public String title;
+	public String partyTag;
+	public String cultureTag;
+%>
+
+<%
+	// Checking if the get parameter 'type' was set
+	if (request.getParameter("type") != null){
+		
+		// Checking if the get parameter is set to 'party'. If so set all variables to party
+		if(request.getParameter("type").equals("party")){
+			title = "Party";
+			partyTag = "checked";
+			cultureTag = "";
+			
+		// Checking if the get parmater is set to 'culture' If so  set all variables to culture
+		} else if (request.getParameter("type").equals("culture")){
+			title = "Kultur";
+			partyTag = "";
+			cultureTag =  "checked";
+		
+		// If the get parameter is neither 'party' nor 'culture' set all the variables to default (party)
+		} else {
+			title = "Party";
+			partyTag = "checked";
+			cultureTag = "";
+		}
+		
+	}
+%>
+
 <html>
 	<head>
 		<meta charset="ISO-8859-1">
@@ -32,15 +66,265 @@
 	</head>
 	<body>
 		<div class="absolute" id="header">
+			<div id='logoWrapper'>
+	        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\Title.png'></a>
+	        </div>
+	        <div class="floatRight" id='loginArea'>
+	        <% 		
+					if (session.getAttribute("loggedin") != null && (boolean)session.getAttribute("loggedin")){
+		   				%>
+		   					<jsp:include page="utilities\loggedIn.jsp"></jsp:include>
+	   					<%
+						
+					} else {
+						
+						%>
+							<jsp:include page="utilities\logIn.jsp"></jsp:include>
+						<%
+					}
+				
+			%>	
+			</div>
+	        <div id='otherMapHeader'>
+	    		<h2 id='mapHeader'><% out.print(title); %></h2>
+	    	</div>
+		</div>
+		<div class="absolute" id="searchbar">
 			<span class="mq-place-search" >
 				
-				  <input class="mq-input" id="test"/>
-				  <button class="mq-input-icon mq-icon-clear" onClick="$('#test').val()=''"><i class="material-icons">clear</i></button>
+				  <input class="mq-input" id="input-search" placeholder='Nach Ort suchen...'/>
+				  <button class="mq-input-icon mq-icon-clear" onClick="clearInput('input-search')"><i class="material-icons">clear</i></button>
 			</span>
 		</div>
+		<div class="absolute" id="optionpanle">
+			<p class="centered">Optionen</p>
+			<hr>
+			<form action="" method="POST">
+				<p>Sehenwürdigkeiten</p>
+				<input type="text" id="spotValue" size="1" value="10" min="1" max="20">
+			    <input type="range" id="spotRange" name="spots" min="1" max="20" />
+				<hr>
+				<p>Dauer der Touren</p>
+				<input type="text" id="timeValue" size="1" value="2" min="1" max="24">
+				<input type="range" id="timeRange" name="time" value="2" min="1" max="24" />
+				<hr>
+				<p>Bewertung</p>
+				<div class="centered" id="rating">
+					<i class="ratingStar material-icons activeStar" id="star1">grade</i>
+					<i class="ratingStar material-icons activeStar" id="star2">grade</i>
+					<i class="ratingStar material-icons activeStar" id="star3">grade</i>
+					<i class="ratingStar material-icons" id="star4">grade</i>
+					<i class="ratingStar material-icons" id="star5">grade</i>
+				</div>
+				<input type="hidden" value="3" name="rating" id="ratingValue">
+				<hr>
+				<!-- Slider wie von Google -->
+				<!-- <div id="sliderOptions">
+				<p class="sliderText">Test Text</p>
+				<label class="switch"> 
+					<input type="checkbox">
+					<span class="slider round"></span>
+				</label>
+				</div> -->
+				<input type="submit" value="Tour suchen" id="searchTour" onClick="$('#tours').show(); return false;" class="centered">
+			</form>
+		</div>
 		<div id="map"></div>
-		
+		<div class="absolute" id="tours">
+			<div class="absolute" id="leftArrow" style="display: none;">
+				<i class="material-icons bigIcon">chevron_left</i>
+			</div>
+			<ul id="tourList">
+			
+			<li class="inline tourdata"> 
+				<p>Tour-Title 1</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP2.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 2</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP1.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 3</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP2.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 4</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP1.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 5</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP2.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 6</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP1.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 7</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP2.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 8</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP1.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 9</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP2.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 10</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP1.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 11</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP2.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 12</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP1.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 13</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP2.jpg">
+				</div>
+			</li>
+			<li class="inline tourdata">
+				<p>Tour-Title 14</p>
+				<div class="centered">
+					<i class="material-icons activeStar" id="star1">grade</i>
+					<i class="material-icons activeStar" id="star2">grade</i>
+					<i class="material-icons " id="star3">grade</i>
+					<i class="material-icons" id="star4">grade</i>
+					<i class="material-icons" id="star5">grade</i>
+				</div>
+				<div class="iconWrapper">
+					<img class="tourIcon" src="utilities/pic/OP1.jpg">
+				</div>
+			</li>
+			</ul> 
+			<div class="absolute" id="rightArrow">
+				<i class="material-icons bigIcon">chevron_right</i>
+			</div>
+		</div>
 		<script>
+			// This part have to outsourced
   	 		L.mapquest.key = 'y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6';
   	 		
   	 		var mymap = L.mapquest.map('map', {
@@ -49,13 +333,7 @@
   	 		  zoom: 12
   	 		});
   	 		
-  	 		$("#test").keypress(function(e){
-  	 			if (e.which == 13){
-  	 				getLocation($("#test").val(), mymap);
-  	 			}
-  	 		});
   	 		
-
   	 		//Loading all the Markers
   	 		var hs = loadJson();
 
@@ -66,7 +344,7 @@
 	  	 		layer.bindPopup(hs[i].properties.popupContent);
   	 		}	
 			
-  	 	 L.mapquest.directions().route({
+  	 	/*  L.mapquest.directions().route({
   	 	  "locations": [{
   	          "type": "s",
   	          "latLng": {
@@ -98,7 +376,7 @@
   	 	  "options": {
   	 	    "allToAll": true
   	 	  }
-  	 	});
+  	 	}); */
   	 		
   	 		var marker;
   	 		mymap.on('click', function(e){
@@ -135,6 +413,9 @@
   	 		 	this.marker=null;
   	 		}
   	 		
+  	 		function getMap(){
+  	 			return mymap;
+  	 		}
   	 	</script>
 	</body>
 </html>

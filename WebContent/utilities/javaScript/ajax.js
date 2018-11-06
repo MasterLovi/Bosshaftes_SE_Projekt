@@ -20,7 +20,6 @@ function getLocation(searchString, map){
 			alert("Ihre Eingabe konnte keiner Adresse zugeordnet werden.")
 		}
 		map.panTo(result.results[0].locations[0].latLng);
-		//map.setZoom(12);
 	});
 	
 }
@@ -28,3 +27,5 @@ function getLocation(searchString, map){
 function getMarker(lng, lat, offsetX, offsetY){
 	
 }
+
+
