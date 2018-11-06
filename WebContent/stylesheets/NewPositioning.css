@@ -1,0 +1,233 @@
+@charset "ISO-8859-1";
+
+*{
+	padding: 0;
+	margin: 0;
+}
+
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+body {
+	position: relative;
+	min-height: 100%;
+}
+
+p{
+	text-align: -moz-center;
+	text-align: -webkit-center;
+ 	text-align: center;	
+}
+
+#map{
+	width: 100%;
+	height: 100vh;
+	z-index: 100;
+}
+
+#searchbar{
+	top: 90px;
+	left: 50px;
+	width: 500px;
+	height: 50px;
+	background-color: #ffffff;
+	z-index: 800;
+	border-radius: 4px;
+	box-shadow: 2px 2px 2px #bbb;
+}
+
+#optionpanle{
+	right: 20px;
+	top: 90px;
+	width: 200px;
+	background-color: #ffffff;
+	z-index: 800;
+	border-radius: 4px;
+	border: 1px solid #bbb;
+	padding: 10px 10px 10px 10px;
+	box-shadow: 2px 2px 2px #bbb;
+}
+
+#header{
+	display: inline-block;
+	top: 10px;
+	left: 50px;
+	width: 94.5%;
+	z-index: 800;
+	background-color: #ffffff;
+	padding: 10px 10px 10px 10px;
+	border-radius: 4px;
+    border: 1px solid #bbb;
+    box-shadow: 2px 2px 2px #bbb;
+}
+
+#mainLogo{
+	height: 50px;
+	float: left;
+	border-radius: 50%;
+}
+
+#mapHeader{
+	text-align: -moz-center;
+	text-align: -webkit-center;
+	box-sizing: inherit;
+ 	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+}
+
+#loginForm {
+	text-align: -moz-right;
+	text-align: -webkit-right;
+	text-align: right;
+}
+
+#headerbar {
+	display: inline-block;
+	width: 60%;
+	margin: 15px 0px 15px 0px;
+	padding: 0 2% 0 2%;
+	padding-bottom: 15px;
+	padding-top: 15px;
+}
+
+#otherHeader {
+	width: 30%;
+	float: left;
+}
+
+#spotRange{
+	width: 70%;
+}
+
+#spotValue{
+	width: 20%;
+	float: right;
+}
+
+#timeRange{
+	width: 70%;
+}
+
+#timeValue{
+	width:	20%;
+	float: right;
+}
+
+#rating{
+	
+}
+
+#searchTour{
+	margin-top: 10px;
+	width: 100%;
+}
+
+#tours{
+
+	left: 50px;
+	bottom: 30px;
+	width: 70%;
+	height: 130px;
+	z-index: 800;
+	background-color: #ffffff;
+	padding: 10px 10px 10px 10px;
+	border-radius: 4px;
+    border: 1px solid #bbb;
+    box-shadow: 2px 2px 2px #bbb;
+    overflow: hidden
+}
+
+#tourList{
+	white-space: nowrap;
+}
+
+#leftArrow{
+	height: 30px;
+	left: 0px;
+	top: 63px;
+	background-color: #ffffff;
+	border-radius-top-right: 4px;
+	border-radius:0px 4px 4px 0px;
+	opacity: 0.8;
+	
+}
+
+#rightArrow{
+	height: 30px;
+	right: 0px;
+	top: 63px;
+	background-color: #ffffff;
+	border-radius:4px 0px 0px 4px;
+	opacity: 0.8;
+}
+
+#leftArrow:hover {
+	cursor: pointer;
+}
+
+#rightArrow:hover {
+	cursor: pointer;
+}
+
+.absolute{
+	position: absolute;
+}
+
+.relative{
+	position: relative;
+}
+
+.floatRight{
+	float: right;
+}
+
+.floatLeft{
+	float:left;
+}
+.centered{
+	text-align: -moz-center;
+	text-align: -webkit-center;
+ 	text-align: center;
+}
+
+.ratingStar:hover{
+	cursor: pointer;
+	color: #ffbf00;
+}
+
+.activeStar{
+	cursor: pointer;
+	color: #ffbf00;
+}
+
+.sliderText{
+	marign-top:10px;
+}
+
+.inline{
+	display: inline-block;
+}
+
+.tourdata{
+	margin-right: 10px;
+}
+
+.tourIcon{
+	display: block;
+	height: 100%;
+	width: 100%;
+	border-radius: 4px;
+}
+
+.iconWrapper{
+	width: 156px;
+	height: 80px;
+}
+
+.bigIcon{
+	font-size: 30px !important;
+}
