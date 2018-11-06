@@ -59,7 +59,7 @@ public class LocationServlet extends HttpServlet {
 		Integer errorCount = 0;
 		ArrayList<String> loc = new ArrayList<String>();
 		
-		//Loop over Locations that should be updated
+		//Loop over Locations that should be created
 		for (Location location : locations) {
 			Query query = em.createQuery("SELECT l from Location l WHERE l.latitude = " + location.getLatitude() + " AND l.longitude = " + location.getLatitude());
 			List<Location> result = query.getResultList();
