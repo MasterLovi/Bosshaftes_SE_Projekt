@@ -13,11 +13,6 @@ import model.Users;
  **/
 public class JSON {
 	
-	
-	
-	
-	//TODO Die ganzen Ids muss ich noch irgendwie getten
-	
 	/**
      * Get the Value of a single property which is formatted in JSON-String. Therefore uses a substring of a JSON-String.
      * @param substr - String containing at least the name of the property and it's value, split by the ":" character (like in JSON format).
@@ -171,6 +166,7 @@ public class JSON {
 				Location location = new Location();
 				
 				//find properties
+				String id = json.substring(json.indexOf("id"));
 				String name = json.substring(json.indexOf("name"));
 				String type = json.substring(json.indexOf("location_type"));
 				String time = json.substring(json.indexOf("time"));
@@ -179,6 +175,7 @@ public class JSON {
 				String feedback = json.substring(json.indexOf("feedback"), json.indexOf("]"));
 				
 				//set Properties
+				location.setId(getIntValue(id));
 				location.setName(getStringValue(name));
 				location.setTimeInMinutes(getIntValue(time));
 				location.setType(getStringValue(type));

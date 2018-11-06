@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Address;
 import model.Location;
 import util.JSON;
 
@@ -30,21 +32,68 @@ public class LocationServlet extends HttpServlet {
 		super();
 	}
 	
+	private static String read(EntityManager em, String type) throws Exception {
+		
+		try {
+			// Select Location from database table
+			Query query = em.createQuery("SELECT l FROM Location l WHERE l.type = '" + type + "'");
+			List<Location> result = query.getResultList();
+			String JSONData;
+
+			// check for empty resultList
+			if (result.size() > 0) {
+				// convert data to JSON
+				JSONData = JSON.locationToJSON(result);
+			} else {
+				JSONData = "[]";
+			}
+			// return
+			return JSONData;
+		} catch(Exception e) {
+			throw e;
+		}
+	}
+	
 	private static String create(List<Location> locations, EntityManager em) {
-		return "";
+		
+		Integer errorCount = 0;
+		ArrayList<String> loc = new ArrayList<String>();
+		
+		//Loop over Locations that should be updated
+		for (Location location : locations) {
+			Query query = em.createQuery("SELECT l from Location l WHERE l.latitude = " + location.getLatitude() + " AND l.longitude = " + location.getLatitude());
+			List<Location> result = query.getResultList();
+			
+			//If location was found, it should be updated
+			if (result.size() == 0) {
+				em.getTransaction().begin();
+				em.persist(location.getAddress());
+				em.persist(location);
+				em.getTransaction().commit();
+			} else {
+				errorCount++;
+				loc.add(location.getName());
+			}
+		}
+		return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", locations: " + loc.toString() + "}";
 	}
 	
 	private static String delete(List<Location> locations, EntityManager em) {
 		return "";
 	}
 	
-	private static String update(List<Location> locations, EntityManager em) {
+	private static String update(List<Location> locations, EntityManager em) throws Exception {
 		
 		try {
+			Integer errorCount = 0;
+			ArrayList<String> loc = new ArrayList<String>();
+			
+			//Loop over Locations that should be updated
 			for (Location location : locations) {
 				Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
 				List<Location> result = query.getResultList();
 				
+				//If location was found, it should be updated
 				if (result.size() > 0) {
 					Location resultlocation = result.get(0);
 					resultlocation.setName(location.getName());
@@ -52,17 +101,35 @@ public class LocationServlet extends HttpServlet {
 					resultlocation.setType(location.getType());
 					resultlocation.setLatitude(location.getLatitude());
 					resultlocation.setLongitude(location.getLongitude());
-					//TODO set feedback and address and owner
+					
+					// update corresponding Address
+					Address address = location.getAddress();
+					query = em.createQuery("SELECT a from Address a WHERE"
+							+ " a.country = " + address.getCountry()
+							+ " a.postCode = " + address.getPostCode()
+							+ " a.cityName = " + address.getCityName()
+							+ " a.streetName = " + address.getStreetName()
+							+ " a.houseNumber = " + address.getHouseNumber());
+					List<Address> resultAddresses = query.getResultList();
+					
+					if (resultAddresses.size() > 0) {
+						Address resultAddress = resultAddresses.get(0);
+						resultAddress.setAddress(address);
+					} else {
+						em.getTransaction().begin();
+						em.persist(address);
+						resultlocation.setAddress(address);
+						em.getTransaction().commit();
+					}
 				} else {
-					//TODO error handling
+					errorCount++;
+					loc.add(location.getName());
 				}
 			}
-			
+			return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", locations: " + loc.toString() + "}";
 		} catch(Exception e) {
-			//TODO send back error
-		 }
-		
-		return "";
+			throw e;
+		}
 	}
 
 	/**
@@ -75,36 +142,24 @@ public class LocationServlet extends HttpServlet {
 		// retrieve EntityManagerFactory and create EntityManager
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
-
+		
+		//Define response
+		String res;
+		
+		//read Data
 		try {
-
 			String paramType = request.getParameter("type");
-			// Select Location from database table
-			Query query = em.createQuery("SELECT l FROM Location l WHERE l.type = '" + paramType + "'");
-			List<Location> result = query.getResultList();
-			String JSONData;
-
-			// check for empty resultList
-			if (result.size() > 0) {
-				// convert data to JSON
-				JSONData = JSON.locationToJSON(result);
-			} else {
-				JSONData = "[]";
-			}
-
-			// send Response
+			res = read(em, paramType);
 			response.setStatus(200);
-			response.setContentType("application/json");
-			PrintWriter writer = response.getWriter();
-			writer.append(JSONData);
-
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			response.setContentType("text/xml");
-			PrintWriter writer = response.getWriter();
-			writer.append(e.getMessage());
+			res = e.getMessage();
 		}
+		//Send Response
+		response.setContentType("application/json");
+		PrintWriter writer = response.getWriter();
+		writer.append(res);
 		em.close();
 	}
 
@@ -118,19 +173,29 @@ public class LocationServlet extends HttpServlet {
 		EntityManager em = emf.createEntityManager();
 		String JSONData = request.getParameter("data");
 		List<Location> locations = JSON.toLocation(JSONData);
-			    
-		switch (request.getParameter("operation")) {
-		case "update":
-			update(locations, em);
-			break;
-		case "create":
-			create(locations, em);
-			break;
-		case "delete":
-			delete(locations, em);
-			break;
+		String res = "";
+		
+		try {
+			switch (request.getParameter("operation")) {
+			case "update":
+				res = update(locations, em);
+				break;
+			case "create":
+				res = create(locations, em);
+				break;
+			case "delete":
+				res = delete(locations, em);
+				break;
+			}
+			response.setStatus(200);
+		} catch (Exception e) {
+			// send back error
+			response.setStatus(500);
+			res = e.getMessage();
 		}
-	     
-	     em.close();
+		response.setContentType("application/json");
+		PrintWriter writer = response.getWriter();
+		writer.append(res);
+	    em.close();
 	}
 }

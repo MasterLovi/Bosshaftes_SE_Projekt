@@ -25,11 +25,11 @@ public class Location {
 	private double latitude;
 	private String type;
 	private int timeInMinutes;
-	@OneToOne
+	@OneToOne(orphanRemoval = true)
 	@JoinColumn(name = "ADDRESS_ID")
 	private Address address;
 	
-	@OneToMany
+	@OneToMany(orphanRemoval = true)
 	@JoinColumn(name = "FEEDBACK_ID")
 	private List<Feedback> feedback;
 
@@ -62,6 +62,10 @@ public class Location {
 	}
 
 	// setter
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}

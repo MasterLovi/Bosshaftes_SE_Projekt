@@ -2,6 +2,7 @@ package listener;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -46,6 +47,7 @@ public class ContextListener implements ServletContextListener {
 	 */
 	public void contextInitialized(ServletContextEvent context) {
 
+		
 		// Decide on the db system directory: <userhome>/.addressbook/
 		String userHomeDir = System.getProperty("user.home", ".");
 		String systemDir = userHomeDir + "/.database";
