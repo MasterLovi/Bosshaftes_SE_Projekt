@@ -64,7 +64,7 @@ public class LocationServlet extends HttpServlet {
 			Query query = em.createQuery("SELECT l from Location l WHERE l.latitude = " + location.getLatitude() + " AND l.longitude = " + location.getLatitude());
 			List<Location> result = query.getResultList();
 			
-			//If location was found, it should be updated
+			//If location was not found, it should be created
 			if (result.size() == 0) {
 				em.getTransaction().begin();
 				em.persist(location.getAddress());
@@ -78,8 +78,15 @@ public class LocationServlet extends HttpServlet {
 		return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", locations: " + loc.toString() + "}";
 	}
 	
-	private static String delete(List<Location> locations, EntityManager em) {
-		return "";
+	private static String delete(List<Location> locations, EntityManager em) throws Exception {
+		//Loop over Locations that should be deleted
+		for (Location location : locations) {
+			Location result = em.find(Location.class, location.getId());
+			em.getTransaction().begin();
+			em.remove(result);
+			em.getTransaction().commit();
+		}
+		return "Success";
 	}
 	
 	private static String update(List<Location> locations, EntityManager em) throws Exception {

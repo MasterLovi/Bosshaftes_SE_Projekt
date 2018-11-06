@@ -25,7 +25,7 @@ public class Users {
 	private String email;
 	private String password;
 
-	@OneToMany(mappedBy = "owner")
+	@OneToMany(mappedBy = "owner", orphanRemoval = true)
 	private List<Route> routes;
 
 	@ManyToMany
