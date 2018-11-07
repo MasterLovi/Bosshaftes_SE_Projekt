@@ -25,7 +25,7 @@ public class JSON {
 	 */
 	private static String getStringValue(String substr) {
 		substr = substr.indexOf(",") > -1 ? substr.substring(0, substr.indexOf(","))
-				: substr.substring(0, substr.indexOf("}"));
+						: substr.substring(0, substr.indexOf("}"));
 		substr = substr.substring(substr.indexOf(":"), substr.length());
 		substr = substr.substring(substr.indexOf("\""), substr.length());
 		substr = substr.substring(0, substr.indexOf("\""));
@@ -63,7 +63,7 @@ public class JSON {
 	 */
 	private static Integer getIntValue(String substr) {
 		substr = substr.indexOf(",") > -1 ? substr.substring(0, substr.indexOf(","))
-				: substr.substring(0, substr.indexOf("}"));
+						: substr.substring(0, substr.indexOf("}"));
 		substr = substr.substring(substr.indexOf(":"), substr.length());
 		return Integer.parseInt(substr);
 	}
@@ -75,33 +75,33 @@ public class JSON {
 	 *                  JSON-String.
 	 * @return JSON-formatted String.
 	 */
-public static String locationToJSON(List<Location> locations) {
-		
+	public static String locationToJSON(List<Location> locations) {
+
 		if (locations != null && locations.size() > 0) {
 			String json = "[";
-		
-			for(Location location : locations) {
-			
-				json = json 
-						+ "\n" + "  {"
-						+ "\n" + "    \"type\": \"Feature\","
-						+ "\n" + "    \"properties\": {"
-						+ "\n" + "      \"id\": " + location.getId() + ","
-						+ "\n" + "      \"name\": \"" + location.getName() + "\","
-						+ "\n" + "      \"location_type\": \"" + location.getType() + "\","
-						+ "\n" + "      \"time\": " + location.getTimeInMinutes() + ","
-						+ "\n" + "      \"address\": " + JSON.addressToJSON(location.getAddress()) + ","
-						+ "\n" + "      \"feedback\": " + JSON.feedbackToJSON(location.getFeedback()) + ","
-						+ "\n" + "      \"popupContent\": \"\""
-						+ "\n" + "    },"
-						+ "\n" + "    \"geometry\": {"
-						+ "\n" + "      \"type\": \"Point\","
-						+ "\n" + "      \"coordinates\": ["
-						+ "\n" + "        " + location.getLatitude() + ","
-						+ "\n" + "        " + location.getLongitude()
-						+ "\n" + "      ]"
-						+ "\n" + "    }"
-						+ "\n" + "  },";
+
+			for (Location location : locations) {
+
+				json = json
+								+ "\n" + "  {"
+								+ "\n" + "    \"type\": \"Feature\","
+								+ "\n" + "    \"properties\": {"
+								+ "\n" + "      \"id\": " + location.getId() + ","
+								+ "\n" + "      \"name\": \"" + location.getName() + "\","
+								+ "\n" + "      \"location_type\": \"" + location.getType() + "\","
+								+ "\n" + "      \"time\": " + location.getTimeInMinutes() + ","
+								+ "\n" + "      \"address\": " + JSON.addressToJSON(location.getAddress()) + ","
+								+ "\n" + "      \"feedback\": " + JSON.feedbackToJSON(location.getFeedback()) + ","
+								+ "\n" + "      \"popupContent\": \"\""
+								+ "\n" + "    },"
+								+ "\n" + "    \"geometry\": {"
+								+ "\n" + "      \"type\": \"Point\","
+								+ "\n" + "      \"coordinates\": ["
+								+ "\n" + "        " + location.getLatitude() + ","
+								+ "\n" + "        " + location.getLongitude()
+								+ "\n" + "      ]"
+								+ "\n" + "    }"
+								+ "\n" + "  },";
 			}
 			json = json.substring(0, json.length() - 1);
 			json = json + "\n]";
@@ -120,14 +120,16 @@ public static String locationToJSON(List<Location> locations) {
 	public static String addressToJSON(Address address) {
 		if (address != null) {
 			String json = "{";
-			json = json 
-					+ "\n" + "        \"address\": \"" + address.getStreetName() + " " + address.getHouseNumber() + ", " + address.getPostCode() + " " + address.getCityName() + ", " + address.getCountry() + "\","
-					+ "\n" + "        \"cityName\": \"" + address.getCityName() + "\","
-					+ "\n" + "        \"country\": \"" + address.getCountry() + "\","
-					+ "\n" + "        \"houseNumber\": \"" + address.getHouseNumber() + "\","
-					+ "\n" + "        \"postCode\": \"" + address.getPostCode() + "\","
-					+ "\n" + "        \"streetName\": \"" + address.getStreetName() + "\""
-					+ "\n" + "      }";
+			json = json
+							+ "\n" + "        \"address\": \"" + address.getStreetName() + " "
+							+ address.getHouseNumber() + ", " + address.getPostCode() + " " + address.getCityName()
+							+ ", " + address.getCountry() + "\","
+							+ "\n" + "        \"cityName\": \"" + address.getCityName() + "\","
+							+ "\n" + "        \"country\": \"" + address.getCountry() + "\","
+							+ "\n" + "        \"houseNumber\": \"" + address.getHouseNumber() + "\","
+							+ "\n" + "        \"postCode\": \"" + address.getPostCode() + "\","
+							+ "\n" + "        \"streetName\": \"" + address.getStreetName() + "\""
+							+ "\n" + "      }";
 			return json;
 		} else {
 			return "{}";
@@ -148,39 +150,25 @@ public static String locationToJSON(List<Location> locations) {
 			for (Route route : routes) {
 				List<Location> stops = route.getStops();
 
-				json = json 
-						+ "\n" + "  {" 
-						+ "\n" + "    \"type\": \"Feature\"," 
-						+ "\n" + "    \"properties\": {" 
-						+ "\n" + "      \"id\": " + route.getId() + "," 
-						+ "\n" + "      \"name\": \"" + route.getName() + "\","
-						+ "\n" + "      \"route_type\": \"" + route.getType() + "\","
-						// + "\n" + " \"time\": " + location.getTimeInMinutes() + ","
-						+ "\n" + "		\"stops\": \"" + JSON.locationToJSON(route.getStops()) + "," 
-						+ "\n" + "      \"feedback\": " + JSON.feedbackToJSON(route.getFeedback()) + "," 
-						+ "\n" + "		\"owner\": " + route.getOwner().getUsername() + "," 
-						+ "\n" + "      \"popupContent\": \"\"" 
-						+ "\n" + "    }," 
-						+ "\n" + "    \"geometry\": {" 
-						+ "\n" + "      \"type\": \"Point\"," 
-						+ "\n" + "      \"coordinates\": [";
-						for (Location location : stops) {
-								json = json 
-										+ "\n" + "	{" 
-										+ "\n" + "        " + location.getLatitude() + "," 
-										+ "\n" + "        " + location.getLongitude() 
-										+ "\n" + "	}";
-							}
-
-				json = json + "\n" + "      ]" 
-						+ "\n" + "    }" 
-						+ "\n" + "  },";
+				json = json
+								+ "\n" + "  {"
+								+ "\n" + "    \"id\": " + route.getId() + ","
+								+ "\n" + "    \"name\": \"" + route.getName() + "\","
+								+ "\n" + "    \"route_type\": \"" + route.getType() + "\","
+								// + "\n" + " \"time\": " + location.getTimeInMinutes() + ","
+								+ "\n" + "    \"stops\": " + JSON.locationToJSON(route.getStops()) + ","
+								+ "\n" + "    \"feedback\": " + JSON.feedbackToJSON(route.getFeedback()) + ","
+								+ "\n" + "	  \"owner\": \"" + route.getOwner().getUsername() + "\","
+								+ "\n" + "    \"popupContent\": \"\""
+								+ "\n" + "    },";
 			}
 
 			json = json.substring(0, json.length() - 1);
 			json = json + "\n]";
 			return json;
-		} else {
+		} else
+
+		{
 			return "[]";
 		}
 	}
@@ -192,25 +180,25 @@ public static String locationToJSON(List<Location> locations) {
 	 * @return JSON-formatted String.
 	 */
 	public static String feedbackToJSON(List<Feedback> ratings) {
-		
+
 		String json = "[";
-		
+
 		if (ratings != null && ratings.size() > 0) {
-			for(Feedback feedback : ratings) {
-				
+			for (Feedback feedback : ratings) {
+
 				json = json
-						+ "\n" + "        {"
-						+ "\n" + "          \"id\": " + feedback.getId() + ","
-						+ "\n" + "          \"author\": \"" + feedback.getAuthor().getUsername() + "\","
-						+ "\n" + "          \"comment\": \"" + feedback.getComment() + "\","
-						+ "\n" + "          \"rating\": " + feedback.getRating()
-						+ "\n" + "        },";
+								+ "\n" + "        {"
+								+ "\n" + "          \"id\": " + feedback.getId() + ","
+								+ "\n" + "          \"author\": \"" + feedback.getAuthor().getUsername() + "\","
+								+ "\n" + "          \"comment\": \"" + feedback.getComment() + "\","
+								+ "\n" + "          \"rating\": " + feedback.getRating()
+								+ "\n" + "        },";
 			}
-		
+
 			json = json.substring(0, json.length() - 1);
 			json = json
-					+ "\n" + "      ]";
-			
+							+ "\n" + "      ]";
+
 			return json;
 		} else {
 			return "[]";
@@ -333,14 +321,6 @@ public static String locationToJSON(List<Location> locations) {
 				// route.setAddress(toAddress(address));
 				route.setStops(toLocation(stops));
 				route.setFeedback(toFeedback(feedback));
-
-				// set Coordinates
-				/*
-				String latitude = coordinates.substring(coordinates.indexOf("[") + 1, coordinates.indexOf(","));
-				String longitude = coordinates.substring(coordinates.indexOf(",") + 1, coordinates.indexOf("]"));
-				location.setLatitude(Double.parseDouble(latitude));
-				location.setLongitude(Double.parseDouble(longitude));
-				*/
 
 				// add to list
 				routes.add(route);
