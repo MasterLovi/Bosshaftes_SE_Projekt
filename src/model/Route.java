@@ -80,9 +80,7 @@ public class Route {
 	}
 
 	public void setStops(List<Location> stops) {
-		for (Location location : stops) {
-			this.addStop(location);
-		}
+		this.stops = stops;
 	}
 
 	public void setOwner(Users owner) {

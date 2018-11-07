@@ -56,5 +56,9 @@ public class Feedback {
 	public void setAuthor(Users author) {
 		this.author = author;
 	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 
 }

@@ -78,5 +78,9 @@ public class Users {
 	public void setRoutes(List<Route> routes) {
 		this.routes = routes;
 	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 
 }
