@@ -137,6 +137,7 @@
 			<ul id="tourList">
 			
 			<li class="inline tourdata"> 
+				<input type="hidden" class="startingPoint" value='{"coordinates": [49.46928, 8.419304]}'>
 				<p>Tour-Title 1</p>
 				<div class="centered">
 					<i class="material-icons activeStar" id="star1">grade</i>
@@ -150,6 +151,7 @@
 				</div>
 			</li>
 			<li class="inline tourdata">
+				<input type="hidden" class="startingPoint" value='{"coordinates": [49.463927, 8.348579]}'>
 				<p>Tour-Title 2</p>
 				<div class="centered">
 					<i class="material-icons activeStar" id="star1">grade</i>
@@ -163,6 +165,7 @@
 				</div>
 			</li>
 			<li class="inline tourdata">
+				<input type="hidden" class="startingPoint" value='{"coordinates": [49.444296, 8.395271]}'>
 				<p>Tour-Title 3</p>
 				<div class="centered">
 					<i class="material-icons activeStar" id="star1">grade</i>
@@ -176,6 +179,7 @@
 				</div>
 			</li>
 			<li class="inline tourdata">
+				<input type="hidden" class="startingPoint" value='{"coordinates": [49.46705, 8.482475]}'>
 				<p>Tour-Title 4</p>
 				<div class="centered">
 					<i class="material-icons activeStar" id="star1">grade</i>
@@ -189,6 +193,7 @@
 				</div>
 			</li>
 			<li class="inline tourdata">
+				<input type="hidden" class="startingPoint" value='{"coordinates": [49.498933, 8.455353]}'>
 				<p>Tour-Title 5</p>
 				<div class="centered">
 					<i class="material-icons activeStar" id="star1">grade</i>
@@ -202,6 +207,7 @@
 				</div>
 			</li>
 			<li class="inline tourdata">
+				<input type="hidden" class="startingPoint" value='{"coordinates": [49.494921, 8.500328]}'>
 				<p>Tour-Title 6</p>
 				<div class="centered">
 					<i class="material-icons activeStar" id="star1">grade</i>
@@ -306,6 +312,7 @@
 				</div>
 			</li>
 			<li class="inline tourdata">
+				
 				<p>Tour-Title 14</p>
 				<div class="centered">
 					<i class="material-icons activeStar" id="star1">grade</i>

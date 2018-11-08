@@ -120,6 +120,41 @@ $(document).ready(function(){
 	});
 })
 
+// When hovering over a 
+$(document).ready(function(){
+	var layer;
+	$(".tourdata").mouseenter(function(){
+		var json = $(this).children(".startingPoint").val();
+		var obj = JSON.parse(json);
+		
+		layer = L.marker(obj.coordinates, {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#00cc00'})}).addTo(getMap());
+	});
+	
+	$(".tourdata").mouseleave(function(){
+		getMap().removeLayer(layer);
+	})
+})
+
+// Loads the position of the user as soon as he enters the page 
+$(document).ready(function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        console.log("Is not supported");
+    }
+})
+
+// Prints out the geo point that was loaded to the map.
+function showPosition(position) {
+	var coords = '{ "coordinates": ["'+position.coords.latitude+'" ,"'+position.coords.longitude+'"]}';
+	var json = JSON.parse(coords);
+	
+	var layer = L.marker(json.coordinates , {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#0066ff'})}).addTo(getMap())
+	layer.bindPopup("Your location");
+	
+	getMap().panTo(json.coordinates);
+}
+
 function toureListLeftShift(){
 	
 	// Disables the button until the animation is done. Prevents confusing result if the button was clicked too often
