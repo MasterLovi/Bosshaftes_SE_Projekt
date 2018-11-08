@@ -100,6 +100,26 @@ $(document).ready(function(){
 	$("#rightArrow").bind("click", toureListRightShift);
 })
 
+$(document).ready(function(){
+	$(".tourdata").click(function(){ 
+		$("#myModal").css("display", "block");
+	});
+})
+
+$(document).ready(function(){
+	$(".close").click(function(){
+		$("#myModal").css("display", "none");
+	});
+})
+
+$(document).ready(function(){
+	$(window).click(function(e){
+		if (e.target.id == $("#myModal").attr("id")){
+			$("#myModal").css("display", "none");
+		}
+	});
+})
+
 function toureListLeftShift(){
 	
 	// Disables the button until the animation is done. Prevents confusing result if the button was clicked too often
