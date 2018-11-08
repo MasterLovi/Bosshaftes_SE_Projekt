@@ -130,7 +130,7 @@
 			</form>
 		</div>
 		<div id="map"></div>
-		<div class="absolute" id="tours">
+		<div class="absolute" id="tours" style="display: none;">
 			<div class="absolute" id="leftArrow" style="display: none;">
 				<i class="material-icons bigIcon">chevron_left</i>
 			</div>
@@ -323,6 +323,18 @@
 				<i class="material-icons bigIcon">chevron_right</i>
 			</div>
 		</div>
+		
+		<!-- The Modal -->
+		<div id="myModal" class="modal">
+		
+		  <!-- Modal content -->
+		  <div class="modal-content">
+		    <span class="close">&times;</span>
+		    <p>Some text in the Modal..</p>
+		  </div>
+		
+		</div>
+		
 		<script>
 			// This part have to outsourced
   	 		L.mapquest.key = 'y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6';
