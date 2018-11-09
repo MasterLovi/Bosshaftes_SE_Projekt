@@ -27,7 +27,7 @@ public class JSON {
 		substr = substr.indexOf(",") > -1 ? substr.substring(0, substr.indexOf(","))
 						: substr.substring(0, substr.indexOf("}"));
 		substr = substr.substring(substr.indexOf(":"), substr.length());
-		substr = substr.substring(substr.indexOf("\""), substr.length());
+		substr = substr.substring(substr.indexOf("\"") + 1, substr.length());
 		substr = substr.substring(0, substr.indexOf("\""));
 		return substr;
 	}
@@ -64,7 +64,11 @@ public class JSON {
 	private static Integer getIntValue(String substr) {
 		substr = substr.indexOf(",") > -1 ? substr.substring(0, substr.indexOf(","))
 						: substr.substring(0, substr.indexOf("}"));
-		substr = substr.substring(substr.indexOf(":"), substr.length());
+		if (substr.indexOf(": ") != -1) {
+			substr = substr.substring(substr.indexOf(":") + 2, substr.length());
+		} else {
+			substr = substr.substring(substr.indexOf(":") + 1, substr.length());
+		}
 		return Integer.parseInt(substr);
 	}
 
@@ -118,6 +122,7 @@ public class JSON {
 	 * @return JSON-formatted String.
 	 */
 	public static String addressToJSON(Address address) {
+		// System.out.println(address != null);
 		if (address != null) {
 			String json = "{";
 			json = json
@@ -126,8 +131,8 @@ public class JSON {
 							+ ", " + address.getCountry() + "\","
 							+ "\n" + "        \"cityName\": \"" + address.getCityName() + "\","
 							+ "\n" + "        \"country\": \"" + address.getCountry() + "\","
-							+ "\n" + "        \"houseNumber\": \"" + address.getHouseNumber() + "\","
-							+ "\n" + "        \"postCode\": \"" + address.getPostCode() + "\","
+							+ "\n" + "        \"houseNumber\": " + address.getHouseNumber() + ","
+							+ "\n" + "        \"postCode\": " + address.getPostCode() + ","
 							+ "\n" + "        \"streetName\": \"" + address.getStreetName() + "\""
 							+ "\n" + "      }";
 			return json;
@@ -306,7 +311,7 @@ public class JSON {
 				// find properties
 				String id = json.substring(json.indexOf("id"));
 				String name = json.substring(json.indexOf("name"));
-				String type = json.substring(json.indexOf("location_type"));
+				String type = json.substring(json.indexOf("route_type"));
 				// String time = json.substring(json.indexOf("time"));
 				String stops = json.substring(json.indexOf("stops"));
 				String coordinates = json.substring(json.indexOf("coordinates"));
@@ -354,7 +359,7 @@ public class JSON {
 				// find properties
 				String author = json.substring(json.indexOf("author"));
 				String comment = json.substring(json.indexOf("comment"));
-				String rating = json.substring(json.indexOf("ratings"));
+				String rating = json.substring(json.indexOf("rating"));
 
 				// create Feedback Object and set Values ('Comment' first)
 				Feedback feedback = new Feedback();

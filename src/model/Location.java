@@ -92,8 +92,7 @@ public class Location {
 	}
 
 	public void setAddress(Address address) {
-		address.setAddress(address);
-		;
+		this.address = address;
 	}
 
 	public List<Feedback> getFeedback() {

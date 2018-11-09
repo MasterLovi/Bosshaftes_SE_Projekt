@@ -100,7 +100,24 @@ public class JSON_Test_unsauber {
 		}
 
 		System.out.println("Only Routes:");
-		System.out.println(JSON.routeToJSON(routes));
+		String leon = JSON.routeToJSON(routes);
+		System.out.println(leon);
+
+		Route testRoute = new Route();
+		String json = leon;
+
+		try {
+			testRoute = JSON.toRoute(json).get(0);
+			System.out.println(testRoute.getId());
+			System.out.println(testRoute.getName());
+			System.out.println(testRoute.getType());
+			System.out.println(testRoute.getFeedback());
+			System.out.println(testRoute.getOwner());
+			System.out.println(testRoute.getStops());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
