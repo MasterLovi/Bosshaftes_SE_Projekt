@@ -86,7 +86,7 @@
 			%>	
 			</div>
 	        <div id='otherMapHeader'>
-	    		<h2 id='mapHeader'><% out.print(title); %></h2>
+	    		<h2 id='mapHeader'><div></div><span id="partyText">Party </span><i class="material-icons bigIcon">chevron_left</i><span id="Kultur"> Kultur</span></div></h2>
 	    	</div>
 		</div>
 		<div class="absolute" id="searchbar">
@@ -97,8 +97,6 @@
 			</span>
 		</div>
 		<div class="absolute" id="optionpanle">
-			<p class="centered">Optionen</p>
-			<hr>
 			<form action="" method="POST">
 				<p>Sehenwürdigkeiten</p>
 				<input type="text" id="spotValue" size="1" value="10" min="1" max="20">
@@ -129,6 +127,9 @@
 				<input type="submit" value="Tour suchen" id="searchTour" onClick="$('#tours').show(); return false;" class="centered">
 			</form>
 		</div>
+		<div id="tourInfoPanel">
+			<i class="absolute material-icons" id="closeTourInfo">search</i>
+		</div>
 		<div id="map"></div>
 		<div class="absolute" id="tours" style="display: none;">
 			<div class="absolute" id="leftArrow" style="display: none;">
@@ -136,7 +137,7 @@
 			</div>
 			<ul id="tourList">
 			
-			<li class="inline tourdata"> 
+			<li class="inline tourdata">
 				<input type="hidden" class="startingPoint" value='{"coordinates": [49.46928, 8.419304]}'>
 				<p>Tour-Title 1</p>
 				<div class="centered">
@@ -299,6 +300,10 @@
 				</div>
 			</li>
 			<li class="inline tourdata">
+				<div class="infoPopup">
+					
+				
+				</div>
 				<p>Tour-Title 13</p>
 				<div class="centered">
 					<i class="material-icons activeStar" id="star1">grade</i>
@@ -363,7 +368,7 @@
 	  	 		layer.bindPopup(hs[i].properties.popupContent);
   	 		}	
 			
-  	 	/*  L.mapquest.directions().route({
+  	 	 /*  L.mapquest.directions().route({
   	 	  "locations": [{
   	          "type": "s",
   	          "latLng": {
@@ -395,7 +400,7 @@
   	 	  "options": {
   	 	    "allToAll": true
   	 	  }
-  	 	}); */
+  	 	});  */
   	 		
   	 		var marker;
   	 		mymap.on('click', function(e){

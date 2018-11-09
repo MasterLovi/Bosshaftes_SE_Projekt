@@ -100,25 +100,25 @@ $(document).ready(function(){
 	$("#rightArrow").bind("click", toureListRightShift);
 })
 
-$(document).ready(function(){
-	$(".tourdata").click(function(){ 
-		$("#myModal").css("display", "block");
-	});
-})
-
-$(document).ready(function(){
-	$(".close").click(function(){
-		$("#myModal").css("display", "none");
-	});
-})
-
-$(document).ready(function(){
-	$(window).click(function(e){
-		if (e.target.id == $("#myModal").attr("id")){
-			$("#myModal").css("display", "none");
-		}
-	});
-})
+//$(document).ready(function(){
+//	$(".tourdata").click(function(){ 
+//		$("#myModal").css("display", "block");
+//	});
+//})
+//
+//$(document).ready(function(){
+//	$(".close").click(function(){
+//		$("#myModal").css("display", "none");
+//	});
+//})
+//
+//$(document).ready(function(){
+//	$(window).click(function(e){
+//		if (e.target.id == $("#myModal").attr("id")){
+//			$("#myModal").css("display", "none");
+//		}
+//	});
+//})
 
 // When hovering over a 
 $(document).ready(function(){
@@ -127,11 +127,40 @@ $(document).ready(function(){
 		var json = $(this).children(".startingPoint").val();
 		var obj = JSON.parse(json);
 		
+		// Todo Data must be loaded before the panel is shown
+		
+		$("#tourInfoPanel").css("display","block");
+		
 		layer = L.marker(obj.coordinates, {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#00cc00'})}).addTo(getMap());
 	});
 	
 	$(".tourdata").mouseleave(function(){
+		//$("#tourInfoPanel").css("display", "none");
 		getMap().removeLayer(layer);
+	})
+})
+
+var permLayer; // Is used in multiple functions thats why it has to be global
+
+$(document).ready(function(){
+
+	$(".tourdata").click(function(){
+		var json = $(this).children(".startingPoint").val();
+		var obj = JSON.parse(json);
+		
+		if(permLayer != null){getMap().removeLayer(permLayer)};
+		
+		getMap().panTo(obj.coordinates);
+		permLayer = L.marker(obj.coordinates, {icon: L.mapquest.icons.marker({primaryColor: '#009933', secondaryColor: '#00cc00'})}).addTo(getMap());
+	});
+
+})
+
+$(document).ready(function(){
+	$("#closeTourInfo").click(function(){
+		$("#tourInfoPanel").css("display", "none");
+		$("#tours").css("display", "none");
+		if(permLayer != null){getMap().removeLayer(permLayer)};
 	})
 })
 
