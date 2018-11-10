@@ -86,11 +86,11 @@
 			%>	
 			</div>
 	        <div id='otherMapHeader'>
-	    		<h2 id='mapHeader'>
+	    		<h4 id='mapHeader'>
     				<span id="partyText">Party</span>
-    				<i class="material-icons bigIcon">chevron_left</i>
+    				<i class="material-icons">chevron_left</i>
     				<span id="Kultur"> Kultur</span>
-   				</h2>
+   				</h4>
 	    	</div>
 		</div>
 		<div class="absolute" id="searchbar">
@@ -251,89 +251,6 @@
 					<img class="tourIcon" src="utilities/pic/OP1.jpg">
 				</div>
 			</li>
-			<li class="inline tourdata">
-				<p>Tour-Title 9</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP2.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<p>Tour-Title 10</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP1.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<p>Tour-Title 11</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP2.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<p>Tour-Title 12</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP1.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<div class="infoPopup">
-					
-				
-				</div>
-				<p>Tour-Title 13</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP2.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				
-				<p>Tour-Title 14</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP1.jpg">
-				</div>
-			</li>
 			</ul> 
 			<div class="absolute" id="rightArrow">
 				<i class="material-icons bigIcon">chevron_right</i>
@@ -347,13 +264,43 @@
 		  <div class="modal-content">
 		    <span class="close">&times;</span>
 		    <form id="createLoactionForm" method="post">
-		    	<input type="hidden" name="lat" value=""/>
-		    	<input type="hidden" name="lng" value=""/>
-		    	<input type="hidden" name="userId" value=""/>
-		    	<input type="text" name="locationName" value=""/>
-		    	<input type="file" name="picture" value=""/>
-		    	<textarea form="createLocationForm" name="description"></textarea>
-		    	<input type="submit" name="confirm" value="Anlegen"/>
+		    	<input type="hidden" name="lat" id="newLat" value=""/>
+		    	<input type="hidden" name="lng" id="newLng" value=""/>
+		    	<input type="hidden" name="userId" id="userId" value=""/>
+		    	<table id="popupTable">
+		    	<tr>
+			    	<td>
+			    		<p>Angezeigter Name:</p>
+			    	</td>
+		    		<td>
+		    			<input type="text" name="locationName" value=""/>
+		    		</td>
+		    	</tr>
+		    	<tr>
+			    	<td>
+			    		<p>Bild:</p>
+			    	</td>
+		    		<td>
+		    			<input type="file" name="picture" value=""/>
+		    		</td>
+		    	</tr>
+		    	<tr>
+			    	<td>
+			    		<p>Beschreibung:</p>
+			    	</td>
+		    		<td>
+		    			<textarea rows="7" form="createLocationForm" name="description"></textarea>
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+		    			<!-- Some button -->
+		    		</td>
+		    		<td>
+		    			<input type="submit" name="confirm" value="Anlegen"/>
+		    		</td>
+		    	</tr>
+		    	</table>
 		    </form>
 		  </div>
 		
@@ -422,7 +369,7 @@
   	 			
   	 			// Creates a new marker and gives it a popup
   	 		    marker = new L.marker(e.latlng, {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#00cc00'})}).addTo(mymap)
-  	 		    	.bindPopup("<button class='addLocation'>Add to Map</button>").openPopup()
+  	 		    	.bindPopup("<button onClick='showNewPointPopup(marker)' >Add to Map</button>").openPopup()
   	 		    	.on('click', function(e){
   	 		    		// This has to be checked since the marker will be set to null if it is added to the map.
   	 		    		if(marker != null){

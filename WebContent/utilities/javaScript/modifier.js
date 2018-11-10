@@ -100,11 +100,15 @@ $(document).ready(function(){
 	$("#rightArrow").bind("click", toureListRightShift);
 })
 
-$(document).ready(function(){
-	$(".addLocation").click(function(){ 
-		$("#myModal").css("display", "block");
-	});
-})
+function showNewPointPopup(marker){ 
+	loadMarkerinfoToSubmitForm(marker);
+	$("#myModal").css("display", "block");
+}
+
+function loadMarkerinfoToSubmitForm(marker){
+	$("#newLat").val(marker.getLatLng()["lat"]);
+	$("#newLng").val(marker.getLatLng()["lng"]);
+}
 
 $(document).ready(function(){
 	$(".close").click(function(){
@@ -239,6 +243,18 @@ function toureListRightShift(){
 	
 	
 }
+
+// Checks if there are enough element that the right scoll is needed
+$(document).ready(function(){
+	width = $("#tours").css("width");
+	var viewPortSize = Number(width.substring(0, width.length - 2));
+	
+	var toureListSize = ($("#tourList li").length - 1)  * 170;
+	
+	if (toureListSize <= viewPortSize){
+		$("#rightArrow").css("display", "none");
+	}
+})
 
 
 
