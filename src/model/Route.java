@@ -68,6 +68,10 @@ public class Route {
 		return time;
 	}
 
+	public List<Feedback> getFeedback() {
+		return feedback;
+	}
+
 	// setter
 	public void setId(int id) {
 		this.id = id;
@@ -97,6 +101,10 @@ public class Route {
 		this.time = time;
 	}
 
+	public void setFeedback(List<Feedback> feedback) {
+		this.feedback = feedback;
+	}
+
 	// other methods
 	public void addStop(Location location) {
 		this.stops.add(location);
@@ -110,12 +118,16 @@ public class Route {
 		this.stops.remove(index);
 	}
 
-	public List<Feedback> getFeedback() {
-		return feedback;
-	}
+	@Override
+	public String toString() {
+		String routeString = "ROUTE= "
+						+ "Id: " + this.id + ", "
+						+ "Name: " + this.name + ", "
+						+ "Type: " + this.type + ", "
+						+ "Time: " + this.time.toString() + ", "
+						+ "|| Feedback und Location spar ich mir";
 
-	public void setFeedback(List<Feedback> feedback) {
-		this.feedback = feedback;
+		return routeString;
 	}
 
 }

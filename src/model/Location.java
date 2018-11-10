@@ -63,6 +63,10 @@ public class Location {
 		return address;
 	}
 
+	public List<Feedback> getFeedback() {
+		return feedback;
+	}
+
 	// setter
 	public void setId(int id) {
 		this.id = id;
@@ -96,12 +100,24 @@ public class Location {
 		this.address = address;
 	}
 
-	public List<Feedback> getFeedback() {
-		return feedback;
-	}
-
 	public void setFeedback(List<Feedback> feedback) {
 		this.feedback = feedback;
+	}
+
+	// other methods
+	@Override
+	public String toString() {
+		String locationString = "LOCATION= "
+						+ "Id: " + this.id + ", "
+						+ "Name: " + this.name + ", "
+						+ "Longtitude: " + this.longitude + ", "
+						+ "Latitude: " + this.latitude + ", "
+						+ "Type: " + this.type + ", "
+						+ "Time: " + this.time.toString() + ", "
+						+ "Address: " + this.address.toString() + ", "
+						+ "Feedback: geb ich jetzt dazu sicherlich nicht aus";
+
+		return locationString;
 	}
 
 }

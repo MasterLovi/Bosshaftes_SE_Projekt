@@ -20,7 +20,7 @@ public class Address {
 	private String cityName;
 	private String streetName;
 	private int houseNumber;
-	
+
 	// getter
 	public Address getAddress() {
 		return this;
@@ -51,6 +51,10 @@ public class Address {
 	}
 
 	// setter
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public void setAddress(Address address) {
 		this.country = address.country;
 		this.postCode = address.postCode;
@@ -77,6 +81,18 @@ public class Address {
 
 	public void setHouseNumber(int houseNumber) {
 		this.houseNumber = houseNumber;
+	}
+
+	// other methods
+	@Override
+	public String toString() {
+		String addressString = "ADDRESS= "
+						+ "Id: " + this.id + ", "
+						+ this.streetName + " " + this.houseNumber + ", "
+						+ this.postCode + " " + this.cityName + ", "
+						+ this.country;
+
+		return addressString;
 	}
 
 }

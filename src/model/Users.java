@@ -7,10 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -54,6 +54,10 @@ public class Users {
 	}
 
 	// setter
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -66,6 +70,10 @@ public class Users {
 		this.password = password;
 	}
 
+	public void setRoutes(List<Route> routes) {
+		this.routes = routes;
+	}
+
 	// other methods
 	public void addRoute(Route route) {
 		this.visitedRoutes.add(route);
@@ -75,12 +83,15 @@ public class Users {
 		return routes;
 	}
 
-	public void setRoutes(List<Route> routes) {
-		this.routes = routes;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
+	@Override
+	public String toString() {
+		String userString = "USER= "
+						+ "Id: " + this.id + ", "
+						+ "Username: " + this.username + ", "
+						+ "Email: " + this.email + ", "
+						+ "Password" + this.password;
+
+		return userString;
 	}
 
 }
