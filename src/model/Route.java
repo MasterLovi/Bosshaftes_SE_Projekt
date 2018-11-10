@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Time;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -24,6 +25,7 @@ public class Route {
 	private int id;
 	private String name;
 	private String type;
+	private Time time;
 
 	@OneToMany
 	@JoinColumn(name = "FEEDBACK_ID")
@@ -62,11 +64,15 @@ public class Route {
 		return owner;
 	}
 
+	public Time getTime() {
+		return time;
+	}
+
 	// setter
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -85,6 +91,10 @@ public class Route {
 
 	public void setOwner(Users owner) {
 		this.owner = owner;
+	}
+
+	public void setTime(Time time) {
+		this.time = time;
 	}
 
 	// other methods

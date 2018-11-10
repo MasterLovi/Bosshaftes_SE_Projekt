@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Time;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -24,7 +25,7 @@ public class Location {
 	private double longitude;
 	private double latitude;
 	private String type;
-	private int timeInMinutes;
+	private Time time;
 
 	@OneToOne(orphanRemoval = true)
 	@JoinColumn(name = "ADDRESS_ID")
@@ -54,8 +55,8 @@ public class Location {
 		return type;
 	}
 
-	public int getTimeInMinutes() {
-		return timeInMinutes;
+	public Time getTime() {
+		return time;
 	}
 
 	public Address getAddress() {
@@ -87,8 +88,8 @@ public class Location {
 		}
 	}
 
-	public void setTimeInMinutes(int timeInMinutes) {
-		this.timeInMinutes = timeInMinutes;
+	public void setTime(Time time) {
+		this.time = time;
 	}
 
 	public void setAddress(Address address) {

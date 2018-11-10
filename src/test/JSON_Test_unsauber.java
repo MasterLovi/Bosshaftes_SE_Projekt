@@ -1,5 +1,6 @@
 package test;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,8 @@ public class JSON_Test_unsauber {
 			List<Location> locations = new ArrayList<Location>();
 			List<Feedback> feedback = new ArrayList<Feedback>();
 
+			Time time = new Time(2, 30, 0);
+
 			for (Integer j = 0; j < 2; j++) {
 
 				Location location = new Location();
@@ -44,7 +47,7 @@ public class JSON_Test_unsauber {
 				location.setLatitude(j);
 				location.setLongitude(j);
 				location.setName("Test Location " + j);
-				location.setTimeInMinutes(j);
+				location.setTime(time);
 
 				try {
 					location.setType("Party");

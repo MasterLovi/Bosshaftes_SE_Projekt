@@ -1,5 +1,6 @@
 package util;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,9 @@ import model.Users;
 /**
  * Util - Class JSON - Converts DB-Objects to JSON String - Parses JSON String
  * to DB-Objects
+ * 
+ * Use of deprecated constructors for java.sql.Time because they are a lot more
+ * useful in combination with the Frontend
  **/
 public class JSON {
 
@@ -62,9 +66,8 @@ public class JSON {
 	 * @return Value of the property within the given String.
 	 */
 	private static Integer getIntValue(String substr) {
-		
-		
-		if(substr.indexOf(",") > -1) {
+
+		if (substr.indexOf(",") > -1) {
 			substr = substr.substring(0, substr.indexOf(","));
 		} else if (substr.indexOf("}") > -1) {
 			substr = substr.substring(0, substr.indexOf("}"));
@@ -76,7 +79,7 @@ public class JSON {
 		} else {
 			substr = substr.substring(substr.indexOf(":") + 1, substr.length());
 		}
-		return Integer.parseInt(substr.replaceAll("\\s+",""));
+		return Integer.parseInt(substr.replaceAll("\\s+", ""));
 	}
 
 	/**
@@ -100,7 +103,7 @@ public class JSON {
 								+ "\n" + "      \"id\": " + location.getId() + ","
 								+ "\n" + "      \"name\": \"" + location.getName() + "\","
 								+ "\n" + "      \"location_type\": \"" + location.getType() + "\","
-								+ "\n" + "      \"time\": " + location.getTimeInMinutes() + ","
+								+ "\n" + "      \"time\": " + JSON.timeToJSON(location.getTime()) + ","
 								+ "\n" + "      \"address\": " + JSON.addressToJSON(location.getAddress()) + ","
 								+ "\n" + "      \"feedback\": " + JSON.feedbackToJSON(location.getFeedback()) + ","
 								+ "\n" + "      \"popupContent\": \"\""
@@ -167,7 +170,7 @@ public class JSON {
 								+ "\n" + "    \"id\": " + route.getId() + ","
 								+ "\n" + "    \"name\": \"" + route.getName() + "\","
 								+ "\n" + "    \"route_type\": \"" + route.getType() + "\","
-								// + "\n" + " \"time\": " + location.getTimeInMinutes() + ","
+								+ "\n" + "    \"time\": " + JSON.timeToJSON(route.getTime()) + ","
 								+ "\n" + "    \"stops\": " + JSON.locationToJSON(route.getStops()) + ","
 								+ "\n" + "    \"feedback\": " + JSON.feedbackToJSON(route.getFeedback()) + ","
 								+ "\n" + "	  \"owner\": \"" + route.getOwner().getUsername() + "\","
@@ -182,6 +185,22 @@ public class JSON {
 
 		{
 			return "[]";
+		}
+	}
+
+	public static String timeToJSON(Time time) {
+		if (time != null) {
+			String json = "{";
+			json = json
+							+ "\n" + "        \"time\": \"" + time.getHours() + ":" + time.getMinutes() + ":"
+							+ time.getSeconds() + "\","
+							+ "\n" + "        \"hours\": " + time.getHours() + ","
+							+ "\n" + "        \"minutes\": " + time.getMinutes() + ","
+							+ "\n" + "        \"seconds\": " + time.getSeconds()
+							+ "\n" + "      }";
+			return json;
+		} else {
+			return "{}";
 		}
 	}
 
@@ -247,7 +266,7 @@ public class JSON {
 				// set Properties
 				location.setId(getIntValue(id));
 				location.setName(getStringValue(name));
-				location.setTimeInMinutes(getIntValue(time));
+				location.setTime(toTime(time));
 				location.setType(getStringValue(type));
 				location.setAddress(toAddress(address));
 				location.setFeedback(toFeedback(feedback));
@@ -319,7 +338,7 @@ public class JSON {
 				String id = json.substring(json.indexOf("id"));
 				String name = json.substring(json.indexOf("name"));
 				String type = json.substring(json.indexOf("route_type"));
-				// String time = json.substring(json.indexOf("time"));
+				String time = json.substring(json.indexOf("time"));
 				String stops = json.substring(json.indexOf("stops"));
 				String coordinates = json.substring(json.indexOf("coordinates"));
 				String owner = json.substring(json.indexOf("owner"));
@@ -328,9 +347,8 @@ public class JSON {
 				// set Properties
 				route.setId(getIntValue(id));
 				route.setName(getStringValue(name));
-				// location.setTimeInMinutes(getIntValue(time));
+				route.setTime(toTime(time));
 				route.setType(getStringValue(type));
-				// route.setAddress(toAddress(address));
 				route.setStops(toLocation(stops));
 				route.setFeedback(toFeedback(feedback));
 
@@ -396,6 +414,20 @@ public class JSON {
 
 		return ratings;
 
+	}
+
+	public static Time toTime(String json) {
+
+		Time time = new Time(0);
+		String hours = json.substring(json.indexOf("hours"));
+		String minutes = json.substring(json.indexOf("minutes"));
+		String seconds = json.substring(json.indexOf("seconds"));
+
+		time.setHours(getIntValue(hours));
+		time.setMinutes(getIntValue(minutes));
+		time.setSeconds(getIntValue(seconds));
+
+		return time;
 	}
 
 }
