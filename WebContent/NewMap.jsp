@@ -346,7 +346,15 @@
 		  <!-- Modal content -->
 		  <div class="modal-content">
 		    <span class="close">&times;</span>
-		    <p>Some text in the Modal..</p>
+		    <form id="createLoactionForm" method="post">
+		    	<input type="hidden" name="lat" value=""/>
+		    	<input type="hidden" name="lng" value=""/>
+		    	<input type="hidden" name="userId" value=""/>
+		    	<input type="text" name="locationName" value=""/>
+		    	<input type="file" name="picture" value=""/>
+		    	<textarea form="createLocationForm" name="description"></textarea>
+		    	<input type="submit" name="confirm" value="Anlegen"/>
+		    </form>
 		  </div>
 		
 		</div>
@@ -414,7 +422,7 @@
   	 			
   	 			// Creates a new marker and gives it a popup
   	 		    marker = new L.marker(e.latlng, {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#00cc00'})}).addTo(mymap)
-  	 		    	.bindPopup("<button onClick=addMarkerToMap(marker)>Add to Map</button>").openPopup()
+  	 		    	.bindPopup("<button class='addLocation'>Add to Map</button>").openPopup()
   	 		    	.on('click', function(e){
   	 		    		// This has to be checked since the marker will be set to null if it is added to the map.
   	 		    		if(marker != null){
