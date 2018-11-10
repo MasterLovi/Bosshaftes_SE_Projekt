@@ -62,14 +62,21 @@ public class JSON {
 	 * @return Value of the property within the given String.
 	 */
 	private static Integer getIntValue(String substr) {
-		substr = substr.indexOf(",") > -1 ? substr.substring(0, substr.indexOf(","))
-						: substr.substring(0, substr.indexOf("}"));
+		
+		
+		if(substr.indexOf(",") > -1) {
+			substr = substr.substring(0, substr.indexOf(","));
+		} else if (substr.indexOf("}") > -1) {
+			substr = substr.substring(0, substr.indexOf("}"));
+		} else {
+			substr = substr.substring(0, substr.indexOf("\n"));
+		}
 		if (substr.indexOf(": ") != -1) {
 			substr = substr.substring(substr.indexOf(":") + 2, substr.length());
 		} else {
 			substr = substr.substring(substr.indexOf(":") + 1, substr.length());
 		}
-		return Integer.parseInt(substr);
+		return Integer.parseInt(substr.replaceAll("\\s+",""));
 	}
 
 	/**
