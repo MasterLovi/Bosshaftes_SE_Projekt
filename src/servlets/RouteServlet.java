@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.Address;
-import model.Location;
 import model.Route;
 import util.JSON;
 
@@ -24,6 +22,7 @@ import util.JSON;
  */
 @WebServlet("/RouteServlet")
 public class RouteServlet extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -55,85 +54,67 @@ public class RouteServlet extends HttpServlet {
 		}
 	}
 
-	private static String create(List<Location> locations, EntityManager em) {
+	private static String create(List<Route> routes, EntityManager em) {
 
-		Integer errorCount = 0;
-		ArrayList<String> loc = new ArrayList<String>();
-
-		// Loop over Locations that should be created
-		for (Location location : locations) {
-			Query query = em.createQuery("SELECT l from Location l WHERE l.latitude = " + location.getLatitude()
-					+ " AND l.longitude = " + location.getLatitude());
-			List<Location> result = query.getResultList();
-
-			// If location was not found, it should be created
-			if (result.size() == 0) {
+		// Loop over Routes that should be created
+		try {
+			for (Route route : routes) {
 				em.getTransaction().begin();
-				em.persist(location.getAddress());
-				em.persist(location);
+				em.persist(route);
 				em.getTransaction().commit();
-			} else {
-				errorCount++;
-				loc.add(location.getName());
 			}
-		}
-		return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", locations: " + loc.toString() + "}";
-	}
-
-	private static String delete(List<Location> locations, EntityManager em) throws Exception {
-		// Loop over Locations that should be deleted
-		for (Location location : locations) {
-			Location result = em.find(Location.class, location.getId());
-			em.getTransaction().begin();
-			em.remove(result);
-			em.getTransaction().commit();
+		} catch (Exception e) {
+			return "Failed: " + e.getMessage();
 		}
 		return "Success";
 	}
 
-	private static String update(List<Location> locations, EntityManager em) throws Exception {
+	private static String delete(List<Route> routes, EntityManager em) throws Exception {
+		// Loop over Routes that should be deleted
+		try {
+			for (Route route : routes) {
+				Route result = em.find(Route.class, route.getId());
+				em.getTransaction().begin();
+				em.remove(result);
+				em.getTransaction().commit();
+			}
+		} catch (Exception e) {
+			return "Failed: " + e.getMessage();
+		}
+		return "Success";
+	}
+
+	private static String update(List<Route> routes, EntityManager em) throws Exception {
 
 		try {
 			Integer errorCount = 0;
-			ArrayList<String> loc = new ArrayList<String>();
+			ArrayList<String> log = new ArrayList<String>();
 
-			// Loop over Locations that should be updated
-			for (Location location : locations) {
-				Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
-				List<Location> result = query.getResultList();
+			// Loop over Routes that should be updated
+			for (Route route : routes) {
+				Query query = em.createQuery("SELECT r from Route r WHERE r.id = " + route.getId());
+				List<Route> result = query.getResultList();
 
-				// If location was found, it should be updated
+				// If route was found, it should be updated
 				if (result.size() > 0) {
-					Location resultlocation = result.get(0);
-					resultlocation.setName(location.getName());
-					resultlocation.setTimeInMinutes(location.getTimeInMinutes());
-					resultlocation.setType(location.getType());
-					resultlocation.setLatitude(location.getLatitude());
-					resultlocation.setLongitude(location.getLongitude());
+					Route resultRoute = result.get(0);
+					resultRoute.setName(route.getName());
+					resultRoute.setTime(route.getTime());
+					resultRoute.setType(route.getType());
+					resultRoute.setFeedback(route.getFeedback());
+					resultRoute.setStops(route.getStops());
+					resultRoute.setOwner(route.getOwner());
 
-					// update corresponding Address
-					Address address = location.getAddress();
-					query = em.createQuery("SELECT a from Address a WHERE" + " a.country = " + address.getCountry()
-							+ " a.postCode = " + address.getPostCode() + " a.cityName = " + address.getCityName()
-							+ " a.streetName = " + address.getStreetName() + " a.houseNumber = "
-							+ address.getHouseNumber());
-					List<Address> resultAddresses = query.getResultList();
+					em.getTransaction().begin();
+					em.persist(resultRoute);
+					em.getTransaction().commit();
 
-					if (resultAddresses.size() > 0) {
-						Address resultAddress = resultAddresses.get(0);
-						resultAddress.setAddress(address);
-					} else {
-						em.getTransaction().begin();
-						em.persist(address);
-						resultlocation.setAddress(address);
-						em.getTransaction().commit();
-					}
 				} else {
 					errorCount++;
-					loc.add(location.getName());
+					log.add(route.getName());
 				}
 			}
-			return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", locations: " + loc.toString() + "}";
+			return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", routes: " + log.toString() + "}";
 		} catch (Exception e) {
 			throw e;
 		}
@@ -145,7 +126,7 @@ public class RouteServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+					throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory and create EntityManager
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
@@ -177,25 +158,26 @@ public class RouteServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+					throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
 		String JSONData = request.getParameter("data");
-		List<Location> locations = JSON.toLocation(JSONData);
+
+		List<Route> routes = JSON.toRoute(JSONData);
 		String res = "";
 
 		try {
 			switch (request.getParameter("operation")) {
 			case "update":
-				res = update(locations, em);
+				res = update(routes, em);
 				break;
 			case "create":
-				res = create(locations, em);
+				res = create(routes, em);
 				break;
 			case "delete":
-				res = delete(locations, em);
+				res = delete(routes, em);
 				break;
 			}
 			response.setStatus(200);
