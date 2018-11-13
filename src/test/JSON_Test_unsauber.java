@@ -4,12 +4,14 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import model.Address;
 import model.Feedback;
 import model.Location;
 import model.Route;
 import model.Users;
-import util.JSON;
 
 public class JSON_Test_unsauber {
 
@@ -80,11 +82,6 @@ public class JSON_Test_unsauber {
 
 				feedback.add(rating);
 
-				if (j == 0) {
-					// System.out.println("Only Address:");
-					// System.out.println(JSON.addressToJSON(address));
-					// System.out.println("\n\n\n");
-				}
 			}
 
 			route.setFeedback(feedback);
@@ -92,34 +89,29 @@ public class JSON_Test_unsauber {
 
 			routes.add(route);
 
-			if (i == 0) {
-				// System.out.println("Only Feedback:");
-				// System.out.println(JSON.feedbackToJSON(feedback));
-				// System.out.println("\n\n\n");
-				// System.out.println("Only Locations:");
-				// System.out.println(JSON.locationToJSON(locations));
-				// System.out.println("\n\n\n");
-			}
 		}
-
-		System.out.println("Only Routes:");
-		String leon = JSON.routeToJSON(routes);
-		System.out.println(leon);
-
-		Route testRoute = new Route();
-		String json = leon;
-
-		try {
-			testRoute = JSON.toRoute(json).get(0);
-			System.out.println(testRoute.getId());
-			System.out.println(testRoute.getName());
-			System.out.println(testRoute.getType());
-			System.out.println(testRoute.getFeedback());
-			System.out.println(testRoute.getOwner());
-			System.out.println(testRoute.getStops());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		Gson gson = new Gson();
+        String json = gson.toJson(routes);
+        System.out.println(json + "\n\n\n");
+        
+        routes = gson.fromJson(json, new TypeToken<List<Route>>(){}.getType());
+        
+        for (Route r : routes) {
+        	System.out.println(r.toString());
+        	for (Location l : r.getStops()) {
+        		System.out.println(l.toString());
+        		for (Feedback f : r.getFeedback()) {
+            		System.out.println(f.toString());
+            	}
+        	}
+        	for (Feedback f : r.getFeedback()) {
+        		System.out.println(f.toString());
+        	}
+        }
+        
+//        Type routeListType = new TypeToken<List<Route>>(){}.getType();
+//        List<Route> founderList = gson.fromJson(founderJson, founderListType);  
 
 	}
 

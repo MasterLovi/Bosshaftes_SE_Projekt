@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import model.Route;
 import util.JSON;
 
@@ -59,8 +62,18 @@ public class RouteServlet extends HttpServlet {
 		// Loop over Routes that should be created
 		try {
 			for (Route route : routes) {
+				
+				Route newRoute = new Route();
+				
+				newRoute.setName(route.getName());
+				newRoute.setType(route.getType());
+				newRoute.setTime(route.getTime());
+				newRoute.setStops(route.getStops());
+				newRoute.setFeedback(null);
+				newRoute.setOwner(route.getOwner());
+				
 				em.getTransaction().begin();
-				em.persist(route);
+				em.persist(newRoute);
 				em.getTransaction().commit();
 			}
 		} catch (Exception e) {
@@ -92,12 +105,11 @@ public class RouteServlet extends HttpServlet {
 
 			// Loop over Routes that should be updated
 			for (Route route : routes) {
-				Query query = em.createQuery("SELECT r from Route r WHERE r.id = " + route.getId());
-				List<Route> result = query.getResultList();
+				Route result = em.find(Route.class, route.getId());
 
 				// If route was found, it should be updated
 				if (result.size() > 0) {
-					Route resultRoute = result.get(0);
+					Route resultRoute = new Route();
 					resultRoute.setName(route.getName());
 					resultRoute.setTime(route.getTime());
 					resultRoute.setType(route.getType());
@@ -163,9 +175,8 @@ public class RouteServlet extends HttpServlet {
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
-		String JSONData = request.getParameter("data");
-
-		List<Route> routes = JSON.toRoute(JSONData);
+		Gson gson = new Gson();
+		List<Route> routes = gson.fromJson(request.getParameter("data"), new TypeToken<List<Route>>(){}.getType());
 		String res = "";
 
 		try {

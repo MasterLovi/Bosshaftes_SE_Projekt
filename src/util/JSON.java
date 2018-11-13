@@ -192,8 +192,6 @@ public class JSON {
 		if (time != null) {
 			String json = "{";
 			json = json
-							+ "\n" + "        \"time\": \"" + time.getHours() + ":" + time.getMinutes() + ":"
-							+ time.getSeconds() + "\","
 							+ "\n" + "        \"hours\": " + time.getHours() + ","
 							+ "\n" + "        \"minutes\": " + time.getMinutes() + ","
 							+ "\n" + "        \"seconds\": " + time.getSeconds()

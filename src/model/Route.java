@@ -124,7 +124,7 @@ public class Route {
 						+ "Id: " + this.id + ", "
 						+ "Name: " + this.name + ", "
 						+ "Type: " + this.type + ", "
-						+ "Time: " + this.time.toString() + ", "
+//						+ "Time: " + this.time.toString() + ", "
 						+ "|| Feedback und Location spar ich mir";
 
 		return routeString;

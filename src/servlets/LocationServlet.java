@@ -14,9 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import model.Address;
 import model.Location;
-import util.JSON;
 
 /**
  * Servlet implementation class LocationServlet
@@ -44,7 +46,8 @@ public class LocationServlet extends HttpServlet {
 			// check for empty resultList
 			if (result.size() > 0) {
 				// convert data to JSON
-				JSONData = JSON.locationToJSON(result);
+				Gson gson = new Gson();
+		        JSONData = gson.toJson(result);
 			} else {
 				JSONData = "[]";
 			}
@@ -184,8 +187,8 @@ public class LocationServlet extends HttpServlet {
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
-		String JSONData = request.getParameter("data");
-		List<Location> locations = JSON.toLocation(JSONData);
+		Gson gson = new Gson();
+		List<Location> locations = gson.fromJson(request.getParameter("data"), new TypeToken<List<Location>>(){}.getType());
 		String res = "";
 
 		try {
