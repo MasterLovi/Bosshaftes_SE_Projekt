@@ -27,8 +27,10 @@ public class Route {
 	private String name;
 	private String type;
 	private Time time;
+	private String description;
+	private List<byte[]> images;
 
-	@OneToMany
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FEEDBACK_ID")
 	private List<Feedback> feedback;
 
@@ -51,6 +53,14 @@ public class Route {
 
 	public String getType() {
 		return type;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public List<byte[]> getImages() {
+		return images;
 	}
 
 	public List<Location> getStops() {
@@ -90,6 +100,10 @@ public class Route {
 		}
 	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public void setStops(List<Location> stops) {
 		this.stops = stops;
 	}
@@ -100,6 +114,10 @@ public class Route {
 
 	public void setTime(Time time) {
 		this.time = time;
+	}
+
+	public void setImages(List<byte[]> images) {
+		this.images = images;
 	}
 
 	public void setFeedback(List<Feedback> feedback) {
@@ -119,13 +137,38 @@ public class Route {
 		this.stops.remove(index);
 	}
 
+	public void addFeedback(Feedback feedback) {
+		this.feedback.add(feedback);
+	}
+
+	public void removeFeedback(Feedback feedback) {
+		this.feedback.remove(feedback);
+	}
+
+	public void removeFeedbackAtIndex(int index) {
+		this.feedback.remove(index);
+	}
+
+	public void addImage(byte[] image) {
+		this.images.add(image);
+	}
+
+	public void removeImage(byte[] image) {
+		this.images.remove(image);
+	}
+
+	public void removeImageAtIndex(int index) {
+		this.images.remove(index);
+	}
+
 	@Override
 	public String toString() {
 		String routeString = "ROUTE= "
 						+ "Id: " + this.id + ", "
 						+ "Name: " + this.name + ", "
 						+ "Type: " + this.type + ", "
-//						+ "Time: " + this.time.toString() + ", "
+						+ "Time: " + this.time.toString() + ", "
+						+ "Description: " + this.description + ", "
 						+ "|| Feedback und Location spar ich mir";
 
 		return routeString;

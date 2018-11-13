@@ -104,6 +104,8 @@ public class JSON {
 								+ "\n" + "      \"name\": \"" + location.getName() + "\","
 								+ "\n" + "      \"location_type\": \"" + location.getType() + "\","
 								+ "\n" + "      \"time\": " + JSON.timeToJSON(location.getTime()) + ","
+								+ "\n" + "      \"timesReported\": " + location.getTimesReported() + ","
+								+ "\n" + "      \"description\": \"" + location.getDescription() + "\","
 								+ "\n" + "      \"address\": " + JSON.addressToJSON(location.getAddress()) + ","
 								+ "\n" + "      \"feedback\": " + JSON.feedbackToJSON(location.getFeedback()) + ","
 								+ "\n" + "      \"popupContent\": \"\""
@@ -171,6 +173,7 @@ public class JSON {
 								+ "\n" + "    \"name\": \"" + route.getName() + "\","
 								+ "\n" + "    \"route_type\": \"" + route.getType() + "\","
 								+ "\n" + "    \"time\": " + JSON.timeToJSON(route.getTime()) + ","
+								+ "\n" + "    \"description\": \"" + route.getDescription() + "\","
 								+ "\n" + "    \"stops\": " + JSON.locationToJSON(route.getStops()) + ","
 								+ "\n" + "    \"feedback\": " + JSON.feedbackToJSON(route.getFeedback()) + ","
 								+ "\n" + "	  \"owner\": \"" + route.getOwner().getUsername() + "\","
@@ -257,6 +260,7 @@ public class JSON {
 				String name = json.substring(json.indexOf("name"));
 				String type = json.substring(json.indexOf("location_type"));
 				String time = json.substring(json.indexOf("time"));
+				String description = json.substring(json.indexOf("description"));
 				String address = json.substring(json.indexOf("address"));
 				String coordinates = json.substring(json.indexOf("coordinates"));
 				String feedback = json.substring(json.indexOf("feedback"), json.indexOf("]"));
@@ -266,6 +270,7 @@ public class JSON {
 				location.setName(getStringValue(name));
 				location.setTime(toTime(time));
 				location.setType(getStringValue(type));
+				location.setDescription(getStringValue(description));
 				location.setAddress(toAddress(address));
 				location.setFeedback(toFeedback(feedback));
 
@@ -337,6 +342,7 @@ public class JSON {
 				String name = json.substring(json.indexOf("name"));
 				String type = json.substring(json.indexOf("route_type"));
 				String time = json.substring(json.indexOf("time"));
+				String description = json.substring(json.indexOf("description"));
 				String stops = json.substring(json.indexOf("stops"));
 				String coordinates = json.substring(json.indexOf("coordinates"));
 				String owner = json.substring(json.indexOf("owner"));
@@ -347,6 +353,7 @@ public class JSON {
 				route.setName(getStringValue(name));
 				route.setTime(toTime(time));
 				route.setType(getStringValue(type));
+				route.setDescription(getStringValue(description));
 				route.setStops(toLocation(stops));
 				route.setFeedback(toFeedback(feedback));
 

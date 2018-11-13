@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -63,6 +64,10 @@ public class LocationServlet extends HttpServlet {
 
 			// If location was not found, it should be created
 			if (result.size() == 0) {
+				/*
+				 * for (Base64 image : location.getImages()) { byte[] decodedImage =
+				 * Base64.decode(image, 0); }
+				 */
 				em.persist(location);
 			} else {
 				throw new Exception("Location: " + location.getName() + " existiert bereits.");
@@ -123,6 +128,42 @@ public class LocationServlet extends HttpServlet {
 		return "Success";
 	}
 
+	private static String report(List<Location> locations, EntityManager em) throws Exception {
+
+		try {
+			Integer errorCount = 0;
+			ArrayList<String> loc = new ArrayList<String>();
+
+			// Loop over Locations that should be reported
+			for (Location location : locations) {
+				Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
+				List<Location> result = query.getResultList();
+
+				// If location was found, it should be updated
+				if (result.size() > 0) {
+					Location resultLocation = result.get(0);
+					int timesReported = resultLocation.getTimesReported();
+
+					if (timesReported == 2) {
+						// delete Location
+						ArrayList<Location> deleteLocations = new ArrayList<Location>();
+						deleteLocations.add(location);
+						delete(deleteLocations, em);
+					} else {
+						resultLocation.setTimesReported(timesReported++);
+					}
+
+				} else {
+					errorCount++;
+					loc.add(location.getName());
+				}
+			}
+			return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", locations: " + loc.toString() + "}";
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -181,6 +222,9 @@ public class LocationServlet extends HttpServlet {
 				break;
 			case "delete":
 				res = delete(locations, em);
+				break;
+			case "report":
+				res = report(locations, em);
 				break;
 			}
 			response.setStatus(200);
