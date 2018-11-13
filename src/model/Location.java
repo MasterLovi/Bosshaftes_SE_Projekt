@@ -3,6 +3,7 @@ package model;
 import java.sql.Time;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,12 +27,13 @@ public class Location {
 	private double latitude;
 	private String type;
 	private Time time;
+	private int timesReported;
 
-	@OneToOne(orphanRemoval = true)
+	@OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS_ID")
 	private Address address;
 
-	@OneToMany(orphanRemoval = true)
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FEEDBACK_ID")
 	private List<Feedback> feedback;
 
@@ -57,6 +59,10 @@ public class Location {
 
 	public Time getTime() {
 		return time;
+	}
+
+	public int getTimesReported() {
+		return timesReported;
 	}
 
 	public Address getAddress() {
@@ -98,6 +104,10 @@ public class Location {
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	public void setTimesReported(int timesReported) {
+		this.timesReported = timesReported;
 	}
 
 	public void setFeedback(List<Feedback> feedback) {
