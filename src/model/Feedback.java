@@ -19,7 +19,7 @@ public class Feedback {
 	private int id;
 	private String comment;
 	private int rating;
-	
+
 	@OneToOne
 	@JoinColumn(name = "AUTHOR_ID")
 	private Users author;
@@ -41,6 +41,11 @@ public class Feedback {
 		return author;
 	}
 
+	// setter
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
@@ -55,6 +60,18 @@ public class Feedback {
 
 	public void setAuthor(Users author) {
 		this.author = author;
+	}
+
+	// other methods
+	@Override
+	public String toString() {
+		String feedbackString = "FEEDBACK= "
+						+ "Id: " + this.id + ", "
+						+ "Comment: " + this.comment + ", "
+						+ "Rating: " + this.rating + ", "
+						+ "Author (Username): " + this.author.getUsername() + ", ";
+
+		return feedbackString;
 	}
 
 }

@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Time;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -23,20 +24,19 @@ public class Route {
 	@Column(name = "ID")
 	private int id;
 	private String name;
-	
+	private String type;
+	private Time time;
+
 	@OneToMany
 	@JoinColumn(name = "FEEDBACK_ID")
 	private List<Feedback> feedback;
-	
+
 	@ManyToMany
-	@JoinTable(
-	   name="ROUTES_LOCATION",
-	   joinColumns= @JoinColumn(name="ROUTE_ID", referencedColumnName="ID"),
-	   inverseJoinColumns= @JoinColumn(name="LOCATION_ID", referencedColumnName="ID"))
+	@JoinTable(name = "ROUTES_LOCATION", joinColumns = @JoinColumn(name = "ROUTE_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "LOCATION_ID", referencedColumnName = "ID"))
 	private List<Location> stops;
-	
+
 	@ManyToOne
-	@JoinColumn(name="OWNER_ID")
+	@JoinColumn(name = "OWNER_ID")
 	private Users owner;
 
 	// getter
@@ -46,6 +46,10 @@ public class Route {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getType() {
+		return type;
 	}
 
 	public List<Location> getStops() {
@@ -60,13 +64,45 @@ public class Route {
 		return owner;
 	}
 
+	public Time getTime() {
+		return time;
+	}
+
+	public List<Feedback> getFeedback() {
+		return feedback;
+	}
+
 	// setter
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	public void setType(String type) throws Exception {
+		if (type.equals("Kultur") || type.equals("Party")) {
+			this.type = type;
+		} else {
+			throw new Exception("You can only add Routes of type \"Kultur\" or \"Party\"");
+		}
+	}
+
+	public void setStops(List<Location> stops) {
+		this.stops = stops;
+	}
+
 	public void setOwner(Users owner) {
 		this.owner = owner;
+	}
+
+	public void setTime(Time time) {
+		this.time = time;
+	}
+
+	public void setFeedback(List<Feedback> feedback) {
+		this.feedback = feedback;
 	}
 
 	// other methods
@@ -81,13 +117,17 @@ public class Route {
 	public void removeStopAtIndex(int index) {
 		this.stops.remove(index);
 	}
-	
-	public List<Feedback> getFeedback() {
-		return feedback;
-	}
-	
-	public void setFeedback(List<Feedback> feedback) {
-		this.feedback = feedback;
+
+	@Override
+	public String toString() {
+		String routeString = "ROUTE= "
+						+ "Id: " + this.id + ", "
+						+ "Name: " + this.name + ", "
+						+ "Type: " + this.type + ", "
+						+ "Time: " + this.time.toString() + ", "
+						+ "|| Feedback und Location spar ich mir";
+
+		return routeString;
 	}
 
 }

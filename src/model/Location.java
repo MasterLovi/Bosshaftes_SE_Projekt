@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Time;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -24,11 +25,12 @@ public class Location {
 	private double longitude;
 	private double latitude;
 	private String type;
-	private int timeInMinutes;
+	private Time time;
+
 	@OneToOne(orphanRemoval = true)
 	@JoinColumn(name = "ADDRESS_ID")
 	private Address address;
-	
+
 	@OneToMany(orphanRemoval = true)
 	@JoinColumn(name = "FEEDBACK_ID")
 	private List<Feedback> feedback;
@@ -53,19 +55,23 @@ public class Location {
 		return type;
 	}
 
-	public int getTimeInMinutes() {
-		return timeInMinutes;
+	public Time getTime() {
+		return time;
 	}
 
 	public Address getAddress() {
 		return address;
 	}
 
+	public List<Feedback> getFeedback() {
+		return feedback;
+	}
+
 	// setter
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -86,21 +92,32 @@ public class Location {
 		}
 	}
 
-	public void setTimeInMinutes(int timeInMinutes) {
-		this.timeInMinutes = timeInMinutes;
+	public void setTime(Time time) {
+		this.time = time;
 	}
 
 	public void setAddress(Address address) {
-		address.setAddress(address);
-		;
+		this.address = address;
 	}
-	
-	public List<Feedback> getFeedback() {
-		return feedback;
-	}
-	
+
 	public void setFeedback(List<Feedback> feedback) {
 		this.feedback = feedback;
+	}
+
+	// other methods
+	@Override
+	public String toString() {
+		String locationString = "LOCATION= "
+						+ "Id: " + this.id + ", "
+						+ "Name: " + this.name + ", "
+						+ "Longtitude: " + this.longitude + ", "
+						+ "Latitude: " + this.latitude + ", "
+						+ "Type: " + this.type + ", "
+						+ "Time: " + this.time.toString() + ", "
+						+ "Address: " + this.address.toString() + ", "
+						+ "Feedback: geb ich jetzt dazu sicherlich nicht aus";
+
+		return locationString;
 	}
 
 }
