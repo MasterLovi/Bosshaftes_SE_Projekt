@@ -4,20 +4,23 @@
 }
 
 body {
-	background-color: #bfbfbf;
+	background-image: url("../utilities/pic/backgroundIndex.png");
+	background-color: #cccccc;
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 
 #headMsg {
 	background-color: #ffffff;
-	border-radius: 10px;
-	box-shadow: 10px 5px 10px grey;
+	border-radius: 4px;
+	box-shadow: 2px 2px 2px #bbb;
 }
 
 #headerbar {
 	background-color: #ffffff;
-	border-radius: 10px;
-	box-shadow: 10px 5px 10px grey;
+	border-radius: 4px;
+	box-shadow: 2px 2px 2px #bbb;
 }
 
 #optionPane{
@@ -26,20 +29,20 @@ body {
 
 #mapWrapper{
 	background-color: #ffffff;
-	box-shadow: 10px 5px 10px grey;
-	border-radius: 10px;
+	box-shadow: 2px 2px 2px #bbb;
+	border-radius: 4px;
 }
 
 #map{
-	border-radius: 10px;
+	border-radius: 4px;
 }
 
 #optionPane{
 	margin-top: 15px;
 	background-color: #ffffff;
-	box-shadow: 10px 5px 10px grey;
-	border-bottom-left-radius: 10px;
-	border-top-left-radius: 10px;
+	box-shadow: 2px 2px 2px #bbb;
+	border-bottom-left-radius: 4px;
+	border-top-left-radius: 4px;
 }
 
 #userIcon {
@@ -56,16 +59,16 @@ body {
 }
 
 .opWrapper h2 {
-	background-color: #000099;
+	background-color: #404040;
 	color: #ffffff;
-	box-shadow: 0px 5px 10px grey;
-	border-radius: 10px;
+	box-shadow: 2px 2px 2px #bbb;
+	border-radius: 4px;
 }
 
 .optionPanel {
 	background-color: #ffffff;
-	border-radius: 6px;
-	box-shadow: 10px 5px 10px grey;
+	border-radius: 4px;
+	box-shadow: 2px 2px 2px #bbb;
 }
 
 .actionButton {
@@ -80,7 +83,7 @@ body {
 
 .optionImg {
 	border-radius: 50%;
-	box-shadow: 0px 5px 10px grey;
+	box-shadow: 2px 2px 2px #bbb;
 }
 
 .bigIcon{

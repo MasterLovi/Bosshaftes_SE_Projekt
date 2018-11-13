@@ -100,11 +100,15 @@ $(document).ready(function(){
 	$("#rightArrow").bind("click", toureListRightShift);
 })
 
-$(document).ready(function(){
-	$(".tourdata").click(function(){ 
-		$("#myModal").css("display", "block");
-	});
-})
+function showNewPointPopup(marker){ 
+	loadMarkerinfoToSubmitForm(marker);
+	$("#myModal").css("display", "block");
+}
+
+function loadMarkerinfoToSubmitForm(marker){
+	$("#newLat").val(marker.getLatLng()["lat"]);
+	$("#newLng").val(marker.getLatLng()["lng"]);
+}
 
 $(document).ready(function(){
 	$(".close").click(function(){
@@ -119,6 +123,70 @@ $(document).ready(function(){
 		}
 	});
 })
+
+// When hovering over a 
+$(document).ready(function(){
+	var layer;
+	$(".tourdata").mouseenter(function(){
+		var json = $(this).children(".startingPoint").val();
+		var obj = JSON.parse(json);
+		
+		// Todo Data must be loaded before the panel is shown
+		
+		$("#tourInfoPanel").css("display","block");
+		
+		layer = L.marker(obj.coordinates, {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#00cc00'})}).addTo(getMap());
+	});
+	
+	$(".tourdata").mouseleave(function(){
+		//$("#tourInfoPanel").css("display", "none");
+		getMap().removeLayer(layer);
+	})
+})
+
+var permLayer; // Is used in multiple functions thats why it has to be global
+
+$(document).ready(function(){
+
+	$(".tourdata").click(function(){
+		var json = $(this).children(".startingPoint").val();
+		var obj = JSON.parse(json);
+		
+		if(permLayer != null){getMap().removeLayer(permLayer)};
+		
+		getMap().panTo(obj.coordinates);
+		permLayer = L.marker(obj.coordinates, {icon: L.mapquest.icons.marker({primaryColor: '#009933', secondaryColor: '#00cc00'})}).addTo(getMap());
+	});
+
+})
+
+$(document).ready(function(){
+	$("#closeTourInfo").click(function(){
+		$("#tourInfoPanel").css("display", "none");
+		$("#tours").css("display", "none");
+		if(permLayer != null){getMap().removeLayer(permLayer)};
+	})
+})
+
+// Loads the position of the user as soon as he enters the page 
+$(document).ready(function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        console.log("Is not supported");
+    }
+})
+
+// Prints out the geo point that was loaded to the map.
+function showPosition(position) {
+	var coords = '{ "coordinates": ["'+position.coords.latitude+'" ,"'+position.coords.longitude+'"]}';
+	var json = JSON.parse(coords);
+	
+	var layer = L.marker(json.coordinates , {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#0066ff'})}).addTo(getMap())
+	layer.bindPopup("Your location");
+	
+	getMap().panTo(json.coordinates);
+}
 
 function toureListLeftShift(){
 	
@@ -175,6 +243,18 @@ function toureListRightShift(){
 	
 	
 }
+
+// Checks if there are enough element that the right scoll is needed
+$(document).ready(function(){
+	width = $("#tours").css("width");
+	var viewPortSize = Number(width.substring(0, width.length - 2));
+	
+	var toureListSize = ($("#tourList li").length - 1)  * 170;
+	
+	if (toureListSize <= viewPortSize){
+		$("#rightArrow").css("display", "none");
+	}
+})
 
 
 

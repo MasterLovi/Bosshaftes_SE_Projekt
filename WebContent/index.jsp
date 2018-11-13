@@ -42,27 +42,43 @@
    		</div>
 
     	<div id='headMsgWrapper'>
-    		<h1 id='headMsg'>Your time is precious! Use it to ... </h1>
+    		<h1 id='headMsg'>Deine Zeit ist kostbar! Nutze sie um ... </h1>
     	</div>
 	
         <div class='optionPanel'> 
         	<div class='opWrapper'>
-        		<h2>Parteyyyy</h2>
+        		<h2>Party zu erleben</h2>
         		<div class='infoWrapper'>
-	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\Party_round.png' />Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is. Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.</p>
+	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\Party_round.png' />
+	        			Businessmeeting, auf der Durchreise oder die Verwandten besuchen gewesen?<br>
+						Du kennst niemanden und bist auch noch nie hier gewesen?<br>
+						Wenn du deinen Abend nicht im Hotelzimmer totschlagen willst bist du hier genau richtig!<br>
+						Einfach klicken und die besten Clubs, Bars und sonstige Party-Locations in einer Übersicht.<br>
+						Egal ob du die Nacht durchfeiern willst oder nur 2 Stunden Zeit hast bis dein Zug kommt.<br>
+						Hier kommt jeder auf seine Kosten.<br>
+						Die ganz Harten können auch direkt eine Kneipen- oder Discotour machen!<br>
+						Viel Spaß und let the party never stop :D
+					</p>
 	        		<div class='buttonWrapper'>
-	        			<a href="map.jsp?type=party"><button class='actionButton' onClick=>Find a tour that fits your time</button></a>
+	        			<a href="NewMap.jsp?type=party"><button class='actionButton' >Finde eine Tour die zu deiner Zeit passt</button></a>
 	        		</div>
         		</div>
         	</div>
         </div>
          <div class='optionPanel'> 
         	<div class='opWrapper'>
-        		<h2>Culture</h2>
+        		<h2>Kultur zu erfahren</h2>
         		<div class='infoWrapper'>
-	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\Culture_round.png' />Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is. Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.Some bla bla with some other bla bla in order to bla bla that this bla bla will always be considered as the bla bla that it is.</p>
+	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\Culture_round.png' />
+	        			Auf der Durchreise, oder sogar etwas zu erledigen?<br>
+						Sie haben noch etwas Zeit zu Verfügung bis ihre Bahn fährt oder das Meeting anfängt?<br>
+						Sie sind an den kulturellen Hotspots interessiert die die Region zu bieten hat?<br>
+						Dann sind Sie hier genau richtig.<br>
+						Einfach Ihre verbleibende Zeit eingeben und schon können Sie sich auf eine von vielen Touren durch Altstadt, Museen, Kulturzentren und sonstigen Sehenswürdigkeiten machen.<br>
+						Erleben Sie unvergessliche Stunden, starten Sie gleich mit einer von vielen Kul-touren!
+					</p>
 	        		<div class='buttonWrapper'>
-	        			<a href="map.jsp?type=culture"><button class='actionButton' onClick=>Find a tour that fits your time</button></a>
+	        			<a href="NewMap.jsp?type=culture"><button class='actionButton' >Finde eine Tour die zu deiner Zeit passt</button></a>
 	        		</div>
         		</div>
         	</div>
