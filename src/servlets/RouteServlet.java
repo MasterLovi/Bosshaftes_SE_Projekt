@@ -2,7 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.time.Duration;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -37,99 +37,67 @@ public class RouteServlet extends HttpServlet {
 
 	private static String read(EntityManager em, String type) throws Exception {
 
-		try {
-			// Select Route from database table
-			Query query = em.createQuery("SELECT r FROM Route r WHERE r.type = '" + type + "'");
-			List<Route> result = query.getResultList();
-			String JSONData;
+		// Select Route from database table
+		Query query = em.createQuery("SELECT r FROM Route r WHERE r.type = '" + type + "'");
+		List<Route> result = query.getResultList();
+		String JSONData;
 
-			// check for empty resultList
-			if (result.size() > 0) {
-				// convert data to JSON
-				JSONData = JSON.routeToJSON(result);
-			} else {
-				JSONData = "[]";
-			}
-			// return
-			return JSONData;
-		} catch (Exception e) {
-			throw e;
+		// check for empty resultList
+		if (result.size() > 0) {
+			// convert data to JSON
+			JSONData = JSON.routeToJSON(result);
+		} else {
+			JSONData = "[]";
 		}
+		// return
+		return JSONData;
 	}
 
-	private static String create(List<Route> routes, EntityManager em) {
+	private static String create(List<Route> routes, EntityManager em) throws Exception {
 
 		// Loop over Routes that should be created
-		try {
-			for (Route route : routes) {
-				
-				Route newRoute = new Route();
-				
-				newRoute.setName(route.getName());
-				newRoute.setType(route.getType());
-				newRoute.setTime(route.getTime());
-				newRoute.setStops(route.getStops());
-				newRoute.setFeedback(null);
-				newRoute.setOwner(route.getOwner());
-				
-				em.getTransaction().begin();
-				em.persist(newRoute);
-				em.getTransaction().commit();
-			}
-		} catch (Exception e) {
-			return "Failed: " + e.getMessage();
+		em.getTransaction().begin();
+		for (Route route : routes) {
+			Route newRoute = new Route();
+			newRoute.setName(route.getName());
+			newRoute.setType(route.getType());
+			newRoute.setTime(route.getTime());
+			newRoute.setStops(route.getStops());
+			newRoute.setFeedback(null);
+			newRoute.setOwner(route.getOwner());
+
+			em.persist(newRoute);
 		}
+		em.getTransaction().commit();
 		return "Success";
 	}
 
 	private static String delete(List<Route> routes, EntityManager em) throws Exception {
 		// Loop over Routes that should be deleted
-		try {
-			for (Route route : routes) {
-				Route result = em.find(Route.class, route.getId());
-				em.getTransaction().begin();
-				em.remove(result);
-				em.getTransaction().commit();
-			}
-		} catch (Exception e) {
-			return "Failed: " + e.getMessage();
+		em.getTransaction().begin();
+		for (Route route : routes) {
+			Route result = em.find(Route.class, route.getId());
+			em.remove(result);
 		}
+		em.getTransaction().commit();
 		return "Success";
 	}
 
 	private static String update(List<Route> routes, EntityManager em) throws Exception {
 
-		try {
-			Integer errorCount = 0;
-			ArrayList<String> log = new ArrayList<String>();
-
-			// Loop over Routes that should be updated
-			for (Route route : routes) {
-				Route result = em.find(Route.class, route.getId());
-
-				// If route was found, it should be updated
-				if (result.size() > 0) {
-					Route resultRoute = new Route();
-					resultRoute.setName(route.getName());
-					resultRoute.setTime(route.getTime());
-					resultRoute.setType(route.getType());
-					resultRoute.setFeedback(route.getFeedback());
-					resultRoute.setStops(route.getStops());
-					resultRoute.setOwner(route.getOwner());
-
-					em.getTransaction().begin();
-					em.persist(resultRoute);
-					em.getTransaction().commit();
-
-				} else {
-					errorCount++;
-					log.add(route.getName());
-				}
-			}
-			return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", routes: " + log.toString() + "}";
-		} catch (Exception e) {
-			throw e;
+		em.getTransaction().begin();
+		// Loop over Routes that should be updated
+		for (Route route : routes) {
+			Route result = em.find(Route.class, route.getId());
+			result.setName(route.getName());
+			result.setTime(route.getTime());
+			result.setType(route.getType());
+			result.setFeedback(route.getFeedback());
+			result.setStops(route.getStops());
+			result.setOwner(route.getOwner());
 		}
+		em.getTransaction().commit();
+		return "Success";
 	}
 
 	/**
@@ -138,12 +106,11 @@ public class RouteServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+			throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory and create EntityManager
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
-
 		// Define response
 		String res;
 
@@ -170,13 +137,14 @@ public class RouteServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+			throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
 		Gson gson = new Gson();
-		List<Route> routes = gson.fromJson(request.getParameter("data"), new TypeToken<List<Route>>(){}.getType());
+		List<Route> routes = gson.fromJson(request.getParameter("data"), new TypeToken<List<Route>>() {
+		}.getType());
 		String res = "";
 
 		try {
