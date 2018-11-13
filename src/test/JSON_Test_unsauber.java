@@ -1,6 +1,7 @@
 package test;
 
-import java.sql.Time;
+import  util.Time;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,27 +92,30 @@ public class JSON_Test_unsauber {
 
 		}
 		
+//		Gson gson = new Gson();
+//        String json = gson.toJson(routes);
+//        System.out.println(json + "\n\n\n");
+//        
+//        routes = gson.fromJson(json, new TypeToken<List<Route>>(){}.getType());
+//        
+//        for (Route r : routes) {
+//        	System.out.println(r.toString());
+//        	for (Location l : r.getStops()) {
+//        		System.out.println(l.toString());
+//        		for (Feedback f : r.getFeedback()) {
+//            		System.out.println(f.toString());
+//            	}
+//        	}
+//        	for (Feedback f : r.getFeedback()) {
+//        		System.out.println(f.toString());
+//        	}
+//        }
+        List<Duration> ds = new ArrayList<Duration>();
+		Duration d = Duration.ofHours(4);
+		ds.add(d);
 		Gson gson = new Gson();
-        String json = gson.toJson(routes);
+		String json = gson.toJson(ds);
         System.out.println(json + "\n\n\n");
-        
-        routes = gson.fromJson(json, new TypeToken<List<Route>>(){}.getType());
-        
-        for (Route r : routes) {
-        	System.out.println(r.toString());
-        	for (Location l : r.getStops()) {
-        		System.out.println(l.toString());
-        		for (Feedback f : r.getFeedback()) {
-            		System.out.println(f.toString());
-            	}
-        	}
-        	for (Feedback f : r.getFeedback()) {
-        		System.out.println(f.toString());
-        	}
-        }
-        
-//        Type routeListType = new TypeToken<List<Route>>(){}.getType();
-//        List<Route> founderList = gson.fromJson(founderJson, founderListType);  
 
 	}
 

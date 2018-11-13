@@ -1,6 +1,6 @@
 package model;
 
-import java.sql.Time;
+import util.Time;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "ROUTE")
@@ -28,7 +29,10 @@ public class Route {
 	private String type;
 	private Time time;
 	private String description;
-	private List<byte[]> images;
+	private List<byte[]> pictures;
+	
+	@Transient
+	private List<String> images;
 
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FEEDBACK_ID")
@@ -59,8 +63,12 @@ public class Route {
 		return description;
 	}
 
-	public List<byte[]> getImages() {
+	public List<String> getImages() {
 		return images;
+	}
+	
+	public List<byte[]> getPictures() {
+		return pictures;
 	}
 
 	public List<Location> getStops() {
@@ -116,10 +124,14 @@ public class Route {
 		this.time = time;
 	}
 
-	public void setImages(List<byte[]> images) {
+	public void setImages(List<String> images) {
 		this.images = images;
 	}
-
+	
+	public void setPictures(List<byte[]> pictures) {
+		this.pictures = pictures;
+	}
+	
 	public void setFeedback(List<Feedback> feedback) {
 		this.feedback = feedback;
 	}
@@ -149,7 +161,7 @@ public class Route {
 		this.feedback.remove(index);
 	}
 
-	public void addImage(byte[] image) {
+	public void addImage(String image) {
 		this.images.add(image);
 	}
 

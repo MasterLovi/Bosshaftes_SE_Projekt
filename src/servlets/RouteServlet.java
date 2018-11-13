@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -16,8 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 import model.Route;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 import util.JSON;
 
 /**
@@ -44,7 +48,15 @@ public class RouteServlet extends HttpServlet {
 
 		// check for empty resultList
 		if (result.size() > 0) {
-			// convert data to JSON
+			for (Route route : result) {
+				List<String> images = new ArrayList<String>();
+				// convert pictures and data to JSON
+				for (byte[] picture : route.getPictures()) {
+					String image64 = new BASE64Encoder().encode(picture);
+					images.add(image64);
+				}
+				route.setImages(images);
+			}
 			JSONData = JSON.routeToJSON(result);
 		} else {
 			JSONData = "[]";
@@ -64,7 +76,15 @@ public class RouteServlet extends HttpServlet {
 			newRoute.setTime(route.getTime());
 			newRoute.setStops(route.getStops());
 			newRoute.setFeedback(null);
+			newRoute.setDescription(route.getDescription());
 			newRoute.setOwner(route.getOwner());
+
+			List<byte[]> images = new ArrayList<byte[]>();
+			for (String sBase64 : route.getImages()) {
+				byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+				images.add(image);
+			}
+			newRoute.setPictures(images);
 
 			em.persist(newRoute);
 		}
@@ -95,6 +115,14 @@ public class RouteServlet extends HttpServlet {
 			result.setFeedback(route.getFeedback());
 			result.setStops(route.getStops());
 			result.setOwner(route.getOwner());
+
+			List<byte[]> images = new ArrayList<byte[]>();
+			for (String sBase64 : route.getImages()) {
+				byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+				images.add(image);
+			}
+			result.setPictures(images);
+
 		}
 		em.getTransaction().commit();
 		return "Success";
