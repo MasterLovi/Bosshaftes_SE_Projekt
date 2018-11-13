@@ -37,6 +37,9 @@ public class RouteServlet extends HttpServlet {
 		try {
 			// Select Route from database table
 			Query query = em.createQuery("SELECT r FROM Route r WHERE r.type = '" + type + "'");
+			// Prüfen ob Startpunkt im Offset
+			// Ansonsten options von Sascha
+
 			List<Route> result = query.getResultList();
 			String JSONData;
 
