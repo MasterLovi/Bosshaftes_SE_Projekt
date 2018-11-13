@@ -318,14 +318,15 @@
   	 		
   	 		
   	 		//Loading all the Markers
-  	 		var hs = loadJson();
+  	 		/* var hs = loadJson(); */
 
+  	 		getLocationFromDatabase("Party");
     			
   	 		//Putting the markers on the map
-  	 		for(var i = 0; i < hs.length; i++){
+  	 		/* for(var i = 0; i < hs.length; i++){
 	  	 		var layer = L.marker(hs[i].geometry.coordinates).addTo(mymap);
 	  	 		layer.bindPopup(hs[i].properties.popupContent);
-  	 		}	
+  	 		}	 */
 			
   	 	 /*  L.mapquest.directions().route({
   	 	  "locations": [{

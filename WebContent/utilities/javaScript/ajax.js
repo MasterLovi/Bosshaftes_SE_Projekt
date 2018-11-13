@@ -28,4 +28,25 @@ function getMarker(lng, lat, offsetX, offsetY){
 	
 }
 
+function getLocationFromDatabase(sType) {
+	$.ajax({
+	    url: "LocationServlet",
+	    type: "GET",
+	    data: {
+	      type: sType
+	    },
+	    success: function(response) {
+	      var json = JSON.parse(response);
+	      var marker;
+	      
+	      for(var i = 0; i < json.length; i++){
+	  	 		var layer = L.marker(json[i].geometry.coordinates).addTo(getMap());
+	  	 		layer.bindPopup(json[i].properties.popupContent);
+	 		}	
+	    },
+	    error: function(error) {
+	      console.log(error);
+	    }
+  });
+}
 
