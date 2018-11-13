@@ -28,6 +28,7 @@ public class Location {
 	private String type;
 	private Time time;
 	private int timesReported;
+	private String description;
 
 	@OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS_ID")
@@ -63,6 +64,10 @@ public class Location {
 
 	public int getTimesReported() {
 		return timesReported;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public Address getAddress() {
@@ -108,6 +113,10 @@ public class Location {
 
 	public void setTimesReported(int timesReported) {
 		this.timesReported = timesReported;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public void setFeedback(List<Feedback> feedback) {

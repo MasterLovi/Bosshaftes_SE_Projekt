@@ -27,6 +27,7 @@ public class Route {
 	private String name;
 	private String type;
 	private Time time;
+	private String description;
 
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FEEDBACK_ID")
@@ -51,6 +52,10 @@ public class Route {
 
 	public String getType() {
 		return type;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public List<Location> getStops() {
@@ -88,6 +93,10 @@ public class Route {
 		} else {
 			throw new Exception("You can only add Routes of type \"Kultur\" or \"Party\"");
 		}
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public void setStops(List<Location> stops) {
