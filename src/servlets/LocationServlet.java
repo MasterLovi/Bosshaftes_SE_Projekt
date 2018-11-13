@@ -70,6 +70,10 @@ public class LocationServlet extends HttpServlet {
 			if (result.size() == 0) {
 				em.getTransaction().begin();
 				em.persist(location.getAddress());
+				/*
+				 * for (Base64 image : location.getImages()) { byte[] decodedImage =
+				 * Base64.decode(image, 0); }
+				 */
 				em.persist(location);
 				em.getTransaction().commit();
 			} else {
@@ -104,12 +108,14 @@ public class LocationServlet extends HttpServlet {
 
 				// If location was found, it should be updated
 				if (result.size() > 0) {
-					Location resultlocation = result.get(0);
-					resultlocation.setName(location.getName());
-					resultlocation.setTime(location.getTime());
-					resultlocation.setType(location.getType());
-					resultlocation.setLatitude(location.getLatitude());
-					resultlocation.setLongitude(location.getLongitude());
+					Location resultLocation = result.get(0);
+					resultLocation.setName(location.getName());
+					resultLocation.setTime(location.getTime());
+					resultLocation.setType(location.getType());
+					resultLocation.setDescription(location.getDescription());
+					resultLocation.setImages(location.getImages());
+					resultLocation.setLatitude(location.getLatitude());
+					resultLocation.setLongitude(location.getLongitude());
 
 					// update corresponding Address
 					Address address = location.getAddress();
@@ -127,7 +133,7 @@ public class LocationServlet extends HttpServlet {
 					} else {
 						em.getTransaction().begin();
 						em.persist(address);
-						resultlocation.setAddress(address);
+						resultLocation.setAddress(address);
 						em.getTransaction().commit();
 					}
 				} else {

@@ -28,6 +28,7 @@ public class Route {
 	private String type;
 	private Time time;
 	private String description;
+	private List<byte[]> images;
 
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FEEDBACK_ID")
@@ -56,6 +57,10 @@ public class Route {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public List<byte[]> getImages() {
+		return images;
 	}
 
 	public List<Location> getStops() {
@@ -111,6 +116,10 @@ public class Route {
 		this.time = time;
 	}
 
+	public void setImages(List<byte[]> images) {
+		this.images = images;
+	}
+
 	public void setFeedback(List<Feedback> feedback) {
 		this.feedback = feedback;
 	}
@@ -128,6 +137,30 @@ public class Route {
 		this.stops.remove(index);
 	}
 
+	public void addFeedback(Feedback feedback) {
+		this.feedback.add(feedback);
+	}
+
+	public void removeFeedback(Feedback feedback) {
+		this.feedback.remove(feedback);
+	}
+
+	public void removeFeedbackAtIndex(int index) {
+		this.feedback.remove(index);
+	}
+
+	public void addImage(byte[] image) {
+		this.images.add(image);
+	}
+
+	public void removeImage(byte[] image) {
+		this.images.remove(image);
+	}
+
+	public void removeImageAtIndex(int index) {
+		this.images.remove(index);
+	}
+
 	@Override
 	public String toString() {
 		String routeString = "ROUTE= "
@@ -135,6 +168,7 @@ public class Route {
 						+ "Name: " + this.name + ", "
 						+ "Type: " + this.type + ", "
 						+ "Time: " + this.time.toString() + ", "
+						+ "Description: " + this.description + ", "
 						+ "|| Feedback und Location spar ich mir";
 
 		return routeString;
