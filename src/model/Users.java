@@ -14,6 +14,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
+
 @Entity
 @Table(name = "USERS")
 public class Users {
@@ -26,7 +29,8 @@ public class Users {
 	@Column(unique = true)
 	private String username;
 	private String email;
-	private String password;
+	@Expose(serialize = false)
+	private transient String password;
 
 	@OneToMany(mappedBy = "owner", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Route> routes;

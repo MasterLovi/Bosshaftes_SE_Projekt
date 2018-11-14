@@ -1,6 +1,6 @@
 package model;
 
-import java.sql.Time;
+import util.Time;
 import java.util.List;
 
 import javax.persistence.CascadeType;

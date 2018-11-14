@@ -14,9 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import model.Address;
 import model.Location;
-import util.JSON;
 
 /**
  * Servlet implementation class LocationServlet
@@ -35,116 +37,95 @@ public class LocationServlet extends HttpServlet {
 
 	private static String read(EntityManager em, String type) throws Exception {
 
-		try {
-			// Select Location from database table
-			Query query = em.createQuery("SELECT l FROM Location l WHERE l.type = '" + type + "'");
-			List<Location> result = query.getResultList();
-			String JSONData;
+		// Select Location from database table
+		Query query = em.createQuery("SELECT l FROM Location l WHERE l.type = '" + type + "'");
+		List<Location> result = query.getResultList();
+		String JSONData;
 
-			// check for empty resultList
-			if (result.size() > 0) {
-				// convert data to JSON
-				JSONData = JSON.locationToJSON(result);
-			} else {
-				JSONData = "[]";
-			}
-			// return
-			return JSONData;
-		} catch (Exception e) {
-			throw e;
+		// check for empty resultList
+		if (result.size() > 0) {
+			// convert data to JSON
+			Gson gson = new Gson();
+			JSONData = gson.toJson(result);
+		} else {
+			JSONData = "[]";
 		}
+		// return
+		return JSONData;
 	}
 
-	private static String create(List<Location> locations, EntityManager em) {
-
-		Integer errorCount = 0;
-		ArrayList<String> loc = new ArrayList<String>();
-
+	private static String create(List<Location> locations, EntityManager em) throws Exception {
+		em.getTransaction().begin();
 		// Loop over Locations that should be created
 		for (Location location : locations) {
 			Query query = em.createQuery("SELECT l from Location l WHERE l.latitude = " + location.getLatitude()
-							+ " AND l.longitude = " + location.getLatitude());
+					+ " AND l.longitude = " + location.getLatitude());
 			List<Location> result = query.getResultList();
 
 			// If location was not found, it should be created
 			if (result.size() == 0) {
-				em.getTransaction().begin();
-				em.persist(location.getAddress());
 				/*
 				 * for (Base64 image : location.getImages()) { byte[] decodedImage =
 				 * Base64.decode(image, 0); }
 				 */
 				em.persist(location);
-				em.getTransaction().commit();
 			} else {
-				errorCount++;
-				loc.add(location.getName());
+				throw new Exception("Location: " + location.getName() + " existiert bereits.");
 			}
 		}
-		return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", locations: " + loc.toString() + "}";
+		em.getTransaction().commit();
+		return "Sucess";
 	}
 
 	private static String delete(List<Location> locations, EntityManager em) throws Exception {
 		// Loop over Locations that should be deleted
+		em.getTransaction().begin();
 		for (Location location : locations) {
 			Location result = em.find(Location.class, location.getId());
-			em.getTransaction().begin();
 			em.remove(result);
-			em.getTransaction().commit();
 		}
+		em.getTransaction().commit();
 		return "Success";
 	}
 
 	private static String update(List<Location> locations, EntityManager em) throws Exception {
+		
+		em.getTransaction().begin();
+		// Loop over Locations that should be updated
+		for (Location location : locations) {
+			Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
+			List<Location> result = query.getResultList();
 
-		try {
-			Integer errorCount = 0;
-			ArrayList<String> loc = new ArrayList<String>();
+			// If location was found, it should be updated
+			if (result.size() > 0) {
+				Location resultlocation = result.get(0);
+				resultlocation.setName(location.getName());
+				resultlocation.setTime(location.getTime());
+				resultlocation.setType(location.getType());
+				resultlocation.setLatitude(location.getLatitude());
+				resultlocation.setLongitude(location.getLongitude());
 
-			// Loop over Locations that should be updated
-			for (Location location : locations) {
-				Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
-				List<Location> result = query.getResultList();
+				// update corresponding Address
+				Address address = location.getAddress();
+				query = em.createQuery(
+						"SELECT a from Address a WHERE" + " a.country = " + address.getCountry() + " a.postCode = "
+								+ address.getPostCode() + " a.cityName = " + address.getCityName() + " a.streetName = "
+								+ address.getStreetName() + " a.houseNumber = " + address.getHouseNumber());
+				List<Address> resultAddresses = query.getResultList();
 
-				// If location was found, it should be updated
-				if (result.size() > 0) {
-					Location resultLocation = result.get(0);
-					resultLocation.setName(location.getName());
-					resultLocation.setTime(location.getTime());
-					resultLocation.setType(location.getType());
-					resultLocation.setDescription(location.getDescription());
-					resultLocation.setImages(location.getImages());
-					resultLocation.setLatitude(location.getLatitude());
-					resultLocation.setLongitude(location.getLongitude());
-
-					// update corresponding Address
-					Address address = location.getAddress();
-					query = em.createQuery("SELECT a from Address a WHERE"
-									+ " a.country = " + address.getCountry()
-									+ " a.postCode = " + address.getPostCode()
-									+ " a.cityName = " + address.getCityName()
-									+ " a.streetName = " + address.getStreetName()
-									+ " a.houseNumber = " + address.getHouseNumber());
-					List<Address> resultAddresses = query.getResultList();
-
-					if (resultAddresses.size() > 0) {
-						Address resultAddress = resultAddresses.get(0);
-						resultAddress.setAddress(address);
-					} else {
-						em.getTransaction().begin();
-						em.persist(address);
-						resultLocation.setAddress(address);
-						em.getTransaction().commit();
-					}
+				if (resultAddresses.size() > 0) {
+					Address resultAddress = resultAddresses.get(0);
+					resultAddress.setAddress(address);
 				} else {
-					errorCount++;
-					loc.add(location.getName());
+					em.persist(address);
+					resultlocation.setAddress(address);
 				}
+			} else {
+				throw new Exception("Location: " + location.getName() + " does not exist.");
 			}
-			return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", locations: " + loc.toString() + "}";
-		} catch (Exception e) {
-			throw e;
 		}
+		em.getTransaction().commit();
+		return "Success";
 	}
 
 	private static String report(List<Location> locations, EntityManager em) throws Exception {
@@ -189,7 +170,7 @@ public class LocationServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+			throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory and create EntityManager
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
@@ -221,13 +202,14 @@ public class LocationServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+			throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
-		String JSONData = request.getParameter("data");
-		List<Location> locations = JSON.toLocation(JSONData);
+		Gson gson = new Gson();
+		List<Location> locations = gson.fromJson(request.getParameter("data"), new TypeToken<List<Location>>() {
+		}.getType());
 		String res = "";
 
 		try {

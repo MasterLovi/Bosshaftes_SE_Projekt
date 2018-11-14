@@ -1,6 +1,6 @@
 package util;
 
-import java.sql.Time;
+import util.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,8 +195,6 @@ public class JSON {
 		if (time != null) {
 			String json = "{";
 			json = json
-							+ "\n" + "        \"time\": \"" + time.getHours() + ":" + time.getMinutes() + ":"
-							+ time.getSeconds() + "\","
 							+ "\n" + "        \"hours\": " + time.getHours() + ","
 							+ "\n" + "        \"minutes\": " + time.getMinutes() + ","
 							+ "\n" + "        \"seconds\": " + time.getSeconds()
@@ -425,14 +423,11 @@ public class JSON {
 
 	public static Time toTime(String json) {
 
-		Time time = new Time(0);
 		String hours = json.substring(json.indexOf("hours"));
 		String minutes = json.substring(json.indexOf("minutes"));
 		String seconds = json.substring(json.indexOf("seconds"));
 
-		time.setHours(getIntValue(hours));
-		time.setMinutes(getIntValue(minutes));
-		time.setSeconds(getIntValue(seconds));
+		Time time = new Time(getIntValue(hours), getIntValue(minutes), getIntValue(seconds));
 
 		return time;
 	}

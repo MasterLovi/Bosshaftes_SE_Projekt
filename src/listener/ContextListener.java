@@ -2,7 +2,7 @@ package listener;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.sql.Time;
+import util.Time;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

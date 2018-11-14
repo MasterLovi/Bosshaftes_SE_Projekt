@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+
 import model.Route;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 import util.JSON;
 
 /**
@@ -34,93 +41,91 @@ public class RouteServlet extends HttpServlet {
 
 	private static String read(EntityManager em, String type) throws Exception {
 
-		try {
-			// Select Route from database table
-			Query query = em.createQuery("SELECT r FROM Route r WHERE r.type = '" + type + "'");
-			// Prüfen ob Startpunkt im Offset
-			// Ansonsten options von Sascha
+		// Select Route from database table
+		Query query = em.createQuery("SELECT r FROM Route r WHERE r.type = '" + type + "'");
+		List<Route> result = query.getResultList();
+		String JSONData;
 
-			List<Route> result = query.getResultList();
-			String JSONData;
-
-			// check for empty resultList
-			if (result.size() > 0) {
-				// convert data to JSON
-				JSONData = JSON.routeToJSON(result);
-			} else {
-				JSONData = "[]";
+		// check for empty resultList
+		if (result.size() > 0) {
+			for (Route route : result) {
+				List<String> images = new ArrayList<String>();
+				// convert pictures and data to JSON
+				for (byte[] picture : route.getPictures()) {
+					String image64 = new BASE64Encoder().encode(picture);
+					images.add(image64);
+				}
+				route.setImages(images);
 			}
-			// return
-			return JSONData;
-		} catch (Exception e) {
-			throw e;
+			JSONData = JSON.routeToJSON(result);
+		} else {
+			JSONData = "[]";
 		}
+		// return
+		return JSONData;
 	}
 
-	private static String create(List<Route> routes, EntityManager em) {
+	private static String create(List<Route> routes, EntityManager em) throws Exception {
 
 		// Loop over Routes that should be created
-		try {
-			for (Route route : routes) {
-				em.getTransaction().begin();
-				em.persist(route);
-				em.getTransaction().commit();
+		em.getTransaction().begin();
+		for (Route route : routes) {
+			Route newRoute = new Route();
+			newRoute.setName(route.getName());
+			newRoute.setType(route.getType());
+			newRoute.setTime(route.getTime());
+			newRoute.setStops(route.getStops());
+			newRoute.setFeedback(null);
+			newRoute.setDescription(route.getDescription());
+			newRoute.setOwner(route.getOwner());
+
+			List<byte[]> images = new ArrayList<byte[]>();
+			for (String sBase64 : route.getImages()) {
+				byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+				images.add(image);
 			}
-		} catch (Exception e) {
-			return "Failed: " + e.getMessage();
+			newRoute.setPictures(images);
+
+			em.persist(newRoute);
 		}
+		em.getTransaction().commit();
 		return "Success";
 	}
 
 	private static String delete(List<Route> routes, EntityManager em) throws Exception {
 		// Loop over Routes that should be deleted
-		try {
-			for (Route route : routes) {
-				Route result = em.find(Route.class, route.getId());
-				em.getTransaction().begin();
-				em.remove(result);
-				em.getTransaction().commit();
-			}
-		} catch (Exception e) {
-			return "Failed: " + e.getMessage();
+		em.getTransaction().begin();
+		for (Route route : routes) {
+			Route result = em.find(Route.class, route.getId());
+			em.remove(result);
 		}
+		em.getTransaction().commit();
 		return "Success";
 	}
 
 	private static String update(List<Route> routes, EntityManager em) throws Exception {
 
-		try {
-			Integer errorCount = 0;
-			ArrayList<String> log = new ArrayList<String>();
+		em.getTransaction().begin();
+		// Loop over Routes that should be updated
+		for (Route route : routes) {
+			Route result = em.find(Route.class, route.getId());
+			result.setName(route.getName());
+			result.setTime(route.getTime());
+			result.setType(route.getType());
+			result.setFeedback(route.getFeedback());
+			result.setStops(route.getStops());
+			result.setOwner(route.getOwner());
 
-			// Loop over Routes that should be updated
-			for (Route route : routes) {
-				Query query = em.createQuery("SELECT r from Route r WHERE r.id = " + route.getId());
-				List<Route> result = query.getResultList();
-
-				// If route was found, it should be updated
-				if (result.size() > 0) {
-					Route resultRoute = result.get(0);
-					resultRoute.setName(route.getName());
-					resultRoute.setTime(route.getTime());
-					resultRoute.setType(route.getType());
-					resultRoute.setFeedback(route.getFeedback());
-					resultRoute.setStops(route.getStops());
-					resultRoute.setOwner(route.getOwner());
-
-					em.getTransaction().begin();
-					em.persist(resultRoute);
-					em.getTransaction().commit();
-
-				} else {
-					errorCount++;
-					log.add(route.getName());
-				}
+			List<byte[]> images = new ArrayList<byte[]>();
+			for (String sBase64 : route.getImages()) {
+				byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+				images.add(image);
 			}
-			return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", routes: " + log.toString() + "}";
-		} catch (Exception e) {
-			throw e;
+			result.setPictures(images);
+
 		}
+		em.getTransaction().commit();
+		return "Success";
 	}
 
 	/**
@@ -129,12 +134,11 @@ public class RouteServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+			throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory and create EntityManager
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
-
 		// Define response
 		String res;
 
@@ -161,14 +165,14 @@ public class RouteServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+			throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
-		String JSONData = request.getParameter("data");
-
-		List<Route> routes = JSON.toRoute(JSONData);
+		Gson gson = new Gson();
+		List<Route> routes = gson.fromJson(request.getParameter("data"), new TypeToken<List<Route>>() {
+		}.getType());
 		String res = "";
 
 		try {
