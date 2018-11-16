@@ -48,8 +48,6 @@
         <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css"/>
         <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/place-search-js/v1.0.0/place-search.css"/>
         
-        <!--<link rel="stylesheet" type="text/css" href="utilities/stylesheets/leaflet-routing-machine.css" />-->
-        
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
  		integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
    		crossorigin=""/>
@@ -298,6 +296,14 @@
 			    	</td>
 		    		<td>
 		    			<textarea rows="7" form="createLocationForm" name="description"></textarea>
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+			    		<p>Aufenthaltszeit:</p>
+			    	</td>
+		    		<td>
+		    			<input type="time" name="time" value=""/>
 		    		</td>
 		    	</tr>
 		    	<tr>
