@@ -256,5 +256,12 @@ $(document).ready(function(){
 	}
 })
 
+$(document).ready(function() {
+	$('#createLocationForm').submit(function () {
+		createNewMarker("party");
+		return false;
+	});
+})
+
 
 

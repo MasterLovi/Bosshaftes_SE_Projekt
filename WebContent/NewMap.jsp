@@ -55,6 +55,8 @@
     	<script src="utilities/javaScript/jquery-3.3.1.min.js"></script>
     	<script src="utilities/javaScript/modifier.js"></script>
    	    <script src="utilities/javaScript/mapLoader.js"></script>
+   	    <script src="utilities/javaScript/json.js"></script>
+   	    <script src="utilities/javaScript/api.js"></script>
    	    <script type="text/javascript" src="utilities/javaScript/ajax.js"></script>
    	    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
   		integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
@@ -261,7 +263,7 @@
 		  <!-- Modal content -->
 		  <div class="modal-content">
 		    <span class="close">&times;</span>
-		    <form id="createLocationForm" method="post">
+		    <form id="createLocationForm" method="POST" action="">
 		    	<input type="hidden" name="lat" id="newLat" value=""/>
 		    	<input type="hidden" name="lng" id="newLng" value=""/>
 		    	<input type="hidden" name="userId" id="userId" value=""/>
@@ -280,14 +282,6 @@
 			    	</td>
 		    		<td>
 		    			<input type="file" name="picture" value=""/>
-		    		</td>
-		    	</tr>
-		    	<tr>
-			    	<td>
-			    		<p>Aufenthaltszeit:</p>
-			    	</td>
-		    		<td>
-		    			<input type="time" name="time" value=""/>
 		    		</td>
 		    	</tr>
 		    	<tr>
@@ -311,7 +305,7 @@
 		    			<!-- Some button -->
 		    		</td>
 		    		<td>
-		    			<input type="submit" name="confirm" value="Anlegen" onClick="createNewMarker('party')"/>
+		    			<input type="submit" name="confirm" value="Anlegen"/>
 		    		</td>
 		    	</tr>
 		    	</table>
