@@ -50,3 +50,14 @@ function getLocationFromDatabase(sType) {
   });
 }
 
+function createNewMarker(sType) {
+	var json = getJsonDatastructureLocation();
+	
+	json.id = "";
+	json.name = $("#createLocationForm input[name=locationName]").val();
+	json.location_type = sType;
+	if(sType == "culture") json.time = $("#createLocationForm input[name=locationName]").val();
+	
+	
+}
+

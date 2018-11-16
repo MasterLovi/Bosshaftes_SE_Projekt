@@ -263,7 +263,7 @@
 		  <!-- Modal content -->
 		  <div class="modal-content">
 		    <span class="close">&times;</span>
-		    <form id="createLoactionForm" method="post">
+		    <form id="createLocationForm" method="post">
 		    	<input type="hidden" name="lat" id="newLat" value=""/>
 		    	<input type="hidden" name="lng" id="newLng" value=""/>
 		    	<input type="hidden" name="userId" id="userId" value=""/>
@@ -286,6 +286,14 @@
 		    	</tr>
 		    	<tr>
 			    	<td>
+			    		<p>Aufenthaltszeit:</p>
+			    	</td>
+		    		<td>
+		    			<input type="time" name="time" value=""/>
+		    		</td>
+		    	</tr>
+		    	<tr>
+			    	<td>
 			    		<p>Beschreibung:</p>
 			    	</td>
 		    		<td>
@@ -297,7 +305,7 @@
 		    			<!-- Some button -->
 		    		</td>
 		    		<td>
-		    			<input type="submit" name="confirm" value="Anlegen"/>
+		    			<input type="submit" name="confirm" value="Anlegen" onClick="createNewMarker('party')"/>
 		    		</td>
 		    	</tr>
 		    	</table>
