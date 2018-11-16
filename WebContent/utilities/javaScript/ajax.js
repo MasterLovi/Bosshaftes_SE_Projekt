@@ -24,19 +24,17 @@ function getLocation(searchString, map){
 	
 }
 
-function getMarker(lng, lat, offsetX, offsetY){
-	
-}
-
-function getLocationFromDatabase(sType) {
+//Always put type as parameter 
+function searchLocation(sType) {
 	$.ajax({
 	    url: "LocationServlet",
 	    type: "GET",
 	    data: {
-	      type: sType
+	      type: sType,
+	      name: "" 
 	    },
 	    success: function(response) {
-	      var json = JSON.parse(response);
+	      var json = response;
 	      var marker;
 	      
 	      for(var i = 0; i < json.length; i++){
@@ -50,3 +48,81 @@ function getLocationFromDatabase(sType) {
   });
 }
 
+function getLocationFromDatabase(sType) {
+	$.ajax({
+	    url: "LocationServlet",
+	    type: "GET",
+	    data: {
+	      type: sType,
+	      lngLat: [0,0],
+	      offSetXY: [0,0] 
+	    },
+	    success: function(response) {
+	      var json = response;
+	      var marker;
+	      
+	      for(var i = 0; i < json.length; i++){
+	  	 		var layer = L.marker(json[i].geometry.coordinates).addTo(getMap());
+	  	 		layer.bindPopup(json[i].properties.popupContent);
+	 		}	
+	    },
+	    error: function(error) {
+	      console.log(error);
+	    }
+  });
+}
+
+function createNewMarker(marker) {
+	
+	var requestJson = createMarkerJson(marker); // Has to be defined
+	
+	$.ajax({
+	    url: "LocationServlet",
+	    type: "POST",
+	    data: {
+	      operation: "create",
+	      data: requestJson //Json file
+	     
+	    },
+	    success: function(response) {
+	      var json = response;
+	      var marker;
+	      
+	      for(var i = 0; i < json.length; i++){
+	  	 		var layer = L.marker(json[i].geometry.coordinates).addTo(getMap());
+	  	 		layer.bindPopup(json[i].properties.popupContent);
+	 		}	
+	    },
+	    error: function(error) {
+	      console.log(error);
+	    }
+  });
+}
+
+function getRoute(sType){
+	$.ajax({
+	    url: "RouteServlet",
+	    type: "GET",
+	    data: {
+	      type: sType,
+	      lngLat: [0,0],
+	      offSetXY: [0,0],
+	      stops: 0,
+	      time: {},
+	      rating: 0
+	     
+	    },
+	    success: function(response) {
+	      var json = response;
+	      var marker;
+	      
+	      for(var i = 0; i < json.length; i++){
+	  	 		var layer = L.marker(json[i].geometry.coordinates).addTo(getMap());
+	  	 		layer.bindPopup(json[i].properties.popupContent);
+	 		}	
+	    },
+	    error: function(error) {
+	      console.log(error);
+	    }
+  });
+}
