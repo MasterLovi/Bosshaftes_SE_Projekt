@@ -1,6 +1,13 @@
 package util;
 
-public class Time {
+import java.io.Serializable;
+
+public class Time implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1156215663793678712L;
 
 	private String time;
 
