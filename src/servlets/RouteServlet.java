@@ -150,7 +150,7 @@ public class RouteServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getMessage();
+			res = e.toString();
 		}
 		// Send Response
 		response.setContentType("application/json");
@@ -191,7 +191,7 @@ public class RouteServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getMessage();
+			res = e.toString();
 		}
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();

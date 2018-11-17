@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "LOCATION")
@@ -29,7 +30,10 @@ public class Location {
 	private Time time;
 	private int timesReported;
 	private String description;
-	private List<byte[]> images;
+	private List<byte[]> pictures;
+
+	@Transient
+	private List<String> images;
 
 	@OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS_ID")
@@ -71,7 +75,7 @@ public class Location {
 		return description;
 	}
 
-	public List<byte[]> getImages() {
+	public List<String> getImages() {
 		return images;
 	}
 
@@ -82,10 +86,18 @@ public class Location {
 	public List<Feedback> getFeedback() {
 		return feedback;
 	}
+	
+	public List<byte[]> getPictures() {
+		return pictures;
+	}
 
 	// setter
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public void setPictures(List<byte[]> pictures) {
+		this.pictures = pictures;
 	}
 
 	public void setName(String name) {
@@ -124,7 +136,7 @@ public class Location {
 		this.description = description;
 	}
 
-	public void setImages(List<byte[]> images) {
+	public void setImages(List<String> images) {
 		this.images = images;
 	}
 
@@ -145,31 +157,13 @@ public class Location {
 		this.feedback.remove(index);
 	}
 
-	public void addImage(byte[] image) {
-		this.images.add(image);
-	}
-
-	public void removeImage(byte[] image) {
-		this.images.remove(image);
-	}
-
-	public void removeImageAtIndex(int index) {
-		this.images.remove(index);
-	}
-
 	@Override
 	public String toString() {
-		String locationString = "LOCATION= "
-						+ "Id: " + this.id + ", "
-						+ "Name: " + this.name + ", "
-						+ "Longtitude: " + this.longitude + ", "
-						+ "Latitude: " + this.latitude + ", "
-						+ "Type: " + this.type + ", "
-						+ "Time: " + this.time.toString() + ", "
-						+ "TimesReported: " + this.timesReported + ", "
-						+ "Description: " + this.description + ", "
-						+ "Address: " + this.address.toString() + ", "
-						+ "Feedback: geb ich jetzt dazu sicherlich nicht aus";
+		String locationString = "LOCATION= " + "Id: " + this.id + ", " + "Name: " + this.name + ", " + "Longtitude: "
+				+ this.longitude + ", " + "Latitude: " + this.latitude + ", " + "Type: " + this.type + ", " + "Time: "
+				+ this.time.toString() + ", " + "TimesReported: " + this.timesReported + ", " + "Description: "
+				+ this.description + ", " + "Address: " + this.address.toString() + ", "
+				+ "Feedback: geb ich jetzt dazu sicherlich nicht aus";
 
 		return locationString;
 	}

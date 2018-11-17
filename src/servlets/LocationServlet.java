@@ -19,6 +19,9 @@ import com.google.gson.reflect.TypeToken;
 
 import model.Address;
 import model.Location;
+import model.Route;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 /**
  * Servlet implementation class LocationServlet
@@ -44,7 +47,15 @@ public class LocationServlet extends HttpServlet {
 
 		// check for empty resultList
 		if (result.size() > 0) {
-			// convert data to JSON
+			for (Location location : result) {
+				List<String> images = new ArrayList<String>();
+				// convert pictures and data to JSON
+				for (byte[] picture : location.getPictures()) {
+					String image64 = new BASE64Encoder().encode(picture);
+					images.add(image64);
+				}
+				location.setImages(images);
+			}
 			Gson gson = new Gson();
 			JSONData = gson.toJson(result);
 		} else {
@@ -55,26 +66,31 @@ public class LocationServlet extends HttpServlet {
 	}
 
 	private static String create(List<Location> locations, EntityManager em) throws Exception {
+		// Loop over Routes that should be created
 		em.getTransaction().begin();
-		// Loop over Locations that should be created
 		for (Location location : locations) {
-			Query query = em.createQuery("SELECT l from Location l WHERE l.latitude = " + location.getLatitude()
-					+ " AND l.longitude = " + location.getLatitude());
-			List<Location> result = query.getResultList();
+			Location nLocation = new Location();
+			nLocation.setName(location.getName());
+			nLocation.setType(location.getType());
+			nLocation.setTime(location.getTime());
+			nLocation.setFeedback(null);
+			nLocation.setAddress(location.getAddress());
+			nLocation.setLatitude(location.getLatitude());
+			nLocation.setLongitude(location.getLongitude());
+			nLocation.setTimesReported(0);
+			nLocation.setDescription(location.getDescription());
 
-			// If location was not found, it should be created
-			if (result.size() == 0) {
-				/*
-				 * for (Base64 image : location.getImages()) { byte[] decodedImage =
-				 * Base64.decode(image, 0); }
-				 */
-				em.persist(location);
-			} else {
-				throw new Exception("Location: " + location.getName() + " existiert bereits.");
+			List<byte[]> images = new ArrayList<byte[]>();
+			for (String sBase64 : location.getImages()) {
+				byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+				images.add(image);
 			}
+			nLocation.setPictures(images);
+
+			em.persist(nLocation);
 		}
 		em.getTransaction().commit();
-		return "Sucess";
+		return "Success";
 	}
 
 	private static String delete(List<Location> locations, EntityManager em) throws Exception {
@@ -89,7 +105,7 @@ public class LocationServlet extends HttpServlet {
 	}
 
 	private static String update(List<Location> locations, EntityManager em) throws Exception {
-		
+
 		em.getTransaction().begin();
 		// Loop over Locations that should be updated
 		for (Location location : locations) {
@@ -187,7 +203,7 @@ public class LocationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getMessage();
+			res = e.toString();
 		}
 		// Send Response
 		response.setContentType("application/json");
@@ -231,7 +247,7 @@ public class LocationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getMessage();
+			res = e.toString();
 		}
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();

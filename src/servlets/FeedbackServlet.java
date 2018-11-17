@@ -125,7 +125,7 @@ public class FeedbackServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getMessage();
+			res = e.toString();
 		}
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
