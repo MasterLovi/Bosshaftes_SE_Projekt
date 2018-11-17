@@ -142,10 +142,7 @@ public class LocationServlet extends HttpServlet {
 
 				// update corresponding Address
 				Address address = location.getAddress();
-				query = em.createQuery(
-						"SELECT a from Address a WHERE" + " a.country = " + address.getCountry() + " a.postCode = "
-								+ address.getPostCode() + " a.cityName = " + address.getCityName() + " a.streetName = "
-								+ address.getStreetName() + " a.houseNumber = " + address.getHouseNumber());
+				query = em.createQuery("SELECT a from Address a WHERE" + " a.id = " + address.getId());
 				List<Address> resultAddresses = query.getResultList();
 
 				if (resultAddresses.size() > 0) {
@@ -165,38 +162,29 @@ public class LocationServlet extends HttpServlet {
 
 	private static String report(List<Location> locations, EntityManager em) throws Exception {
 
-		try {
-			Integer errorCount = 0;
-			ArrayList<String> loc = new ArrayList<String>();
+		// Loop over Locations that should be reported
+		for (Location location : locations) {
+			Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
+			List<Location> result = query.getResultList();
 
-			// Loop over Locations that should be reported
-			for (Location location : locations) {
-				Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
-				List<Location> result = query.getResultList();
+			// If location was found, it should be updated
+			if (result.size() > 0) {
+				Location resultLocation = result.get(0);
+				int timesReported = resultLocation.getTimesReported();
 
-				// If location was found, it should be updated
-				if (result.size() > 0) {
-					Location resultLocation = result.get(0);
-					int timesReported = resultLocation.getTimesReported();
-
-					if (timesReported == 2) {
-						// delete Location
-						ArrayList<Location> deleteLocations = new ArrayList<Location>();
-						deleteLocations.add(location);
-						delete(deleteLocations, em);
-					} else {
-						resultLocation.setTimesReported(timesReported++);
-					}
-
+				if (timesReported == 2) {
+					// delete Location
+					ArrayList<Location> deleteLocations = new ArrayList<Location>();
+					deleteLocations.add(location);
+					delete(deleteLocations, em);
 				} else {
-					errorCount++;
-					loc.add(location.getName());
+					resultLocation.setTimesReported(timesReported++);
 				}
+
+			} else {
 			}
-			return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", locations: " + loc.toString() + "}";
-		} catch (Exception e) {
-			throw e;
 		}
+		return "Success";
 	}
 
 	/**
@@ -266,7 +254,7 @@ public class LocationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.toString();
+			e.getStackTrace().toString();
 		}
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
