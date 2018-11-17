@@ -1,8 +1,9 @@
 package model;
 
-import java.sql.Time;
+import util.Time;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,12 +27,15 @@ public class Location {
 	private double latitude;
 	private String type;
 	private Time time;
+	private int timesReported;
+	private String description;
+	private List<byte[]> images;
 
-	@OneToOne(orphanRemoval = true)
+	@OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS_ID")
 	private Address address;
 
-	@OneToMany(orphanRemoval = true)
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FEEDBACK_ID")
 	private List<Feedback> feedback;
 
@@ -57,6 +61,18 @@ public class Location {
 
 	public Time getTime() {
 		return time;
+	}
+
+	public int getTimesReported() {
+		return timesReported;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public List<byte[]> getImages() {
+		return images;
 	}
 
 	public Address getAddress() {
@@ -100,11 +116,47 @@ public class Location {
 		this.address = address;
 	}
 
+	public void setTimesReported(int timesReported) {
+		this.timesReported = timesReported;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setImages(List<byte[]> images) {
+		this.images = images;
+	}
+
 	public void setFeedback(List<Feedback> feedback) {
 		this.feedback = feedback;
 	}
 
 	// other methods
+	public void addFeedback(Feedback feedback) {
+		this.feedback.add(feedback);
+	}
+
+	public void removeFeedback(Feedback feedback) {
+		this.feedback.remove(feedback);
+	}
+
+	public void removeFeedbackAtIndex(int index) {
+		this.feedback.remove(index);
+	}
+
+	public void addImage(byte[] image) {
+		this.images.add(image);
+	}
+
+	public void removeImage(byte[] image) {
+		this.images.remove(image);
+	}
+
+	public void removeImageAtIndex(int index) {
+		this.images.remove(index);
+	}
+
 	@Override
 	public String toString() {
 		String locationString = "LOCATION= "
@@ -114,6 +166,8 @@ public class Location {
 						+ "Latitude: " + this.latitude + ", "
 						+ "Type: " + this.type + ", "
 						+ "Time: " + this.time.toString() + ", "
+						+ "TimesReported: " + this.timesReported + ", "
+						+ "Description: " + this.description + ", "
 						+ "Address: " + this.address.toString() + ", "
 						+ "Feedback: geb ich jetzt dazu sicherlich nicht aus";
 

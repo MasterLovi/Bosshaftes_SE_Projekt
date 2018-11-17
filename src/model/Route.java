@@ -1,8 +1,9 @@
 package model;
 
-import java.sql.Time;
+import util.Time;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "ROUTE")
@@ -26,8 +28,13 @@ public class Route {
 	private String name;
 	private String type;
 	private Time time;
+	private String description;
+	private List<byte[]> pictures;
+	
+	@Transient
+	private List<String> images;
 
-	@OneToMany
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FEEDBACK_ID")
 	private List<Feedback> feedback;
 
@@ -50,6 +57,18 @@ public class Route {
 
 	public String getType() {
 		return type;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public List<String> getImages() {
+		return images;
+	}
+	
+	public List<byte[]> getPictures() {
+		return pictures;
 	}
 
 	public List<Location> getStops() {
@@ -89,6 +108,10 @@ public class Route {
 		}
 	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public void setStops(List<Location> stops) {
 		this.stops = stops;
 	}
@@ -101,6 +124,14 @@ public class Route {
 		this.time = time;
 	}
 
+	public void setImages(List<String> images) {
+		this.images = images;
+	}
+	
+	public void setPictures(List<byte[]> pictures) {
+		this.pictures = pictures;
+	}
+	
 	public void setFeedback(List<Feedback> feedback) {
 		this.feedback = feedback;
 	}
@@ -118,6 +149,30 @@ public class Route {
 		this.stops.remove(index);
 	}
 
+	public void addFeedback(Feedback feedback) {
+		this.feedback.add(feedback);
+	}
+
+	public void removeFeedback(Feedback feedback) {
+		this.feedback.remove(feedback);
+	}
+
+	public void removeFeedbackAtIndex(int index) {
+		this.feedback.remove(index);
+	}
+
+	public void addImage(String image) {
+		this.images.add(image);
+	}
+
+	public void removeImage(byte[] image) {
+		this.images.remove(image);
+	}
+
+	public void removeImageAtIndex(int index) {
+		this.images.remove(index);
+	}
+
 	@Override
 	public String toString() {
 		String routeString = "ROUTE= "
@@ -125,6 +180,7 @@ public class Route {
 						+ "Name: " + this.name + ", "
 						+ "Type: " + this.type + ", "
 						+ "Time: " + this.time.toString() + ", "
+						+ "Description: " + this.description + ", "
 						+ "|| Feedback und Location spar ich mir";
 
 		return routeString;

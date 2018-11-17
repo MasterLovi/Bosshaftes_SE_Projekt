@@ -2,6 +2,7 @@ package model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
+
 @Entity
 @Table(name = "USERS")
 public class Users {
@@ -21,11 +25,14 @@ public class Users {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int id;
+
+	@Column(unique = true)
 	private String username;
 	private String email;
-	private String password;
+	@Expose(serialize = false)
+	private transient String password;
 
-	@OneToMany(mappedBy = "owner", orphanRemoval = true)
+	@OneToMany(mappedBy = "owner", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Route> routes;
 
 	@ManyToMany
