@@ -1,4 +1,4 @@
-package test;
+package test.util;
 
 import  util.Time;
 import java.util.ArrayList;
@@ -84,6 +84,10 @@ public class JSON_Test_unsauber {
 				feedback.add(rating);
 
 			}
+			
+			Gson gson = new Gson();
+	        String json1 = gson.toJson(locations);
+	        System.out.println(json1 + "\n\n\n");
 
 			route.setFeedback(feedback);
 			route.setStops(locations);
