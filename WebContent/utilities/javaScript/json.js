@@ -12,6 +12,7 @@ function getJsonDatastrucutreLocation() {
 			},
 			timesReported: 0,
 			address: {
+				id: "",
 				cityName: "",
 				country: "",
 				houseNumber: "",
