@@ -3,12 +3,14 @@ function getJsonDatastrucutreLocation() {
 	var json = {
 			id: "",
 			name: "",
-			location_type: "",
+			type: "",
 			time: {
-				hours: "",
-				minutes: "",
-				seconds: "0"
+				time: "",
+				hours: 0,
+				minutes: 0,
+				seconds: 0
 			},
+			timesReported: 0,
 			address: {
 				cityName: "",
 				country: "",
@@ -16,12 +18,9 @@ function getJsonDatastrucutreLocation() {
 				postCode: "",
 				streetName: ""
 			},
-			coordinates: [0,0],
-			feedback: {
-				author: "",
-				comment: "",
-				rating: ""
-			}
+			latitude: "",
+			longitude: "",
+			feedback: [] 
 	};
 	
 	return json;

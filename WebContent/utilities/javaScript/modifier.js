@@ -263,5 +263,11 @@ $(document).ready(function() {
 	});
 })
 
-
+$(document).ready(function() {
+	getMap().on("moveend", function(e) {
+		console.log("moved");
+		getLocationFromDatabase("Party");
+		console.log("done");
+	});
+})
 
