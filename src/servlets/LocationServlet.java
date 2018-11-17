@@ -50,11 +50,15 @@ public class LocationServlet extends HttpServlet {
 			for (Location location : result) {
 				List<String> images = new ArrayList<String>();
 				// convert pictures and data to JSON
-				for (byte[] picture : location.getPictures()) {
-					String image64 = new BASE64Encoder().encode(picture);
-					images.add(image64);
+				if (location.getPictures() != null) {
+					for (byte[] picture : location.getPictures()) {
+						String image64 = new BASE64Encoder().encode(picture);
+						images.add(image64);
+					}
+					location.setImages(images);
+				} else {
+					location.setImages(null);
 				}
-				location.setImages(images);
 			}
 			Gson gson = new Gson();
 			JSONData = gson.toJson(result);
@@ -81,11 +85,15 @@ public class LocationServlet extends HttpServlet {
 			nLocation.setDescription(location.getDescription());
 
 			List<byte[]> images = new ArrayList<byte[]>();
-			for (String sBase64 : location.getImages()) {
-				byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
-				images.add(image);
+			if (location.getImages() != null) {
+				for (String sBase64 : location.getImages()) {
+					byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+					images.add(image);
+				}
+				nLocation.setPictures(images);
+			} else {
+				nLocation.setPictures(null);
 			}
-			nLocation.setPictures(images);
 
 			em.persist(nLocation);
 		}
@@ -107,8 +115,10 @@ public class LocationServlet extends HttpServlet {
 	private static String update(List<Location> locations, EntityManager em) throws Exception {
 
 		em.getTransaction().begin();
+
 		// Loop over Locations that should be updated
 		for (Location location : locations) {
+
 			Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
 			List<Location> result = query.getResultList();
 
@@ -120,6 +130,15 @@ public class LocationServlet extends HttpServlet {
 				resultlocation.setType(location.getType());
 				resultlocation.setLatitude(location.getLatitude());
 				resultlocation.setLongitude(location.getLongitude());
+				resultlocation.setDescription(location.getDescription());
+
+				// update Images
+				List<byte[]> images = new ArrayList<byte[]>();
+				for (String sBase64 : location.getImages()) {
+					byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+					images.add(image);
+				}
+				resultlocation.setPictures(images);
 
 				// update corresponding Address
 				Address address = location.getAddress();
