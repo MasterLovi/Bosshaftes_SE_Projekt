@@ -117,27 +117,29 @@ function createNewMarker(sType) {
 	json.address.postCode = addressData.postCode;
 	json.address.streetName = addressData.streetName;
 	
+	// Loading the coordinates from the form
 	json.coordinates[0] = $("#createLocationForm input[name=lat]").val();
 	json.coordinates[1] = $("#createLocationForm input[name=lng]").val();
 	
+	// Loading the time and split into min and hours
 	json.time.hours = $("#createLocationForm input[name=time]").val().substring(0,2);
 	json.time.minutes = $("#createLocationForm input[name=time]").val().substring(3,5);
 	
 	console.log(json);
 	
-//	$.ajax({
-//	    url: "LocationServlet",
-//	    type: "POST",
-//	    data: {
-//	      operation: "create",
-//	      data: requestJson //Json file
-//	     
-//	    },
-//	    success: function(response) {},
-//	    error: function(error) {
-//		      console.log(error);
-//		 }
-//	});
+	$.ajax({
+	    url: "LocationServlet",
+	    type: "POST",
+	    data: {
+	      operation: "create",
+	      data: json.stringify() //Json file
+	     
+	    },
+	    success: function(response) {},
+	    error: function(error) {
+		      console.log(error);
+		 }
+	});
 }
 
 
