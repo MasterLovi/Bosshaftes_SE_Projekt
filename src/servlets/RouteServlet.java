@@ -22,7 +22,6 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import model.Route;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
-import util.JSON;
 
 /**
  * Servlet implementation class RouteServlet
@@ -57,7 +56,8 @@ public class RouteServlet extends HttpServlet {
 				}
 				route.setImages(images);
 			}
-			JSONData = JSON.routeToJSON(result);
+			Gson gson = new Gson();
+			JSONData = gson.toJson(result);
 		} else {
 			JSONData = "[]";
 		}
@@ -164,7 +164,7 @@ public class RouteServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
@@ -195,7 +195,7 @@ public class RouteServlet extends HttpServlet {
 		}
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
-		writer.append(res);
+		writer.print(res);
 		em.close();
 	}
 }
