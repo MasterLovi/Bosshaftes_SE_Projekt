@@ -13,10 +13,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import model.Feedback;
 import model.Location;
+import model.Route;
 import model.Users;
-import util.JSON;
 
 /**
  * Servlet implementation class FeedbackServlet
@@ -101,7 +104,9 @@ public class FeedbackServlet extends HttpServlet {
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
 		String JSONData = request.getParameter("data");
-		List<Feedback> feedbackList = JSON.toFeedback(JSONData);
+		Gson gson = new Gson();
+		List<Feedback> feedbackList = gson.fromJson(request.getParameter("data"), new TypeToken<List<Feedback>>() {
+		}.getType());
 		String res = "";
 		
 		try {
