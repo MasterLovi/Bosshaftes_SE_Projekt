@@ -48,8 +48,8 @@ public class TestRouteServlet {
 	@Test
 	public void testCreate() throws IOException, ServletException {
 		
-		String testDataCreate = Reader.readFile("resources/test/data/routeCreate.json", StandardCharsets.UTF_8);
-		when(request.getParameter("data")).thenReturn(testDataCreate);
+		String testData = Reader.readFile("resources/test/data/routeCreate.json", StandardCharsets.UTF_8);
+		when(request.getParameter("data")).thenReturn(testData);
 		when(request.getParameter("operation")).thenReturn("create");
 
 		StringWriter sw = new StringWriter();
@@ -68,11 +68,53 @@ public class TestRouteServlet {
 	}
 	
 	@Test
+	public void testRead() throws IOException, ServletException {
+		
+		String testData = Reader.readFile("resources/test/data/routeCreate.json", StandardCharsets.UTF_8);
+		when(request.getParameter("data")).thenReturn(testData);
+		when(request.getSession().getAttribute("username")).thenReturn("test");
+
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		when(response.getWriter()).thenReturn(pw);
+		
+		routeServlet.doGet(request, response);
+		String result = sw.getBuffer().toString();
+		
+        //verify that parameters were called
+		
+		System.out.println(result);
+        assertTrue(result.equals(testData));
+	}
+	
+	@Test
 	public void testUpdate() throws IOException, ServletException {
 		
-		String testDataUpdate = Reader.readFile("resources/test/data/routeUpdate.json", StandardCharsets.UTF_8);
-		when(request.getParameter("data")).thenReturn(testDataUpdate);
+		String testData = Reader.readFile("resources/test/data/routeUpdate.json", StandardCharsets.UTF_8);
+		when(request.getParameter("data")).thenReturn(testData);
 		when(request.getParameter("operation")).thenReturn("update");
+
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		when(response.getWriter()).thenReturn(pw);
+		
+		routeServlet.doPost(request, response);
+		String result = sw.getBuffer().toString();
+		
+        //verify that parameters were called
+        verify(request, atLeast(1)).getParameter("operation");
+		verify(request, atLeast(1)).getParameter("data");
+		
+		System.out.println(result);
+        assertTrue(result.equals("Success"));
+	}
+	
+	@Test
+	public void testDelete() throws IOException, ServletException {
+		
+		String testData = Reader.readFile("resources/test/data/routeUpdate.json", StandardCharsets.UTF_8);
+		when(request.getParameter("data")).thenReturn(testData);
+		when(request.getParameter("operation")).thenReturn("delete");
 
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
