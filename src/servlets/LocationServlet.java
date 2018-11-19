@@ -49,8 +49,8 @@ public class LocationServlet extends HttpServlet {
 		// Build query with given parameters
 		String selectQuery = "SELECT l FROM Location l "
 						+ "WHERE l.type = '" + type + "'"
-						+ " AND l.longtitude BETWEEN " + boundNorthWest[0] + " AND " + boundSouthEast[0]
-						+ " AND l.latitude BETWEEN " + boundNorthWest[1] + " AND " + boundSouthEast[1];
+						+ " AND l.latitude BETWEEN " + boundNorthWest[0] + " AND " + boundSouthEast[0]
+						+ " AND l.longitude BETWEEN " + boundNorthWest[1] + " AND " + boundSouthEast[1];
 
 		// Select Location from database table
 		Query query = em.createQuery(selectQuery);
@@ -95,16 +95,16 @@ public class LocationServlet extends HttpServlet {
 			List<Location> result = query.getResultList();
 
 			if (result.size() == 0) {
-				Location nLocation = new Location();
-				nLocation.setName(location.getName());
-				nLocation.setType(location.getType());
-				nLocation.setTime(location.getTime());
-				nLocation.setFeedback(null);
-				nLocation.setAddress(location.getAddress());
-				nLocation.setLatitude(location.getLatitude());
-				nLocation.setLongitude(location.getLongitude());
-				nLocation.setTimesReported(0);
-				nLocation.setDescription(location.getDescription());
+				Location newLocation = new Location();
+				newLocation.setName(location.getName());
+				newLocation.setType(location.getType());
+				newLocation.setTime(location.getTime());
+				newLocation.setFeedback(null);
+				newLocation.setAddress(location.getAddress());
+				newLocation.setLatitude(location.getLatitude());
+				newLocation.setLongitude(location.getLongitude());
+				newLocation.setTimesReported(0);
+				newLocation.setDescription(location.getDescription());
 
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (location.getImages() != null) {
@@ -112,12 +112,12 @@ public class LocationServlet extends HttpServlet {
 						byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
 						images.add(image);
 					}
-					nLocation.setPictures(images);
+					newLocation.setPictures(images);
 				} else {
-					nLocation.setPictures(null);
+					newLocation.setPictures(null);
 				}
 
-				em.persist(nLocation);
+				em.persist(newLocation);
 			} else {
 				throw new Exception("Location \"" + location.getName() + "\" existiert bereits.");
 			}
@@ -135,7 +135,7 @@ public class LocationServlet extends HttpServlet {
 				em.remove(result);
 			} else {
 				throw new Exception("Location \"" + location.getName()
-								+ "\"existiert nicht und kann daher nicht gelï¿½scht werden");
+								+ "\"existiert nicht und kann daher nicht gelöscht werden");
 			}
 		}
 		em.getTransaction().commit();
@@ -212,6 +212,7 @@ public class LocationServlet extends HttpServlet {
 				}
 
 			} else {
+				throw new Exception("Location \"" + location.getName() + "\" existiert nicht");
 			}
 		}
 		return "Success";
