@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -22,7 +23,6 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import model.Route;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
-import util.JSON;
 
 /**
  * Servlet implementation class RouteServlet
@@ -57,7 +57,8 @@ public class RouteServlet extends HttpServlet {
 				}
 				route.setImages(images);
 			}
-			JSONData = JSON.routeToJSON(result);
+			Gson gson = new Gson();
+			JSONData = gson.toJson(result);
 		} else {
 			JSONData = "[]";
 		}
@@ -65,7 +66,7 @@ public class RouteServlet extends HttpServlet {
 		return JSONData;
 	}
 
-	private static String create(List<Route> routes, EntityManager em) throws Exception {
+	private static String create(List<Route> routes, EntityManager em, HttpSession session) throws Exception {
 
 		// Loop over Routes that should be created
 		em.getTransaction().begin();
@@ -77,14 +78,22 @@ public class RouteServlet extends HttpServlet {
 			newRoute.setStops(route.getStops());
 			newRoute.setFeedback(null);
 			newRoute.setDescription(route.getDescription());
+			
+			// Select Route from database table
+			Query query = em.createQuery("SELECT u FROM Users u WHERE u.username = '" + session.getAttribute("username") + "'");
+			List<Route> result = query.getResultList();
 			newRoute.setOwner(route.getOwner());
 
 			List<byte[]> images = new ArrayList<byte[]>();
-			for (String sBase64 : route.getImages()) {
-				byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
-				images.add(image);
+			if (route.getImages() != null) {
+				for (String sBase64 : route.getImages()) {
+					byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+					images.add(image);
+				}
+				newRoute.setPictures(images);
+			} else {
+				newRoute.setPictures(null);
 			}
-			newRoute.setPictures(images);
 
 			em.persist(newRoute);
 		}
@@ -133,7 +142,7 @@ public class RouteServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory and create EntityManager
@@ -150,7 +159,7 @@ public class RouteServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getMessage();
+			res = e.getStackTrace().toString();
 		}
 		// Send Response
 		response.setContentType("application/json");
@@ -164,8 +173,7 @@ public class RouteServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
@@ -181,7 +189,7 @@ public class RouteServlet extends HttpServlet {
 				res = update(routes, em);
 				break;
 			case "create":
-				res = create(routes, em);
+				res = create(routes, em, request.getSession());
 				break;
 			case "delete":
 				res = delete(routes, em);
@@ -191,11 +199,11 @@ public class RouteServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getMessage();
+			res = e.getStackTrace().toString();
 		}
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
-		writer.append(res);
+		writer.print(res);
 		em.close();
 	}
 }

@@ -99,9 +99,8 @@ public class RegistrationServlet extends HttpServlet {
 			response.sendRedirect(request.getHeader("referer"));
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-			em.close();
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
 		}
+		em.close();
 	}
 }

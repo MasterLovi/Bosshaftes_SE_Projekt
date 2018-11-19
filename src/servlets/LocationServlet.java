@@ -19,6 +19,8 @@ import com.google.gson.reflect.TypeToken;
 
 import model.Address;
 import model.Location;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 /**
  * Servlet implementation class LocationServlet
@@ -58,7 +60,19 @@ public class LocationServlet extends HttpServlet {
 
 		// check for empty resultList
 		if (result.size() > 0) {
-			// convert data to JSON
+			for (Location location : result) {
+				List<String> images = new ArrayList<String>();
+				// convert pictures and data to JSON
+				if (location.getPictures() != null) {
+					for (byte[] picture : location.getPictures()) {
+						String image64 = new BASE64Encoder().encode(picture);
+						images.add(image64);
+					}
+					location.setImages(images);
+				} else {
+					location.setImages(null);
+				}
+			}
 			Gson gson = new Gson();
 			JSONData = gson.toJson(result);
 		} else {
@@ -69,9 +83,10 @@ public class LocationServlet extends HttpServlet {
 	}
 
 	private static String create(List<Location> locations, EntityManager em) throws Exception {
+		// Loop over Routes that should be created
 		em.getTransaction().begin();
-		// Loop over Locations that should be created
 		for (Location location : locations) {
+
 			// find out if location already exists
 			String selectQuery = "SELECT l from Location l"
 							+ " WHERE l.latitude = " + location.getLatitude()
@@ -79,13 +94,30 @@ public class LocationServlet extends HttpServlet {
 			Query query = em.createQuery(selectQuery);
 			List<Location> result = query.getResultList();
 
-			// If location was not found, it should be created
 			if (result.size() == 0) {
-				/*
-				 * for (Base64 image : location.getImages()) { byte[] decodedImage =
-				 * Base64.decode(image, 0); }
-				 */
-				em.persist(location);
+				Location nLocation = new Location();
+				nLocation.setName(location.getName());
+				nLocation.setType(location.getType());
+				nLocation.setTime(location.getTime());
+				nLocation.setFeedback(null);
+				nLocation.setAddress(location.getAddress());
+				nLocation.setLatitude(location.getLatitude());
+				nLocation.setLongitude(location.getLongitude());
+				nLocation.setTimesReported(0);
+				nLocation.setDescription(location.getDescription());
+
+				List<byte[]> images = new ArrayList<byte[]>();
+				if (location.getImages() != null) {
+					for (String sBase64 : location.getImages()) {
+						byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+						images.add(image);
+					}
+					nLocation.setPictures(images);
+				} else {
+					nLocation.setPictures(null);
+				}
+
+				em.persist(nLocation);
 			} else {
 				throw new Exception("Location \"" + location.getName() + "\" existiert bereits.");
 			}
@@ -103,7 +135,7 @@ public class LocationServlet extends HttpServlet {
 				em.remove(result);
 			} else {
 				throw new Exception("Location \"" + location.getName()
-								+ "\"existiert nicht und kann daher nicht gelöscht werden");
+								+ "\"existiert nicht und kann daher nicht gelï¿½scht werden");
 			}
 		}
 		em.getTransaction().commit();
@@ -112,10 +144,12 @@ public class LocationServlet extends HttpServlet {
 
 	private static String update(List<Location> locations, EntityManager em) throws Exception {
 		em.getTransaction().begin();
+
 		// Loop over Locations that should be updated
 		for (Location location : locations) {
 			String selectQuery = "SELECT l from Location l WHERE l.id = " + location.getId();
 			Query query = em.createQuery(selectQuery);
+
 			List<Location> result = query.getResultList();
 
 			// If location was found, it should be updated
@@ -127,17 +161,18 @@ public class LocationServlet extends HttpServlet {
 				resultLocation.setLatitude(location.getLatitude());
 				resultLocation.setLongitude(location.getLongitude());
 				resultLocation.setDescription(location.getDescription());
-				resultLocation.setImages(location.getImages());
+
+				// update Images
+				List<byte[]> images = new ArrayList<byte[]>();
+				for (String sBase64 : location.getImages()) {
+					byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+					images.add(image);
+				}
+				resultLocation.setPictures(images);
 
 				// update corresponding Address
 				Address address = location.getAddress();
-				query = em.createQuery("SELECT a FROM Address a"
-								+ " WHERE" + " a.country = " + address.getCountry()
-								+ " a.postCode = "
-								+ address.getPostCode() + " a.cityName = " + address.getCityName()
-								+ " a.streetName = "
-								+ address.getStreetName() + " a.houseNumber = "
-								+ address.getHouseNumber());
+				query = em.createQuery("SELECT a from Address a WHERE" + " a.id = " + address.getId());
 				List<Address> resultAddresses = query.getResultList();
 
 				if (resultAddresses.size() > 0) {
@@ -157,38 +192,29 @@ public class LocationServlet extends HttpServlet {
 
 	private static String report(List<Location> locations, EntityManager em) throws Exception {
 
-		try {
-			Integer errorCount = 0;
-			ArrayList<String> loc = new ArrayList<String>();
+		// Loop over Locations that should be reported
+		for (Location location : locations) {
+			Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
+			List<Location> result = query.getResultList();
 
-			// Loop over Locations that should be reported
-			for (Location location : locations) {
-				Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
-				List<Location> result = query.getResultList();
+			// If location was found, it should be updated
+			if (result.size() > 0) {
+				Location resultLocation = result.get(0);
+				int timesReported = resultLocation.getTimesReported();
 
-				// If location was found, it should be updated
-				if (result.size() > 0) {
-					Location resultLocation = result.get(0);
-					int timesReported = resultLocation.getTimesReported();
-
-					if (timesReported == 2) {
-						// delete Location
-						ArrayList<Location> deleteLocations = new ArrayList<Location>();
-						deleteLocations.add(location);
-						delete(deleteLocations, em);
-					} else {
-						resultLocation.setTimesReported(timesReported++);
-					}
-
+				if (timesReported == 2) {
+					// delete Location
+					ArrayList<Location> deleteLocations = new ArrayList<Location>();
+					deleteLocations.add(location);
+					delete(deleteLocations, em);
 				} else {
-					errorCount++;
-					loc.add(location.getName());
+					resultLocation.setTimesReported(timesReported++);
 				}
+
+			} else {
 			}
-			return errorCount == 0 ? "Success" : "{ errors: " + errorCount + ", locations: " + loc.toString() + "}";
-		} catch (Exception e) {
-			throw e;
 		}
+		return "Success";
 	}
 
 	/**
@@ -227,7 +253,7 @@ public class LocationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getMessage();
+			res = e.toString();
 		}
 		// Send Response
 		response.setContentType("application/json");
@@ -271,7 +297,7 @@ public class LocationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getMessage();
+			e.getStackTrace().toString();
 		}
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
