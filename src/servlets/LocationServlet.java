@@ -35,11 +35,25 @@ public class LocationServlet extends HttpServlet {
 		super();
 	}
 
-	private static String read(EntityManager em, String type) throws Exception {
+	private static String read(EntityManager em, String type, double[] boundNorthWest, double[] boundSouthEast)
+					throws Exception {
+
+		if (type == null) {
+			throw new Exception("Type darf nicht null sein!");
+		} else if (!(type.equals("Party") || type.equals("Kultur"))) {
+			throw new Exception("Type muss entweder \"Party\" oder \"Kultur\" sein!");
+		}
+
+		// Build query with given parameters
+		String selectQuery = "SELECT l FROM Location l "
+						+ "WHERE l.type = '" + type + "'"
+						+ " AND l.longtitude BETWEEN " + boundNorthWest[0] + " AND " + boundSouthEast[0]
+						+ " AND l.latitude BETWEEN " + boundNorthWest[1] + " AND " + boundSouthEast[1];
 
 		// Select Location from database table
-		Query query = em.createQuery("SELECT l FROM Location l WHERE l.type = '" + type + "'");
+		Query query = em.createQuery(selectQuery);
 		List<Location> result = query.getResultList();
+
 		String JSONData;
 
 		// check for empty resultList
@@ -50,7 +64,7 @@ public class LocationServlet extends HttpServlet {
 		} else {
 			JSONData = "[]";
 		}
-		// return
+		// return results
 		return JSONData;
 	}
 
@@ -58,8 +72,11 @@ public class LocationServlet extends HttpServlet {
 		em.getTransaction().begin();
 		// Loop over Locations that should be created
 		for (Location location : locations) {
-			Query query = em.createQuery("SELECT l from Location l WHERE l.latitude = " + location.getLatitude()
-					+ " AND l.longitude = " + location.getLatitude());
+			// find out if location already exists
+			String selectQuery = "SELECT l from Location l"
+							+ " WHERE l.latitude = " + location.getLatitude()
+							+ " AND l.longitude = " + location.getLatitude();
+			Query query = em.createQuery(selectQuery);
 			List<Location> result = query.getResultList();
 
 			// If location was not found, it should be created
@@ -70,11 +87,11 @@ public class LocationServlet extends HttpServlet {
 				 */
 				em.persist(location);
 			} else {
-				throw new Exception("Location: " + location.getName() + " existiert bereits.");
+				throw new Exception("Location \"" + location.getName() + "\" existiert bereits.");
 			}
 		}
 		em.getTransaction().commit();
-		return "Sucess";
+		return "Success";
 	}
 
 	private static String delete(List<Location> locations, EntityManager em) throws Exception {
@@ -82,35 +99,45 @@ public class LocationServlet extends HttpServlet {
 		em.getTransaction().begin();
 		for (Location location : locations) {
 			Location result = em.find(Location.class, location.getId());
-			em.remove(result);
+			if (result != null) {
+				em.remove(result);
+			} else {
+				throw new Exception("Location \"" + location.getName()
+								+ "\"existiert nicht und kann daher nicht gelöscht werden");
+			}
 		}
 		em.getTransaction().commit();
 		return "Success";
 	}
 
 	private static String update(List<Location> locations, EntityManager em) throws Exception {
-		
 		em.getTransaction().begin();
 		// Loop over Locations that should be updated
 		for (Location location : locations) {
-			Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
+			String selectQuery = "SELECT l from Location l WHERE l.id = " + location.getId();
+			Query query = em.createQuery(selectQuery);
 			List<Location> result = query.getResultList();
 
 			// If location was found, it should be updated
 			if (result.size() > 0) {
-				Location resultlocation = result.get(0);
-				resultlocation.setName(location.getName());
-				resultlocation.setTime(location.getTime());
-				resultlocation.setType(location.getType());
-				resultlocation.setLatitude(location.getLatitude());
-				resultlocation.setLongitude(location.getLongitude());
+				Location resultLocation = result.get(0);
+				resultLocation.setName(location.getName());
+				resultLocation.setTime(location.getTime());
+				resultLocation.setType(location.getType());
+				resultLocation.setLatitude(location.getLatitude());
+				resultLocation.setLongitude(location.getLongitude());
+				resultLocation.setDescription(location.getDescription());
+				resultLocation.setImages(location.getImages());
 
 				// update corresponding Address
 				Address address = location.getAddress();
-				query = em.createQuery(
-						"SELECT a from Address a WHERE" + " a.country = " + address.getCountry() + " a.postCode = "
-								+ address.getPostCode() + " a.cityName = " + address.getCityName() + " a.streetName = "
-								+ address.getStreetName() + " a.houseNumber = " + address.getHouseNumber());
+				query = em.createQuery("SELECT a FROM Address a"
+								+ " WHERE" + " a.country = " + address.getCountry()
+								+ " a.postCode = "
+								+ address.getPostCode() + " a.cityName = " + address.getCityName()
+								+ " a.streetName = "
+								+ address.getStreetName() + " a.houseNumber = "
+								+ address.getHouseNumber());
 				List<Address> resultAddresses = query.getResultList();
 
 				if (resultAddresses.size() > 0) {
@@ -118,10 +145,10 @@ public class LocationServlet extends HttpServlet {
 					resultAddress.setAddress(address);
 				} else {
 					em.persist(address);
-					resultlocation.setAddress(address);
+					resultLocation.setAddress(address);
 				}
 			} else {
-				throw new Exception("Location: " + location.getName() + " does not exist.");
+				throw new Exception("Location \"" + location.getName() + "\" existiert nicht");
 			}
 		}
 		em.getTransaction().commit();
@@ -170,7 +197,7 @@ public class LocationServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+					throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory and create EntityManager
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
@@ -181,8 +208,21 @@ public class LocationServlet extends HttpServlet {
 
 		// read Data
 		try {
+			// retrieve all parameters
 			String paramType = request.getParameter("type");
-			res = read(em, paramType);
+
+			String[] paramBoundNorthWestString = request.getParameterValues("boundNorthWest");
+			double[] paramBoundNorthWest = new double[2];
+			paramBoundNorthWest[0] = Double.valueOf(paramBoundNorthWestString[0]);
+			paramBoundNorthWest[1] = Double.valueOf(paramBoundNorthWestString[1]);
+
+			String[] paramBoundSouthEastString = request.getParameterValues("boundSouthEast");
+			double[] paramBoundSouthEast = new double[2];
+			paramBoundSouthEast[0] = Double.valueOf(paramBoundSouthEastString[0]);
+			paramBoundSouthEast[1] = Double.valueOf(paramBoundSouthEastString[1]);
+
+			// read with parameters
+			res = read(em, paramType, paramBoundNorthWest, paramBoundSouthEast);
 			response.setStatus(200);
 		} catch (Exception e) {
 			// send back error
@@ -202,7 +242,7 @@ public class LocationServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+					throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
