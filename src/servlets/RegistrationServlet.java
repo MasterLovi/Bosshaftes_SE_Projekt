@@ -33,7 +33,7 @@ public class RegistrationServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		// Obtain a database connection:
@@ -88,7 +88,7 @@ public class RegistrationServlet extends HttpServlet {
 			response.sendRedirect(request.getHeader("referer"));
 			
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 		em.close();
 	}
