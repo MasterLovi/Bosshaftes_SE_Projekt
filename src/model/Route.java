@@ -1,6 +1,5 @@
 package model;
 
-import util.Time;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import util.Time;
+
 @Entity
 @Table(name = "ROUTE")
 public class Route {
@@ -30,7 +31,7 @@ public class Route {
 	private Time time;
 	private String description;
 	private List<byte[]> pictures;
-	
+
 	@Transient
 	private List<String> images;
 
@@ -38,9 +39,18 @@ public class Route {
 	@JoinColumn(name = "FEEDBACK_ID")
 	private List<Feedback> feedback;
 
+	private double avgRating;
+
 	@ManyToMany
 	@JoinTable(name = "ROUTES_LOCATION", joinColumns = @JoinColumn(name = "ROUTE_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "LOCATION_ID", referencedColumnName = "ID"))
 	private List<Location> stops;
+
+	private int numberOfStops;
+
+	@Transient
+	private double firstLong;
+	@Transient
+	private double firstLat;
 
 	@ManyToOne
 	@JoinColumn(name = "OWNER_ID")
@@ -66,13 +76,25 @@ public class Route {
 	public List<String> getImages() {
 		return images;
 	}
-	
+
 	public List<byte[]> getPictures() {
 		return pictures;
 	}
 
 	public List<Location> getStops() {
 		return stops;
+	}
+
+	public int getNumberOfStops() {
+		return numberOfStops;
+	}
+
+	public double getFirstLong() {
+		return firstLong;
+	}
+
+	public double getFirstLat() {
+		return firstLat;
 	}
 
 	public Location getStop(int index) {
@@ -89,6 +111,10 @@ public class Route {
 
 	public List<Feedback> getFeedback() {
 		return feedback;
+	}
+
+	public double getAvgRating() {
+		return avgRating;
 	}
 
 	// setter
@@ -116,6 +142,18 @@ public class Route {
 		this.stops = stops;
 	}
 
+	public void setNumberOfStops(int numberOfStops) {
+		this.numberOfStops = numberOfStops;
+	}
+
+	public void setFirstLong(double firstLong) {
+		this.firstLong = firstLong;
+	}
+
+	public void setFirstLat(double firstLat) {
+		this.firstLat = firstLat;
+	}
+
 	public void setOwner(Users owner) {
 		this.owner = owner;
 	}
@@ -127,13 +165,17 @@ public class Route {
 	public void setImages(List<String> images) {
 		this.images = images;
 	}
-	
+
 	public void setPictures(List<byte[]> pictures) {
 		this.pictures = pictures;
 	}
-	
+
 	public void setFeedback(List<Feedback> feedback) {
 		this.feedback = feedback;
+	}
+
+	public void setAvgRating(double avgRating) {
+		this.avgRating = avgRating;
 	}
 
 	// other methods
