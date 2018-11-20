@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.google.gson.annotations.Expose;
+
 import util.Time;
 
 @Entity
@@ -28,8 +30,15 @@ public class Route {
 	private int id;
 	private String name;
 	private String type;
+	
+	@Expose(serialize=false)
+	private String timeString;
+	
+	@Transient
 	private Time time;
 	private String description;
+	
+	@Expose(serialize = false)
 	private List<byte[]> pictures;
 
 	@Transient
@@ -45,11 +54,13 @@ public class Route {
 	@JoinTable(name = "ROUTES_LOCATION", joinColumns = @JoinColumn(name = "ROUTE_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "LOCATION_ID", referencedColumnName = "ID"))
 	private List<Location> stops;
 
+	@Expose(serialize = false)
 	private int numberOfStops;
-
-	@Transient
+	
+	@Expose(serialize = false)
 	private double firstLong;
-	@Transient
+	
+	@Expose(serialize = false)
 	private double firstLat;
 
 	@ManyToOne
@@ -108,6 +119,10 @@ public class Route {
 	public Time getTime() {
 		return time;
 	}
+	
+	public String getTimeString() {
+		return timeString;
+	}
 
 	public List<Feedback> getFeedback() {
 		return feedback;
@@ -140,6 +155,10 @@ public class Route {
 
 	public void setStops(List<Location> stops) {
 		this.stops = stops;
+	}
+	
+	public void setTimeString(String timeString) {
+		this.timeString = timeString;
 	}
 
 	public void setNumberOfStops(int numberOfStops) {
@@ -207,7 +226,7 @@ public class Route {
 		this.images.add(image);
 	}
 
-	public void removeImage(byte[] image) {
+	public void removeImage(String image) {
 		this.images.remove(image);
 	}
 

@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name = "LOCATION")
 public class Location {
@@ -27,9 +29,16 @@ public class Location {
 	private double longitude;
 	private double latitude;
 	private String type;
+	
+	@Expose(serialize=false)
+	private String timeString;
+	
+	@Transient
 	private Time time;
 	private int timesReported;
 	private String description;
+	
+	@Expose(serialize = false)
 	private List<byte[]> pictures;
 
 	@Transient
@@ -66,7 +75,11 @@ public class Location {
 	public Time getTime() {
 		return time;
 	}
-
+	
+	public String getTimeString() {
+		return timeString;
+	}
+	
 	public int getTimesReported() {
 		return timesReported;
 	}
@@ -94,6 +107,10 @@ public class Location {
 	// setter
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public void setTimeString(String timeString) {
+		this.timeString = timeString;
 	}
 	
 	public void setPictures(List<byte[]> pictures) {

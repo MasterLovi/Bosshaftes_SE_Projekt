@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -38,19 +39,19 @@ public class RouteServlet extends HttpServlet {
 		super();
 	}
 
-	private static String read(EntityManager em, String type, Time maxTime, double minRating, int maxNoStops,
+	private static String read(EntityManager em, String type, String maxTime, double minRating, int maxNoStops,
 					double[] boundNorthWest, double[] boundSouthEast) throws Exception {
 
 		if (type == null) {
 			throw new Exception("Type darf nicht null sein!");
-		} else if (!(type.equals("Party") || type.equals("Kultur"))) {
+		} else if (!(type.equals("Party")  || type.equals("Kultur"))) {
 			throw new Exception("Type muss entweder \"Party\" oder \"Kultur\" sein!");
 		}
 
 		// Build query with given parameters
 		String selectQuery = "SELECT r FROM Route r"
 						+ " WHERE r.type = '" + type + "'"
-						+ " AND r.time <= \"" + maxTime + "\""
+						+ " AND r.timeString <= \"" + maxTime + "\""
 						+ " AND r.avgRating >= " + minRating
 						+ " AND r.numberOfStops <= " + maxNoStops
 						+ " AND r.firstLat BETWEEN " + boundNorthWest[0] + " AND " + boundSouthEast[0]
@@ -65,6 +66,7 @@ public class RouteServlet extends HttpServlet {
 		// check for empty resultList
 		if (result.size() > 0) {
 			for (Route route : result) {
+				route.setTime(new Time(route.getTimeString()));
 				List<String> images = new ArrayList<String>();
 				// convert pictures and data to JSON
 				if (route.getPictures() != null) {
@@ -93,7 +95,7 @@ public class RouteServlet extends HttpServlet {
 			Route newRoute = new Route();
 			newRoute.setName(route.getName());
 			newRoute.setType(route.getType());
-			newRoute.setTime(route.getTime());
+			newRoute.setTimeString(route.getTime().getTime());
 			newRoute.setStops(route.getStops());
 			newRoute.setNumberOfStops(route.getStops().size());
 			newRoute.setFirstLong(route.getStop(0).getLongitude());
@@ -147,34 +149,40 @@ public class RouteServlet extends HttpServlet {
 		// Loop over Routes that should be updated
 		for (Route route : routes) {
 			Route result = em.find(Route.class, route.getId());
-			result.setName(route.getName());
-			result.setTime(route.getTime());
-			result.setType(route.getType());
-			result.setFeedback(route.getFeedback());
+			
+			if(result != null) {
+				result.setName(route.getName());
+				result.setTimeString(route.getTime().getTime());
+				result.setType(route.getType());
+				result.setFeedback(route.getFeedback());
 
-			/*
-			 * List<Feedback> routeFeedback = new ArrayList<Feedback>(); routeFeedback =
-			 * route.getFeedback(); double avgRating = 0;
-			 * 
-			 * for (Feedback feedback : routeFeedback) { avgRating = avgRating +
-			 * feedback.getRating(); } avgRating = avgRating / routeFeedback.size();
-			 * avgRating = Math.round(avgRating * Math.pow(10, 1)) / Math.pow(10, 1);
-			 * 
-			 * result.setAvgRating(avgRating);
-			 */
+				/*
+				 * List<Feedback> routeFeedback = new ArrayList<Feedback>(); routeFeedback =
+				 * route.getFeedback(); double avgRating = 0;
+				 * 
+				 * for (Feedback feedback : routeFeedback) { avgRating = avgRating +
+				 * feedback.getRating(); } avgRating = avgRating / routeFeedback.size();
+				 * avgRating = Math.round(avgRating * Math.pow(10, 1)) / Math.pow(10, 1);
+				 * 
+				 * result.setAvgRating(avgRating);
+				 */
 
-			result.setStops(route.getStops());
-			result.setNumberOfStops(route.getStops().size());
-			result.setFirstLong(route.getStop(0).getLongitude());
-			result.setFirstLat(route.getStop(0).getLatitude());
-			result.setOwner(route.getOwner());
+				result.setStops(route.getStops());
+				result.setNumberOfStops(route.getStops().size());
+				result.setFirstLong(route.getStop(0).getLongitude());
+				result.setFirstLat(route.getStop(0).getLatitude());
+				result.setOwner(route.getOwner());
 
-			List<byte[]> images = new ArrayList<byte[]>();
-			for (String sBase64 : route.getImages()) {
-				byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
-				images.add(image);
+				List<byte[]> images = new ArrayList<byte[]>();
+				for (String sBase64 : route.getImages()) {
+					byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+					images.add(image);
+				}
+				result.setPictures(images);
+				
+			} else {
+				throw new Exception("Route \"" + route.getName() + "\" existiert net.");
 			}
-			result.setPictures(images);
 
 		}
 		em.getTransaction().commit();
@@ -199,7 +207,7 @@ public class RouteServlet extends HttpServlet {
 		try {
 			// retrieve all parameters
 			String paramType = request.getParameter("type");
-			Time paramTime = new Time(request.getParameter("time"));
+			String paramTime = request.getParameter("time");
 			double paramRating = Double.valueOf(request.getParameter("rating"));
 			int paramStops = Integer.valueOf(request.getParameter("stops"));
 
@@ -218,7 +226,7 @@ public class RouteServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getStackTrace().toString();
+			res = e.getMessage();
 		}
 		// Send Response
 		response.setContentType("application/json");
@@ -235,20 +243,24 @@ public class RouteServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
+		HttpSession session =  request.getSession();
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
 		Gson gson = new Gson();
 		List<Route> routes = gson.fromJson(request.getParameter("data"), new TypeToken<List<Route>>() {
 		}.getType());
 		String res = "";
-
+		
 		try {
+			if (!session.getAttribute("loggedin").equals("true")) {
+				throw new Exception("You are not logged in.");
+			}
 			switch (request.getParameter("operation")) {
 			case "update":
 				res = update(routes, em);
 				break;
 			case "create":
-				res = create(routes, em, request.getSession());
+				res = create(routes, em, session);
 				break;
 			case "delete":
 				res = delete(routes, em);
@@ -258,7 +270,7 @@ public class RouteServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getStackTrace().toString();
+			res = e.getMessage();
 		}
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();

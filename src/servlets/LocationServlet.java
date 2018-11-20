@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -21,6 +22,7 @@ import model.Address;
 import model.Location;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
+import util.Time;
 
 /**
  * Servlet implementation class LocationServlet
@@ -61,6 +63,7 @@ public class LocationServlet extends HttpServlet {
 		// check for empty resultList
 		if (result.size() > 0) {
 			for (Location location : result) {
+				location.setTime(new Time(location.getTimeString()));
 				List<String> images = new ArrayList<String>();
 				// convert pictures and data to JSON
 				if (location.getPictures() != null) {
@@ -98,7 +101,7 @@ public class LocationServlet extends HttpServlet {
 				Location newLocation = new Location();
 				newLocation.setName(location.getName());
 				newLocation.setType(location.getType());
-				newLocation.setTime(location.getTime());
+				newLocation.setTimeString(location.getTime().getTime());
 				newLocation.setFeedback(null);
 				newLocation.setAddress(location.getAddress());
 				newLocation.setLatitude(location.getLatitude());
@@ -156,7 +159,7 @@ public class LocationServlet extends HttpServlet {
 			if (result.size() > 0) {
 				Location resultLocation = result.get(0);
 				resultLocation.setName(location.getName());
-				resultLocation.setTime(location.getTime());
+				resultLocation.setTimeString(location.getTime().getTime());
 				resultLocation.setType(location.getType());
 				resultLocation.setLatitude(location.getLatitude());
 				resultLocation.setLongitude(location.getLongitude());
@@ -183,7 +186,7 @@ public class LocationServlet extends HttpServlet {
 					resultLocation.setAddress(address);
 				}
 			} else {
-				throw new Exception("Location \"" + location.getName() + "\" existiert nicht");
+				throw new Exception("Location \"" + location.getName() + "\" existiert nicht.");
 			}
 		}
 		em.getTransaction().commit();
@@ -212,7 +215,7 @@ public class LocationServlet extends HttpServlet {
 				}
 
 			} else {
-				throw new Exception("Location \"" + location.getName() + "\" existiert nicht");
+				throw new Exception("Location \"" + location.getName() + "\" existiert nicht.");
 			}
 		}
 		return "Success";
@@ -223,7 +226,7 @@ public class LocationServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory and create EntityManager
@@ -254,7 +257,7 @@ public class LocationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.toString();
+			res = e.getMessage();
 		}
 		// Send Response
 		response.setContentType("application/json");
@@ -268,10 +271,11 @@ public class LocationServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
+		HttpSession session =  request.getSession();
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
 		Gson gson = new Gson();
@@ -280,6 +284,9 @@ public class LocationServlet extends HttpServlet {
 		String res = "";
 
 		try {
+			if (!session.getAttribute("loggedin").equals("true")) {
+				throw new Exception("You are not logged in.");
+			}
 			switch (request.getParameter("operation")) {
 			case "update":
 				res = update(locations, em);
@@ -298,7 +305,7 @@ public class LocationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			e.getStackTrace().toString();
+			res = e.getMessage();
 		}
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
