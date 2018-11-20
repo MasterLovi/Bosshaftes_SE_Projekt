@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +28,7 @@ public class TestRouteServlet {
 	
 	HttpServletRequest request;
 	HttpServletResponse response;
+	HttpSession session;
 	ServletContext servletContext;
 	RouteServlet routeServlet;
 	
@@ -34,6 +36,7 @@ public class TestRouteServlet {
 	public void setUp() throws Exception {
 		 request = mock(HttpServletRequest.class);       
 	     response = mock(HttpServletResponse.class);
+	     session = mock(HttpSession.class);
 	     servletContext = Mockito.mock(ServletContext.class);
 	     routeServlet = new RouteServlet(){
 	       public ServletContext getServletContext() {
@@ -72,7 +75,8 @@ public class TestRouteServlet {
 		
 		String testData = Reader.readFile("resources/test/data/routeCreate.json", StandardCharsets.UTF_8);
 		when(request.getParameter("data")).thenReturn(testData);
-		when(request.getSession().getAttribute("username")).thenReturn("test");
+		when(request.getSession()).thenReturn(session);
+		when(session.getAttribute("username")).thenReturn("test");
 
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
@@ -92,6 +96,8 @@ public class TestRouteServlet {
 		
 		String testData = Reader.readFile("resources/test/data/routeUpdate.json", StandardCharsets.UTF_8);
 		when(request.getParameter("data")).thenReturn(testData);
+		when(request.getSession()).thenReturn(session);
+		when(session.getAttribute("username")).thenReturn("test");
 		when(request.getParameter("operation")).thenReturn("update");
 
 		StringWriter sw = new StringWriter();
@@ -114,6 +120,8 @@ public class TestRouteServlet {
 		
 		String testData = Reader.readFile("resources/test/data/routeUpdate.json", StandardCharsets.UTF_8);
 		when(request.getParameter("data")).thenReturn(testData);
+		when(request.getSession()).thenReturn(session);
+		when(session.getAttribute("username")).thenReturn("test");
 		when(request.getParameter("operation")).thenReturn("delete");
 
 		StringWriter sw = new StringWriter();
