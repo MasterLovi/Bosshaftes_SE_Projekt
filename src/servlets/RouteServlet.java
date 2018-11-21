@@ -43,17 +43,20 @@ public class RouteServlet extends HttpServlet {
 	/**
 	 * Method to read route data from the database
 	 * 
-	 * @param em                 EntityManager
+	 * @param em                 EntityManager manages database operations
 	 * @param type               Type of Location (must be "Kultur" or "Party")
-	 * @param maxTime
-	 * @param minRating
-	 * @param maxNoStops
-	 * @param boundNorthWestLat
-	 * @param boundNorthWestLong
-	 * @param boundSouthEastLat
-	 * @param boundSouthEastLong
-	 * @return
-	 * @throws Exception
+	 * @param maxTime            maximum time that the routes selected should have
+	 * @param minRating          minimal rating that the routes selected should have
+	 * @param maxNoStops         maximum number of stops that the routes selected
+	 *                           should have
+	 * @param boundNorthWestLat  Latitude of upper left corner of the map
+	 * @param boundNorthWestLong Longitude of upper left corner of the map
+	 * @param boundSouthEastLat  Latitude of lower right corner of the map
+	 * @param boundSouthEastLong Longitude of lower right corner of the map
+	 * @return JSONData with found routes; if no entries are found it returns an
+	 *         empty array []
+	 * @exception Exception if type is null
+	 * @exception Exception if type is neither "Kultur" nor "Party"
 	 */
 	private static String read(EntityManager em, String type, String maxTime, double minRating, int maxNoStops,
 					double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat,
@@ -105,6 +108,14 @@ public class RouteServlet extends HttpServlet {
 		return JSONData;
 	}
 
+	/**
+	 * Method to create new routes in the database
+	 * 
+	 * @param routes  List of routes that should be created
+	 * @param em      EntityManager manages database operations
+	 * @param session Needed to retrieve the user that creates the route
+	 * @return "Success" if the routes are successfully created
+	 */
 	private static String create(List<Route> routes, EntityManager em, HttpSession session) throws Exception {
 		// Loop over Routes that should be created
 		em.getTransaction().begin();
@@ -144,6 +155,14 @@ public class RouteServlet extends HttpServlet {
 		return "Success";
 	}
 
+	/**
+	 * Method to delete routes from database
+	 * 
+	 * @param routes List of routes that should be deleted
+	 * @param em     EntityManager manages database operations
+	 * @return "Success" if the routes are successfully deleted
+	 * @exception Exception if route doesn't exist
+	 */
 	private static String delete(List<Route> routes, EntityManager em) throws Exception {
 		// Loop over Routes that should be deleted
 		em.getTransaction().begin();
@@ -160,6 +179,14 @@ public class RouteServlet extends HttpServlet {
 		return "Success";
 	}
 
+	/**
+	 * Method to update routes in the database
+	 * 
+	 * @param routes List of routes that should be updated
+	 * @param em     EntityManager manages database operations
+	 * @return "Success" if the routes are successfully updated
+	 * @exception Exception if route doesn't exist
+	 */
 	private static String update(List<Route> routes, EntityManager em) throws Exception {
 
 		em.getTransaction().begin();
@@ -252,6 +279,7 @@ public class RouteServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @exception Exception if user is not logged in
 	 */
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -45,7 +45,7 @@ public class LocationServlet extends HttpServlet {
 	/**
 	 * Method to read location data from the database
 	 * 
-	 * @param em                 EntityManager
+	 * @param em                 EntityManager manages database operations
 	 * @param type               Type of Location (must be "Kultur" or "Party")
 	 * @param boundNorthWestLat  Latitude of upper left corner of the map
 	 * @param boundNorthWestLong Longitude of upper left corner of the map
@@ -107,8 +107,8 @@ public class LocationServlet extends HttpServlet {
 	/**
 	 * Method to create new locations in the database
 	 * 
-	 * @param locations List of locations
-	 * @param em        EntityManager
+	 * @param locations List of locations that should be created
+	 * @param em        EntityManager manages database operations
 	 * @return "Success" if the locations are successfully created
 	 * @exception Exception if one of the locations is already in the database
 	 */
@@ -162,8 +162,8 @@ public class LocationServlet extends HttpServlet {
 	/**
 	 * Method to delete locations from the database
 	 * 
-	 * @param locations List of locations
-	 * @param em        EntityManager
+	 * @param locations List of locations that should be deleted
+	 * @param em        EntityManager manages database operations
 	 * @return "Success" if locations are successfully deleted
 	 * @exception Exception if one location that should be deleted doesn't exist in
 	 *                      the database
@@ -188,8 +188,8 @@ public class LocationServlet extends HttpServlet {
 	 * Method to update locations in the database; all information will be updated,
 	 * there is no check if only some attributes have changed
 	 * 
-	 * @param locations List of locations
-	 * @param em        EntityManager
+	 * @param locations List of locations that should be updated
+	 * @param em        EntityManager manages database operations
 	 * @return "Success" if locations are successfully updated
 	 * @exception Exception if one location that should be updated doesn't exist
 	 */
@@ -244,8 +244,8 @@ public class LocationServlet extends HttpServlet {
 	/**
 	 * Method to update the timesReported counter of a location
 	 * 
-	 * @param locations List of locations
-	 * @param em        EntityManager
+	 * @param locations List of locations that should be reported
+	 * @param em        EntityManager manages database operations
 	 * @return "Success" if timesReported was successfully updated
 	 * @exception is the location that should be reported doesn't exist
 	 */
