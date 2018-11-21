@@ -17,8 +17,14 @@ import javax.servlet.http.HttpSession;
 
 import model.Users;
 
+/**
+ * Servlet implementation class RegistrationServlet - This servlet is
+ * responsible for creating new users (= registration)
+ *
+ */
 @WebServlet("/RegistrationServlet")
 public class RegistrationServlet extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -29,23 +35,31 @@ public class RegistrationServlet extends HttpServlet {
 	}
 
 	/**
+	 * Unused method
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+					throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
+	 * Method to create a new user in the database
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @exception Exception if password and repeated password are not identical
+	 * @exception Exception if the chosen username already exists
+	 * @exception Exception if there is already an account registered with that
+	 *                      email
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+					throws ServletException, IOException {
 
 		// Obtain a database connection:
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
@@ -53,10 +67,12 @@ public class RegistrationServlet extends HttpServlet {
 
 		try {
 
+			// retrieve all parameters
 			Users user = new Users();
 			user.setUsername(request.getParameter("username"));
 			user.setEmail(request.getParameter("email"));
 
+			// hash password
 			String password = request.getParameter("password");
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
@@ -95,9 +111,9 @@ public class RegistrationServlet extends HttpServlet {
 			session.setAttribute("userid", user.getId());
 			session.setAttribute("username", user.getUsername());
 			session.setAttribute("loggedin", true);
-			
+
 			response.sendRedirect(request.getHeader("referer"));
-			
+
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
 		}
