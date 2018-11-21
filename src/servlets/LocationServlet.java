@@ -45,14 +45,22 @@ public class LocationServlet extends HttpServlet {
 	/**
 	 * Method to read location data from the database
 	 * 
-	 * @param em
-	 * @param type
-	 * @return
-	 * @throws Exception
+	 * @param em                 EntityManager
+	 * @param type               Type of Location (must be "Kultur" or "Party")
+	 * @param boundNorthWestLat  Latitude of upper left corner of the map
+	 * @param boundNorthWestLong Longitude of upper left corner of the map
+	 * @param boundSouthEastLat  Latitude of lower right corner of the map
+	 * @param boundSouthEastLong Longitude of lower right corner of the map
+	 * @return JSONData with found locations; if no entries are found it returns an
+	 *         empty array []
+	 * @exception Exception if type is null
+	 * @exception Exception if type is neither "Kultur" nor "Party"
 	 */
-	private static String read(EntityManager em, String type, double[] boundNorthWest, double[] boundSouthEast)
+	private static String read(EntityManager em, String type, double boundNorthWestLat, double boundNorthWestLong,
+					double boundSouthEastLat, double boundSouthEastLong)
 					throws Exception {
 
+		// check if required type parameter is set
 		if (type == null) {
 			throw new Exception("Type darf nicht null sein!");
 		} else if (!(type.equals("Party") || type.equals("Kultur"))) {
@@ -62,8 +70,8 @@ public class LocationServlet extends HttpServlet {
 		// Build query with given parameters
 		String selectQuery = "SELECT l FROM Location l "
 						+ "WHERE l.type = '" + type + "'"
-						+ " AND l.latitude BETWEEN " + boundNorthWest[0] + " AND " + boundSouthEast[0]
-						+ " AND l.longitude BETWEEN " + boundNorthWest[1] + " AND " + boundSouthEast[1];
+						+ " AND l.latitude BETWEEN " + boundNorthWestLat + " AND " + boundSouthEastLat
+						+ " AND l.longitude BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
 
 		// Select Location from database table
 		Query query = em.createQuery(selectQuery);
@@ -96,6 +104,14 @@ public class LocationServlet extends HttpServlet {
 		return JSONData;
 	}
 
+	/**
+	 * Method to create new locations in the database
+	 * 
+	 * @param locations List of locations
+	 * @param em        EntityManager
+	 * @return "Success" if the locations are successfully created
+	 * @exception Exception if one of the locations is already in the database
+	 */
 	private static String create(List<Location> locations, EntityManager em) throws Exception {
 		// Loop over Routes that should be created
 		em.getTransaction().begin();
@@ -108,6 +124,7 @@ public class LocationServlet extends HttpServlet {
 			Query query = em.createQuery(selectQuery);
 			List<Location> result = query.getResultList();
 
+			// if the locations aren't already in the database, start persisting
 			if (result.size() == 0) {
 				Location newLocation = new Location();
 				newLocation.setName(location.getName());
@@ -140,6 +157,15 @@ public class LocationServlet extends HttpServlet {
 		return "Success";
 	}
 
+	/**
+	 * Method to delete locations from the database
+	 * 
+	 * @param locations List of locations
+	 * @param em        EntityManager
+	 * @return "Success" if locations are successfully deleted
+	 * @exception Exception if one location that should be deleted doesn't exist in
+	 *                      the database
+	 */
 	private static String delete(List<Location> locations, EntityManager em) throws Exception {
 		// Loop over Locations that should be deleted
 		em.getTransaction().begin();
@@ -156,6 +182,15 @@ public class LocationServlet extends HttpServlet {
 		return "Success";
 	}
 
+	/**
+	 * Method to update locations in the database; all information will be updated,
+	 * there is no check if only some attributes have changed
+	 * 
+	 * @param locations List of locations
+	 * @param em        EntityManager
+	 * @return "Success" if locations are successfully updated
+	 * @exception Exception if one location that should be updated doesn't exist
+	 */
 	private static String update(List<Location> locations, EntityManager em) throws Exception {
 		em.getTransaction().begin();
 
@@ -204,6 +239,14 @@ public class LocationServlet extends HttpServlet {
 		return "Success";
 	}
 
+	/**
+	 * Method to update the timesReported counter of a location
+	 * 
+	 * @param locations List of locations
+	 * @param em        EntityManager
+	 * @return "Success" if timesReported was successfully updated
+	 * @exception is the location that should be reported doesn't exist
+	 */
 	private static String report(List<Location> locations, EntityManager em) throws Exception {
 
 		// Loop over Locations that should be reported
@@ -251,19 +294,14 @@ public class LocationServlet extends HttpServlet {
 		try {
 			// retrieve all parameters
 			String paramType = request.getParameter("type");
-
-			String[] paramBoundNorthWestString = request.getParameterValues("boundNorthWest");
-			double[] paramBoundNorthWest = new double[2];
-			paramBoundNorthWest[0] = Double.valueOf(paramBoundNorthWestString[0]);
-			paramBoundNorthWest[1] = Double.valueOf(paramBoundNorthWestString[1]);
-
-			String[] paramBoundSouthEastString = request.getParameterValues("boundSouthEast");
-			double[] paramBoundSouthEast = new double[2];
-			paramBoundSouthEast[0] = Double.valueOf(paramBoundSouthEastString[0]);
-			paramBoundSouthEast[1] = Double.valueOf(paramBoundSouthEastString[1]);
+			double paramBoundNorthWestLat = Double.valueOf(request.getParameter("boundNorthWestLat"));
+			double paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLong"));
+			double paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
+			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLong"));
 
 			// read with parameters
-			res = read(em, paramType, paramBoundNorthWest, paramBoundSouthEast);
+			res = read(em, paramType, paramBoundNorthWestLat, paramBoundNorthWestLong, paramBoundSouthEastLat,
+							paramBoundSouthEastLong);
 			response.setStatus(200);
 		} catch (Exception e) {
 			// send back error
@@ -280,12 +318,14 @@ public class LocationServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @exception Exception if user is not logged in
 	 */
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException {
 
-		// retrieve EntityManagerFactory, create EntityManager and retrieve data
+		// retrieve EntityManagerFactory, create EntityManager and retrieve data (= list
+		// of locations)
 		HttpSession session = request.getSession();
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
@@ -298,6 +338,7 @@ public class LocationServlet extends HttpServlet {
 			if (!session.getAttribute("loggedin").equals("true")) {
 				throw new Exception("You are not logged in.");
 			}
+			// get operation parameter and run the corresponding method
 			switch (request.getParameter("operation")) {
 			case "update":
 				res = update(locations, em);

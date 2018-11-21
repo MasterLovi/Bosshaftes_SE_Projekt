@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,7 +24,9 @@ import sun.misc.BASE64Encoder;
 import util.Time;
 
 /**
- * Servlet implementation class RouteServlet
+ * Servlet implementation class RouteServlet - This servlet is responsible for
+ * reading route data from the database, creating new entries, deleting and
+ * updating entries
  */
 @WebServlet("/RouteServlet")
 public class RouteServlet extends HttpServlet {
@@ -39,12 +40,28 @@ public class RouteServlet extends HttpServlet {
 		super();
 	}
 
+	/**
+	 * Method to read route data from the database
+	 * 
+	 * @param em                 EntityManager
+	 * @param type               Type of Location (must be "Kultur" or "Party")
+	 * @param maxTime
+	 * @param minRating
+	 * @param maxNoStops
+	 * @param boundNorthWestLat
+	 * @param boundNorthWestLong
+	 * @param boundSouthEastLat
+	 * @param boundSouthEastLong
+	 * @return
+	 * @throws Exception
+	 */
 	private static String read(EntityManager em, String type, String maxTime, double minRating, int maxNoStops,
-					double[] boundNorthWest, double[] boundSouthEast) throws Exception {
+					double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat,
+					double boundSouthEastLong) throws Exception {
 
 		if (type == null) {
 			throw new Exception("Type darf nicht null sein!");
-		} else if (!(type.equals("Party")  || type.equals("Kultur"))) {
+		} else if (!(type.equals("Party") || type.equals("Kultur"))) {
 			throw new Exception("Type muss entweder \"Party\" oder \"Kultur\" sein!");
 		}
 
@@ -54,8 +71,8 @@ public class RouteServlet extends HttpServlet {
 						+ " AND r.timeString <= \"" + maxTime + "\""
 						+ " AND r.avgRating >= " + minRating
 						+ " AND r.numberOfStops <= " + maxNoStops
-						+ " AND r.firstLat BETWEEN " + boundNorthWest[0] + " AND " + boundSouthEast[0]
-						+ " AND r.firstLong BETWEEN " + boundNorthWest[1] + " AND " + boundSouthEast[1];
+						+ " AND r.firstLat BETWEEN " + boundNorthWestLat + " AND " + boundSouthEastLat
+						+ " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
 
 		// Select Route from database table
 		Query query = em.createQuery(selectQuery);
@@ -149,8 +166,8 @@ public class RouteServlet extends HttpServlet {
 		// Loop over Routes that should be updated
 		for (Route route : routes) {
 			Route result = em.find(Route.class, route.getId());
-			
-			if(result != null) {
+
+			if (result != null) {
 				result.setName(route.getName());
 				result.setTimeString(route.getTime().getTime());
 				result.setType(route.getType());
@@ -179,7 +196,7 @@ public class RouteServlet extends HttpServlet {
 					images.add(image);
 				}
 				result.setPictures(images);
-				
+
 			} else {
 				throw new Exception("Route \"" + route.getName() + "\" existiert net.");
 			}
@@ -211,17 +228,13 @@ public class RouteServlet extends HttpServlet {
 			double paramRating = Double.valueOf(request.getParameter("rating"));
 			int paramStops = Integer.valueOf(request.getParameter("stops"));
 
-			String[] paramBoundNorthWestString = request.getParameterValues("boundNorthWest");
-			double[] paramBoundNorthWest = new double[2];
-			paramBoundNorthWest[0] = Double.valueOf(paramBoundNorthWestString[0]);
-			paramBoundNorthWest[1] = Double.valueOf(paramBoundNorthWestString[1]);
+			double paramBoundNorthWestLat = Double.valueOf(request.getParameter("boundNorthWestLat"));
+			double paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLong"));
+			double paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
+			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLong"));
 
-			String[] paramBoundSouthEastString = request.getParameterValues("boundSouthEast");
-			double[] paramBoundSouthEast = new double[2];
-			paramBoundSouthEast[0] = Double.valueOf(paramBoundSouthEastString[0]);
-			paramBoundSouthEast[1] = Double.valueOf(paramBoundSouthEastString[1]);
-
-			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWest, paramBoundSouthEast);
+			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWestLat,
+							paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong);
 			response.setStatus(200);
 		} catch (Exception e) {
 			// send back error
@@ -243,14 +256,14 @@ public class RouteServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
-		HttpSession session =  request.getSession();
+		HttpSession session = request.getSession();
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
 		Gson gson = new Gson();
 		List<Route> routes = gson.fromJson(request.getParameter("data"), new TypeToken<List<Route>>() {
 		}.getType());
 		String res = "";
-		
+
 		try {
 			if (!session.getAttribute("loggedin").equals("true")) {
 				throw new Exception("You are not logged in.");
