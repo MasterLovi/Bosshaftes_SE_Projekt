@@ -50,13 +50,13 @@
         		<h2>Party zu erleben</h2>
         		<div class='infoWrapper'>
 	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\Party_round.png' />
-	        			Businessmeeting, auf der Durchreise oder die Verwandten besuchen gewesen?<br>
-						Du kennst niemanden und bist auch noch nie hier gewesen?<br>
-						Wenn du deinen Abend nicht im Hotelzimmer totschlagen willst bist du hier genau richtig!<br>
-						Einfach klicken und die besten Clubs, Bars und sonstige Party-Locations in einer Übersicht.<br>
-						Egal ob du die Nacht durchfeiern willst oder nur 2 Stunden Zeit hast bis dein Zug kommt.<br>
-						Hier kommt jeder auf seine Kosten.<br>
-						Die ganz Harten können auch direkt eine Kneipen- oder Discotour machen!<br>
+	        			Businessmeeting, auf der Durchreise oder die Verwandten besuchen gewesen?
+						Du kennst niemanden und bist auch noch nie hier gewesen?
+						Wenn du deinen Abend nicht im Hotelzimmer totschlagen willst bist du hier genau richtig!
+						Einfach klicken und die besten Clubs, Bars und sonstige Party-Locations in einer Übersicht.
+						Egal ob du die Nacht durchfeiern willst oder nur 2 Stunden Zeit hast bis dein Zug kommt.
+						Hier kommt jeder auf seine Kosten.
+						Die ganz Harten können auch direkt eine Kneipen- oder Discotour machen!
 						Viel Spaß und let the party never stop :D
 					</p>
 	        		<div class='buttonWrapper'>
@@ -70,11 +70,11 @@
         		<h2>Kultur zu erfahren</h2>
         		<div class='infoWrapper'>
 	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\Culture_round.png' />
-	        			Auf der Durchreise, oder sogar etwas zu erledigen?<br>
-						Sie haben noch etwas Zeit zu Verfügung bis ihre Bahn fährt oder das Meeting anfängt?<br>
-						Sie sind an den kulturellen Hotspots interessiert die die Region zu bieten hat?<br>
-						Dann sind Sie hier genau richtig.<br>
-						Einfach Ihre verbleibende Zeit eingeben und schon können Sie sich auf eine von vielen Touren durch Altstadt, Museen, Kulturzentren und sonstigen Sehenswürdigkeiten machen.<br>
+	        			Auf der Durchreise, oder sogar etwas zu erledigen?
+						Sie haben noch etwas Zeit zu Verfügung bis ihre Bahn fährt oder das Meeting anfängt?
+						Sie sind an den kulturellen Hotspots interessiert die die Region zu bieten hat?
+						Dann sind Sie hier genau richtig.
+						Einfach Ihre verbleibende Zeit eingeben und schon können Sie sich auf eine von vielen Touren durch Altstadt, Museen, Kulturzentren und sonstigen Sehenswürdigkeiten machen.
 						Erleben Sie unvergessliche Stunden, starten Sie gleich mit einer von vielen Kul-touren!
 					</p>
 	        		<div class='buttonWrapper'>

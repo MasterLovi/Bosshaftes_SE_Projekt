@@ -1,5 +1,7 @@
 @charset "ISO-8859-1";
-
+*{
+	font-family: cursive;
+}
 /* The switch - the box around the slider */
 .switch {
   position: relative;

@@ -87,11 +87,11 @@
 			%>	
 			</div>
 	        <div id='otherMapHeader'>
-	    		<h4 id='mapHeader'>
-    				<span id="partyText">Party</span>
-    				<i class="material-icons">chevron_left</i>
-    				<span id="Kultur"> Kultur</span>
-   				</h4>
+	    		<div id='mapHeader'>
+    				<i id="partyText">Party</i>
+    				<i id="headerIconMiddle" class="material-icons">chevron_left</i>
+    				<i id="cultureText">Kultur</i>
+   				</div>
 	    	</div>
 		</div>
 		<div class="absolute" id="searchbar">

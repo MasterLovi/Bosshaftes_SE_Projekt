@@ -1,12 +1,12 @@
 * {
-	font-family: arial;
+	font-family: cursive;
 	color: #000000;
 }
 
 body {
 	background-image: url("../utilities/pic/backgroundIndex.png");
 	background-color: #cccccc;
-	background-repeat: no-repeat;
+	background-repeat: y-repeat;
 	background-size: cover;
 }
 

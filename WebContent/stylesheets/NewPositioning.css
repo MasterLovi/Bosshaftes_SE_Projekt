@@ -90,7 +90,7 @@ p{
 
 #mainLogo{
 	height: 50px;
-	float: left;
+	vertical-align: middle;
 	border-radius: 50%;
 }
 
@@ -101,6 +101,8 @@ p{
  	text-align: center;
 	padding-top: 10px;
 	padding-bottom: 10px;
+	width: 65%;
+	display: inline-block;
 
 }
 
@@ -220,6 +222,29 @@ p{
 
 #closeTourInfo:hover{
 	cursor: pointer;
+}
+
+#logoWrapper{
+	float: left;
+}
+
+#partyText{
+	font-size: 24px;
+	width: 40%;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#cultureText{
+	font-size: 24px;
+	width: 40%;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#headerIconMiddle{
+	vertical-align: middle;
+	font-size: 33.33px !important;
 }
 
 .absolute{
