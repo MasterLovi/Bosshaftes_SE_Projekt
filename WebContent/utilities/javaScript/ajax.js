@@ -58,8 +58,10 @@ function getLocationFromDatabase(sType) {
 		type: "GET",
 		data: {
 			type: sType,
-			boundNorthWest: [getMap().getBounds().getNorthWest().lat, getMap().getBounds().getNorthWest().lng],
-			boundSouthEast: [getMap().getBounds().getSouthEast().lat, getMap().getBounds().getSouthEast().lng] 
+			boundNorthWestLat: getMap().getBounds().getNorthWest().lat, 
+			boundNorthWestLng: getMap().getBounds().getNorthWest().lng,
+			boundSouthEastLat: getMap().getBounds().getSouthEast().lat,
+			boundSouthEastLng: getMap().getBounds().getSouthEast().lng
 		},
 		success: function(response) {
 
@@ -148,8 +150,10 @@ function getRoute(sType){
 		type: "GET",
 		data: {
 			type: sType,
-			lngLat: [0,0],
-			offSetXY: [0,0],
+			boundNorthWestLat: getMap().getBounds().getNorthWest().lat, 
+			boundNorthWestLng: getMap().getBounds().getNorthWest().lng,
+			boundSouthEastLat: getMap().getBounds().getSouthEast().lat,
+			boundSouthEastLng: getMap().getBounds().getSouthEast().lng,
 			stops: 0,
 			time: {},
 			rating: 0
