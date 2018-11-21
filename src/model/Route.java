@@ -20,6 +20,9 @@ import com.google.gson.annotations.Expose;
 
 import util.Time;
 
+/**
+ * This class represents the Route database table as mapped Java object
+ */
 @Entity
 @Table(name = "ROUTE")
 public class Route {
@@ -30,14 +33,14 @@ public class Route {
 	private int id;
 	private String name;
 	private String type;
-	
-	@Expose(serialize=false)
+
+	@Expose(serialize = false)
 	private String timeString;
-	
+
 	@Transient
 	private Time time;
 	private String description;
-	
+
 	@Expose(serialize = false)
 	private List<byte[]> pictures;
 
@@ -56,10 +59,10 @@ public class Route {
 
 	@Expose(serialize = false)
 	private int numberOfStops;
-	
+
 	@Expose(serialize = false)
 	private double firstLong;
-	
+
 	@Expose(serialize = false)
 	private double firstLat;
 
@@ -119,7 +122,7 @@ public class Route {
 	public Time getTime() {
 		return time;
 	}
-	
+
 	public String getTimeString() {
 		return timeString;
 	}
@@ -156,7 +159,7 @@ public class Route {
 	public void setStops(List<Location> stops) {
 		this.stops = stops;
 	}
-	
+
 	public void setTimeString(String timeString) {
 		this.timeString = timeString;
 	}
