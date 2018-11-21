@@ -105,8 +105,8 @@ function showNewPointPopup(marker){
 	$("#myModal").css("display", "block");
 }
 
-function showNewPointPopup(marker){ 
-	loadMarkerinfoToSubmitForm(marker);
+function showUpdatePointPopup(marker){ 
+	console.log(marker);
 	$("#myUpdateModal").css("display", "block");
 }
 
@@ -118,6 +118,7 @@ function loadMarkerinfoToSubmitForm(marker){
 $(document).ready(function(){
 	$(".close").click(function(){
 		$("#myModal").css("display", "none");
+		$("#myUpdateModal").css("display", "none");
 	});
 })
 

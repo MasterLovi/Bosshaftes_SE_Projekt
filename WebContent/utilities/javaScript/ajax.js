@@ -82,7 +82,7 @@ function getLocationFromDatabase(sType) {
 				
 				marker = (L.marker([json[i].latitude, json[i].longitude])
 							.addTo(getMap()))
-							.bindPopup(json[i].name);
+							.bindPopup(json[i].name + "<br><button onClick=showUpdatePointPopup(this)>Ändern</button>");
 				marker.info = json[i];
 				
 				markerLayer.addLayer(marker);
