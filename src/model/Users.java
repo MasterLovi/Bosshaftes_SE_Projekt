@@ -32,7 +32,7 @@ public class Users {
 	private String username;
 	private String email;
 	@Expose(serialize = false)
-	private transient String password;
+	private String password;
 
 	@OneToMany(mappedBy = "owner", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Route> routes;

@@ -70,7 +70,7 @@ public class LocationServlet extends HttpServlet {
 		// Build query with given parameters
 		String selectQuery = "SELECT l FROM Location l "
 						+ "WHERE l.type = '" + type + "'"
-						+ " AND l.latitude BETWEEN " + boundNorthWestLat + " AND " + boundSouthEastLat
+						+ " AND l.latitude BETWEEN " + boundSouthEastLat + " AND " + boundNorthWestLat
 						+ " AND l.longitude BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
 
 		// Select Location from database table
@@ -140,8 +140,10 @@ public class LocationServlet extends HttpServlet {
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (location.getImages() != null) {
 					for (String sBase64 : location.getImages()) {
-						byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
-						images.add(image);
+						if(sBase64 != null) {
+							byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+							images.add(image);
+						}
 					}
 					newLocation.setPictures(images);
 				} else {
@@ -295,10 +297,10 @@ public class LocationServlet extends HttpServlet {
 			// retrieve all parameters
 			String paramType = request.getParameter("type");
 			double paramBoundNorthWestLat = Double.valueOf(request.getParameter("boundNorthWestLat"));
-			double paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLong"));
+			double paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLng"));
 			double paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
-			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLong"));
-
+			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
+			
 			// read with parameters
 			res = read(em, paramType, paramBoundNorthWestLat, paramBoundNorthWestLong, paramBoundSouthEastLat,
 							paramBoundSouthEastLong);
@@ -307,9 +309,9 @@ public class LocationServlet extends HttpServlet {
 			// send back error
 			response.setStatus(500);
 			res = e.getMessage();
+			e.printStackTrace();
 		}
 		// Send Response
-		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
 		writer.append(res);
 		em.close();
@@ -330,12 +332,12 @@ public class LocationServlet extends HttpServlet {
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
 		Gson gson = new Gson();
-		List<Location> locations = gson.fromJson(request.getParameter("data"), new TypeToken<List<Location>>() {
+		List<Location> locations = gson.fromJson(request.getParameter("json"), new TypeToken<List<Location>>() {
 		}.getType());
 		String res = "";
 
 		try {
-			if (!session.getAttribute("loggedin").equals("true")) {
+			if ((boolean)session.getAttribute("loggedin") != true) {
 				throw new Exception("You are not logged in.");
 			}
 			// get operation parameter and run the corresponding method
@@ -358,8 +360,8 @@ public class LocationServlet extends HttpServlet {
 			// send back error
 			response.setStatus(500);
 			res = e.getMessage();
+			e.printStackTrace();
 		}
-		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
 		writer.append(res);
 		em.close();

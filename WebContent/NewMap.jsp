@@ -315,6 +315,61 @@
 		
 		</div>
 		
+		<div id="myUpdateModal" class="modal">
+		
+		  <!-- Modal content -->
+		  <div class="modal-content">
+		    <span class="close">&times;</span>
+		    <form id="updateLocationForm" method="POST" action="">
+		    	<input type="hidden" name="lat" id="newLat" value=""/>
+		    	<input type="hidden" name="lng" id="newLng" value=""/>
+		    	<input type="hidden" name="userId" id="userId" value=""/>
+		    	<table id="popupTable">
+		    	<tr>
+			    	<td>
+			    		<p>Angezeigter Name:</p>
+			    	</td>
+		    		<td>
+		    			<input type="text" name="locationName" value=""/>
+		    		</td>
+		    	</tr>
+		    	<tr>
+			    	<td>
+			    		<p>Bild:</p>
+			    	</td>
+		    		<td>
+		    			<input type="file" name="picture" value=""/>
+		    		</td>
+		    	</tr>
+		    	<tr>
+			    	<td>
+			    		<p>Beschreibung:</p>
+			    	</td>
+		    		<td>
+		    			<textarea rows="7" form="createLocationForm" name="description"></textarea>
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+			    		<p>Aufenthaltszeit:</p>
+			    	</td>
+		    		<td>
+		    			<input type="time" name="time" value=""/>
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+		    			<!-- Some button -->
+		    		</td>
+		    		<td>
+		    			<input type="submit" name="confirm" value="Anlegen"/>
+		    		</td>
+		    	</tr>
+		    	</table>
+		    </form>
+		  </div>
+		
+		</div>
 		<script>
 			// This part have to outsourced
   	 		L.mapquest.key = 'y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6';

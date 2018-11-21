@@ -8,7 +8,6 @@ function getAddress(lat, lng) {
 		var returnVals = {
 				cityName: "",
 				country: "",
-				houseNumber: "",
 				postCode: "",
 				streetName: ""
 		}
@@ -23,7 +22,6 @@ function getAddress(lat, lng) {
 			
 			returnVals.cityName = result.results[0].locations[0].adminArea5;
 			returnVals.country = result.results[0].locations[0].adminArea1;
-			returnVals.houseNumber = "";
 			returnVals.postCode = result.results[0].locations[0].postalCode;
 			returnVals.streetName = result.results[0].locations[0].street;
 		});

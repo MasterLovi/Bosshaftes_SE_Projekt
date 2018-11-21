@@ -24,6 +24,7 @@ public class Time implements Serializable {
 	 * @param time Time-String to be converted (format: "HH:MM:SS")
 	 */
 	public Time(String time) {
+		if(time == null) { time = "00:00:00"; }
 		Integer hours = Integer.parseInt(time.substring(0, time.indexOf(":")));
 
 		String sMinutes = time.substring(time.indexOf(":") + 1);

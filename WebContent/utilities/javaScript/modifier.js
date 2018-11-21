@@ -105,6 +105,11 @@ function showNewPointPopup(marker){
 	$("#myModal").css("display", "block");
 }
 
+function showNewPointPopup(marker){ 
+	loadMarkerinfoToSubmitForm(marker);
+	$("#myUpdateModal").css("display", "block");
+}
+
 function loadMarkerinfoToSubmitForm(marker){
 	$("#newLat").val(marker.getLatLng()["lat"]);
 	$("#newLng").val(marker.getLatLng()["lng"]);
@@ -258,10 +263,12 @@ $(document).ready(function(){
 
 $(document).ready(function() {
 	$('#createLocationForm').submit(function () {
-		createNewMarker("Party");
+		createNewMarker("Party"); //TODO Load right category
 		return false;
 	});
 })
+
+
 
 $(document).ready(function() {
 	getMap().on("moveend", function(e) {

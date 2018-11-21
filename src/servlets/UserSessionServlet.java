@@ -77,7 +77,7 @@ public class UserSessionServlet extends HttpServlet {
         	
         	//compare user input with user password in db
         		// set session if user input is correct
-        	System.out.println(resultUser.get(0).getEmail());
+
         	if (resultUser.size() > 0 && resultUser.get(0).getPassword().equals(hashedPW)) {
         				Users resUser = resultUser.get(0);
         				session.setAttribute("userid", resUser.getId());
@@ -91,11 +91,12 @@ public class UserSessionServlet extends HttpServlet {
         		session.invalidate();
         		throw new Exception("Passwort oder Nutzername ist inkorrekt.");
         	}
-        	em.close();
+        	
         	response.sendRedirect(request.getHeader("referer"));
         }
         catch(Exception e) {
-        	response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
+        	response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+        	e.printStackTrace();
         }
         em.close();
 	}

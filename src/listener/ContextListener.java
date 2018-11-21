@@ -75,11 +75,12 @@ public class ContextListener implements ServletContextListener {
 			user.setPassword(hashedPW);
 			em.persist(user);
 
-			Time time = new Time(0, 30, 0);
+			Time time = new Time("03:30:00");
 
 			Location location = new Location();
 			location.setName("Hochschule Ludwigshafen 1");
 			location.setType("Party");
+			location.setTimeString("03:30:00");
 			location.setTime(time);
 			location.setLatitude(49.4775206);
 			location.setLongitude(8.4219807);
@@ -87,6 +88,7 @@ public class ContextListener implements ServletContextListener {
 			Location location2 = new Location();
 			location2.setName("Hochschule Ludwigshafen 2");
 			location2.setType("Party");
+			location.setTimeString("03:30:00");
 			location2.setTime(time);
 			location2.setLatitude(49.47303236240146);
 			location2.setLongitude(8.394641872728245);
@@ -94,6 +96,7 @@ public class ContextListener implements ServletContextListener {
 			Location location3 = new Location();
 			location3.setName("Hochschule Ludwigshafen 3");
 			location3.setType("Party");
+			location.setTimeString("03:30:00");
 			location3.setTime(time);
 			location3.setLatitude(49.45674385539652);
 			location3.setLongitude(8.41655731201172);
@@ -101,6 +104,7 @@ public class ContextListener implements ServletContextListener {
 			Location location4 = new Location();
 			location4.setName("Hochschule Ludwigshafen 4");
 			location4.setType("Party");
+			location.setTimeString("03:30:00");
 			location4.setTime(time);
 			location4.setLatitude(49.47035517151213);
 			location4.setLongitude(8.44139098422602);

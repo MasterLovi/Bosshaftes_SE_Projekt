@@ -229,9 +229,9 @@ public class RouteServlet extends HttpServlet {
 			int paramStops = Integer.valueOf(request.getParameter("stops"));
 
 			double paramBoundNorthWestLat = Double.valueOf(request.getParameter("boundNorthWestLat"));
-			double paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLong"));
+			double paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLng"));
 			double paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
-			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLong"));
+			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
 
 			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWestLat,
 							paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong);
@@ -240,6 +240,7 @@ public class RouteServlet extends HttpServlet {
 			// send back error
 			response.setStatus(500);
 			res = e.getMessage();
+			e.printStackTrace();
 		}
 		// Send Response
 		response.setContentType("application/json");
@@ -283,6 +284,7 @@ public class RouteServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
+			e.printStackTrace();
 			res = e.getMessage();
 		}
 		response.setContentType("application/json");
