@@ -48,8 +48,6 @@
         <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css"/>
         <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/place-search-js/v1.0.0/place-search.css"/>
         
-        <!--<link rel="stylesheet" type="text/css" href="utilities/stylesheets/leaflet-routing-machine.css" />-->
-        
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
  		integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
    		crossorigin=""/>
@@ -57,12 +55,15 @@
     	<script src="utilities/javaScript/jquery-3.3.1.min.js"></script>
     	<script src="utilities/javaScript/modifier.js"></script>
    	    <script src="utilities/javaScript/mapLoader.js"></script>
+   	    <script src="utilities/javaScript/json.js"></script>
+   	    <script src="utilities/javaScript/api.js"></script>
    	    <script type="text/javascript" src="utilities/javaScript/ajax.js"></script>
    	    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
   		integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
    		crossorigin="">
   	 	</script>
   	 	<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+  	 	
 	</head>
 	<body>
 		<div class="absolute" id="header">
@@ -263,7 +264,7 @@
 		  <!-- Modal content -->
 		  <div class="modal-content">
 		    <span class="close">&times;</span>
-		    <form id="createLoactionForm" method="post">
+		    <form id="createLocationForm" method="POST" action="">
 		    	<input type="hidden" name="lat" id="newLat" value=""/>
 		    	<input type="hidden" name="lng" id="newLng" value=""/>
 		    	<input type="hidden" name="userId" id="userId" value=""/>
@@ -290,6 +291,14 @@
 			    	</td>
 		    		<td>
 		    			<textarea rows="7" form="createLocationForm" name="description"></textarea>
+		    		</td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+			    		<p>Aufenthaltszeit:</p>
+			    	</td>
+		    		<td>
+		    			<input type="time" name="time" value=""/>
 		    		</td>
 		    	</tr>
 		    	<tr>
@@ -370,7 +379,7 @@
   	 			
   	 			// Creates a new marker and gives it a popup
   	 		    marker = new L.marker(e.latlng, {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#00cc00'})}).addTo(mymap)
-  	 		    	.bindPopup("<button onClick='showNewPointPopup(marker)' >Add to Map</button>").openPopup()
+  	 		    	.bindPopup("<button onClick='showNewPointPopup(marker)'>Add to Map</button>").openPopup()
   	 		    	.on('click', function(e){
   	 		    		// This has to be checked since the marker will be set to null if it is added to the map.
   	 		    		if(marker != null){

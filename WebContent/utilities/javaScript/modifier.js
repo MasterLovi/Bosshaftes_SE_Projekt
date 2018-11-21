@@ -256,5 +256,18 @@ $(document).ready(function(){
 	}
 })
 
+$(document).ready(function() {
+	$('#createLocationForm').submit(function () {
+		createNewMarker("Party");
+		return false;
+	});
+})
 
+$(document).ready(function() {
+	getMap().on("moveend", function(e) {
+		console.log("moved");
+		getLocationFromDatabase("Party");
+		console.log("done");
+	});
+})
 
