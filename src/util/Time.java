@@ -47,7 +47,19 @@ public class Time implements Serializable{
 		this.hours = hours;
 		this.minutes = minutes;
 		this.seconds = seconds;
-		this.time = "" + hours + ":" + minutes + ":" + seconds;
+		this.time = "";
+		if (hours < 10) {
+			this.time = this.time + 0;
+		}
+		this.time = this.time + hours + ":";
+		if (minutes < 10) {
+			this.time = this.time + 0;
+		}
+		this.time = this.time + minutes + ":";
+		if (seconds < 10) {
+			this.time = this.time + 0;
+		}
+		this.time = this.time + seconds;
 	}
 
 	public Integer getHours() {
