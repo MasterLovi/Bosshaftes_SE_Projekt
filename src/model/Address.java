@@ -7,6 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * This class represents the Address database table as mapped Java object
+ */
 @Entity
 @Table(name = "ADDRESS")
 public class Address {
