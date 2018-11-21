@@ -16,7 +16,9 @@ import javax.persistence.Table;
 
 import com.google.gson.annotations.Expose;
 
-
+/**
+ * This class represents the Users database table as mapped Java object
+ */
 @Entity
 @Table(name = "USERS")
 public class Users {
@@ -90,6 +92,7 @@ public class Users {
 		return routes;
 	}
 
+	// other methods
 	@Override
 	public String toString() {
 		String userString = "USER= "

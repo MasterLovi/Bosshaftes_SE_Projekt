@@ -19,12 +19,14 @@ import com.google.gson.reflect.TypeToken;
 
 import model.Address;
 import model.Location;
-import model.Route;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 /**
- * Servlet implementation class LocationServlet
+ * Servlet implementation class LocationServlet - This servlet is responsible
+ * for reading location data from the database, creating new entries, deleting
+ * and updating entries, as well as reporting a location (different kind of
+ * update)
  */
 @WebServlet("/LocationServlet")
 public class LocationServlet extends HttpServlet {
@@ -38,6 +40,14 @@ public class LocationServlet extends HttpServlet {
 		super();
 	}
 
+	/**
+	 * Method to read location data from the database
+	 * 
+	 * @param em
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
 	private static String read(EntityManager em, String type) throws Exception {
 
 		// Select Location from database table
@@ -193,7 +203,7 @@ public class LocationServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+					throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory and create EntityManager
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
@@ -225,7 +235,7 @@ public class LocationServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+					throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");

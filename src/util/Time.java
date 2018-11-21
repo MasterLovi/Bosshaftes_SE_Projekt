@@ -2,11 +2,12 @@ package util;
 
 import java.io.Serializable;
 
-public class Time implements Serializable{
+/**
+ * This class is an individual util class that represents duration.
+ *
+ */
+public class Time implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1156215663793678712L;
 
 	private String time;
@@ -17,6 +18,11 @@ public class Time implements Serializable{
 
 	private Integer seconds;
 
+	/**
+	 * Individual constructor to save a time object with a given String
+	 * 
+	 * @param time Time-String to be converted (format: "HH:MM:SS")
+	 */
 	public Time(String time) {
 		Integer hours = Integer.parseInt(time.substring(0, time.indexOf(":")));
 
@@ -28,6 +34,14 @@ public class Time implements Serializable{
 		this.setTime(hours, minutes, seconds);
 	}
 
+	/**
+	 * Individual constructor to save time object with given hours, minutes and
+	 * seconds
+	 * 
+	 * @param hours   Hours of the duration
+	 * @param minutes Minutes of the duration
+	 * @param seconds Seconds of the duration
+	 */
 	public Time(Integer hours, Integer minutes, Integer seconds) {
 		this.setTime(hours, minutes, seconds);
 	}

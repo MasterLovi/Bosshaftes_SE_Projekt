@@ -1,6 +1,5 @@
 package model;
 
-import util.Time;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,6 +14,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import util.Time;
+
+/**
+ * This class represents the Location database table as mapped Java object
+ */
 @Entity
 @Table(name = "LOCATION")
 public class Location {
@@ -43,6 +47,7 @@ public class Location {
 	@JoinColumn(name = "FEEDBACK_ID")
 	private List<Feedback> feedback;
 
+	// getter
 	public int getId() {
 		return id;
 	}
@@ -86,7 +91,7 @@ public class Location {
 	public List<Feedback> getFeedback() {
 		return feedback;
 	}
-	
+
 	public List<byte[]> getPictures() {
 		return pictures;
 	}
@@ -95,7 +100,7 @@ public class Location {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public void setPictures(List<byte[]> pictures) {
 		this.pictures = pictures;
 	}
@@ -160,10 +165,11 @@ public class Location {
 	@Override
 	public String toString() {
 		String locationString = "LOCATION= " + "Id: " + this.id + ", " + "Name: " + this.name + ", " + "Longtitude: "
-				+ this.longitude + ", " + "Latitude: " + this.latitude + ", " + "Type: " + this.type + ", " + "Time: "
-				+ this.time.toString() + ", " + "TimesReported: " + this.timesReported + ", " + "Description: "
-				+ this.description + ", " + "Address: " + this.address.toString() + ", "
-				+ "Feedback: geb ich jetzt dazu sicherlich nicht aus";
+						+ this.longitude + ", " + "Latitude: " + this.latitude + ", " + "Type: " + this.type + ", "
+						+ "Time: "
+						+ this.time.toString() + ", " + "TimesReported: " + this.timesReported + ", " + "Description: "
+						+ this.description + ", " + "Address: " + this.address.toString() + ", "
+						+ "Feedback: geb ich jetzt dazu sicherlich nicht aus";
 
 		return locationString;
 	}

@@ -1,6 +1,5 @@
 package model;
 
-import util.Time;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,6 +16,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import util.Time;
+
+/**
+ * This class represents the Route database table as mapped Java object
+ */
 @Entity
 @Table(name = "ROUTE")
 public class Route {
@@ -30,7 +34,7 @@ public class Route {
 	private Time time;
 	private String description;
 	private List<byte[]> pictures;
-	
+
 	@Transient
 	private List<String> images;
 
@@ -66,7 +70,7 @@ public class Route {
 	public List<String> getImages() {
 		return images;
 	}
-	
+
 	public List<byte[]> getPictures() {
 		return pictures;
 	}
@@ -127,11 +131,11 @@ public class Route {
 	public void setImages(List<String> images) {
 		this.images = images;
 	}
-	
+
 	public void setPictures(List<byte[]> pictures) {
 		this.pictures = pictures;
 	}
-	
+
 	public void setFeedback(List<Feedback> feedback) {
 		this.feedback = feedback;
 	}
