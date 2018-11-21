@@ -21,7 +21,8 @@ function getJsonDatastrucutreLocation() {
 			},
 			latitude: "",
 			longitude: "",
-			feedback: [] 
+			feedback: [],
+			description: ""
 	};
 	
 	return json;

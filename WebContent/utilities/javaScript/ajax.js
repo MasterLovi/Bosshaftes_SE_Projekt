@@ -118,10 +118,12 @@ function createNewMarker(sType) {
 	json.longitude = $("#createLocationForm input[name=lng]").val();
 
 	// Loading the time and split into min and hours
-	json.time.hours = $("#createLocationForm input[name=time]").val().substring(0,2);
-	json.time.minutes = $("#createLocationForm input[name=time]").val().substring(3,5);
+	json.time.hours = parseInteger($("#createLocationForm input[name=time]").val().substring(0,2));
+	json.time.minutes = parseInteger($("#createLocationForm input[name=time]").val().substring(3,5));
 	json.time.time = $("#createLocationForm input[name=time]").val()+":00";
 
+	json.description = "Test";
+	
 	console.log(json);
 
 	$.ajax({
