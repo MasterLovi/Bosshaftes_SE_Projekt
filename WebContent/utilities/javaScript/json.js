@@ -27,7 +27,9 @@ function getJsonDatastrucutreLocation(type) {
 			id : "",
 			name : "",
 			type : "",
-			time : "",
+			time : {
+				time: ""
+			},
 			timesReported : 0,
 			address : {
 				id : "",
@@ -41,8 +43,33 @@ function getJsonDatastrucutreLocation(type) {
 			longitude : "",
 			feedback : [],
 			description : "",
-			images : []
+			images : [null]
 		};
+		break;
+	case "report":
+		json = {
+			id : "",
+			name : "",
+			type : "",
+			time : {
+				time: ""
+			},
+			timesReported : 0,
+			address : {
+				id : "",
+				cityName : "",
+				country : "",
+				houseNumber : "",
+				postCode : "",
+				streetName : ""
+			},
+			latitude : "",
+			longitude : "",
+			feedback : [],
+			description : "",
+			images : [null]
+		};
+		break;
 	}
 
 	return json;

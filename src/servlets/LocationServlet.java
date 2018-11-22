@@ -214,12 +214,19 @@ public class LocationServlet extends HttpServlet {
 				resultLocation.setDescription(location.getDescription());
 
 				// update Images
+
 				List<byte[]> images = new ArrayList<byte[]>();
-				for (String sBase64 : location.getImages()) {
-					byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
-					images.add(image);
+				if (location.getImages() != null) {
+					for (String sBase64 : location.getImages()) {
+						if(sBase64 != null) {
+							byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+							images.add(image);
+						}
+					}
+					resultLocation.setPictures(images);
+				} else {
+					resultLocation.setPictures(null);
 				}
-				resultLocation.setPictures(images);
 
 				// update corresponding Address
 				Address address = location.getAddress();
