@@ -200,17 +200,6 @@ public class RouteServlet extends HttpServlet {
 				result.setType(route.getType());
 				result.setFeedback(route.getFeedback());
 
-				/*
-				 * List<Feedback> routeFeedback = new ArrayList<Feedback>(); routeFeedback =
-				 * route.getFeedback(); double avgRating = 0;
-				 * 
-				 * for (Feedback feedback : routeFeedback) { avgRating = avgRating +
-				 * feedback.getRating(); } avgRating = avgRating / routeFeedback.size();
-				 * avgRating = Math.round(avgRating * Math.pow(10, 1)) / Math.pow(10, 1);
-				 * 
-				 * result.setAvgRating(avgRating);
-				 */
-
 				result.setStops(route.getStops());
 				result.setNumberOfStops(route.getStops().size());
 				result.setFirstLong(route.getStop(0).getLongitude());
