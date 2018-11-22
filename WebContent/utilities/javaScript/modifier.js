@@ -229,6 +229,8 @@ function calculateRoute() {
 	var tour = $("#tourIdOnPanle").val();
 	var tourObj;
 	
+	removeCurrentRoute();
+	
 	$.each(globalRoutes, function(i, v){
 		if(v.id == tour) {
 			tourObj = v;
@@ -246,4 +248,35 @@ function calculateRoute() {
 	routeObj.options = {routeType: "pedestrian"};
 	
 	L.mapquest.directions().route(routeObj);
+
+}	
+
+function removeCurrentRoute(){
+	//removes the current route based on the draggable property 
+	getMap().eachLayer(function (layer) {
+		if(layer.options.draggable == true){
+			getMap().removeLayer(layer);
+		}
+	});
 }
+
+function rateRoute(){
+	var tour = $("#tourIdOnPanle").val();
+
+	$("#ratingForm input[name=type]").val("route");
+	$("#ratingForm input[name=id]").val(tour);
+	
+	$("#myRatingModal").show();
+	
+}
+
+function rateLocation(markerId) {
+	var location = globalLayer.getLayer(markerId);
+	
+	$("#ratingForm input[name=type]").val("location");
+	$("#ratingForm input[name=id").val(location.info.id);
+	
+	$("#myRatingModal").show();
+	
+}
+	

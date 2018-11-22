@@ -60,6 +60,35 @@ $(document).ready(function(){
 	})
 })
 
+// This part is for the rating popup
+$(document).ready(function(){
+	$(".ratingStarR").click(function(){
+
+	var id = "";
+	var starCount = 1;
+	var on = true;
+	var stars = ["star1r", "star2r", "star3r", "star4r", "star5r"];
+	
+	id = $(this).attr("id");
+	for(var i = 0; i < stars.length; i++){
+		if(stars[i] == id){
+			$("#"+stars[i]).addClass('activeStar');
+			on = false;
+		} else {
+			if(on){
+				$("#"+stars[i]).addClass('activeStar');
+				starCount++;
+			} else {
+				$("#"+stars[i]).removeClass('activeStar');
+			}
+		}
+	}
+	
+	$("#ratingValueR").val(starCount);
+	
+	})
+})
+
 // Links the spot slider and value box
 $(document).ready(function(){
 	$("#spotRange").change(function(){
@@ -100,18 +129,23 @@ $(document).ready(function(){
 	$(".close").click(function(){
 		$("#myModal").css("display", "none");
 		$("#myUpdateModal").css("display", "none");
+		$("#myRatingModal").css("display", "none");
 	});
 })
 
 // This window event makes sure that if the user clicks somewhere that is not the popup, it will close
 $(document).ready(function(){
 	$(window).click(function(e){
-		if (e.target.id == $("#myModal").attr("id")){
+		if (e.target.id == $("#myModal").attr("id")) {
 			$("#myModal").css("display", "none");
 		}
 		
 		if (e.target.id == $("#myUpdateModal").attr("id")) {
 			$("#myUpdateModal").css("display", "none");
+		}
+		
+		if (e.target.id == $("#myRatingModal").attr("id")) {
+			$("#myRatingModal").css("display", "none");
 		}
 	});
 })
@@ -122,6 +156,7 @@ $(document).ready(function(){
 		$("#tourInfoPanel").css("display", "none");
 		$("#tours").css("display", "none");
 		if(permLayer != null){getMap().removeLayer(permLayer)};
+		removeCurrentRoute();
 	})
 })
 
@@ -136,7 +171,7 @@ $(document).ready(function() {
 // Call the create request for a new marker 
 $(document).ready(function() {
 	$('#updateLocationForm').submit(function () {
-		updateMarker($("#updateLocationForm input[name=id").val()); //TODO Load right category
+		updateMarker($("#updateLocationForm input[name=id]").val()); //TODO Load right category
 		return false;
 	});
 })
@@ -148,3 +183,13 @@ $(document).ready(function() {
 		getLocationFromDatabase("Party"); //TODO Load right category
 	});
 })
+
+$(document).ready(function() {
+	$('#ratingForm').submit(function () {
+		sendFeedback($("#ratingForm input[name=type]").val(), $("#ratingForm input[name=id]").val()); //TODO Load right category
+		return false;
+	});
+})
+
+
+

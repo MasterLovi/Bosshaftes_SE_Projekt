@@ -182,7 +182,7 @@
 				</ul>
 			</div>
 			<button class="absolute" id="buttonLoad" onClick="calculateRoute()">Laden</button>
-			<button class="absolute" id="buttonRate">Bewerten</button>
+			<button class="absolute" id="buttonRate" onClick="rateRoute()">Bewerten</button>
 		</div>
 		<div id="map"></div>
 		<div class="absolute" id="tours" style="display: none;">
@@ -315,6 +315,32 @@
 		    		</td>
 		    	</tr>
 		    	</table>
+		    </form>
+		  </div>
+		</div>
+		
+		<div id="myRatingModal" class="modal">
+		  <!-- Modal update content -->
+		  <div class="modal-content">
+		    <span class="close">&times;</span>
+		    <form id="ratingForm" method="POST" action="">
+		    	<input type="hidden" name="id" value=""/>
+		    	<input type="hidden" name="type" value=""/>
+				<h4 class="centered">Ihre Meinung ist uns wichitg!</h4>
+				<p class="centered infoHeader">Bewertung</p>
+				<div class="centered" id="ratingForm">
+					<i class="ratingStarR material-icons activeStar" id="star1r">grade</i>
+					<i class="ratingStarR material-icons activeStar" id="star2r">grade</i>
+					<i class="ratingStarR material-icons activeStar" id="star3r">grade</i>
+					<i class="ratingStarR material-icons" id="star4r">grade</i>
+					<i class="ratingStarR material-icons" id="star5r">grade</i>
+				</div>
+				<p class="centered infoHeader">Kommentar</p>
+				<input type="hidden" value="3" name="rating" id="ratingValueR">
+		    	<textarea rows="4" form="ratingForm" name="comment"></textarea>
+		    	<div class="right">
+		    		<input type="submit" id="sendFeedback" name="confirm" value="Senden"/>
+		    	</div>
 		    </form>
 		  </div>
 		</div>

@@ -44,6 +44,11 @@ p{
 	resize: none;
 }
 
+#ratingForm textarea{
+	width: 100%;
+	margin-bottom: 15px;
+	resize: none;
+}
 
 #map{
 	width: 100%;
@@ -270,6 +275,11 @@ p{
 	height: 80%;
 }
 
+#sendFeedback{
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
 .absolute{
 	position: absolute;
 }
@@ -291,7 +301,19 @@ p{
  	text-align: center;
 }
 
+.right{
+	text-align: -moz-right;
+	text-align: -webkit-right;
+ 	text-align: right;
+}
+
 .ratingStar:hover{
+	cursor: pointer;
+	color: #ffbf00;
+}
+
+/* same like the one above but different locations */
+.ratingStarR:hover{
 	cursor: pointer;
 	color: #ffbf00;
 }
@@ -371,9 +393,14 @@ p{
 	padding-right: 5%;
 	padding-left: 5%;
 	padding-bottom: 5px;
-	border-bottom: 1px solid grey;
 }
 
 .infoHeader{
 	padding-right: 5%;
+	margin-bottom: 3px;
+	background-color: #a6a6a6;
+	text-align: -moz-center;
+	text-align: -webkit-center;
+ 	text-align: center;
+ 	border-radius: 3px;
 }
