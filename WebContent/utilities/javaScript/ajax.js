@@ -56,6 +56,7 @@ function getLocationFromDatabase(sType) {
 	$.ajax({
 		url: "LocationServlet",
 		type: "GET",
+		contentType: "application/x-www-form-urlencoded;charset=ISO-8859-2",
 		data: {
 			type: sType,
 			boundNorthWestLat: getMap().getBounds().getNorthWest().lat, 
@@ -64,7 +65,7 @@ function getLocationFromDatabase(sType) {
 			boundSouthEastLng: getMap().getBounds().getSouthEast().lng
 		},
 		success: function(response) {
-
+			
 			// Clears the map before the new markers are loaded
 			if(globalLayer != null) {
 				globalLayer.eachLayer(function(layer) {
@@ -75,7 +76,7 @@ function getLocationFromDatabase(sType) {
 
 			var json = JSON.parse(response);
 			var markerLayer = L.layerGroup();
-
+			
 			// Loads the new marker to the map
 			for(var i = 0; i < json.length; i++) {
 				var marker
@@ -84,7 +85,8 @@ function getLocationFromDatabase(sType) {
 							.addTo(getMap()));
 				marker.info = json[i];
 				
-				marker.bindPopup(json[i].name + "<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>");
+				marker.bindPopup(json[i].name + "<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
+						"<button onClick=reportLocation("+marker._leaflet_id+")>Melden</button>");
 				
 				markerLayer.addLayer(marker);
 				
@@ -124,8 +126,6 @@ function createNewMarker(sType) {
 	json.description = $("#createLocationForm textarea[name=description]").val();
 	
 	var jsonArray = [json];
-	
-	console.log(json);
 
 	$.ajax({
 		url: "LocationServlet",
@@ -166,7 +166,7 @@ function updateMarker(markerId){
 	
 	var jsonArray = [json];
 	
-	console.log(json);
+
 	
 	$.ajax({
 		url: "LocationServlet",
@@ -186,6 +186,41 @@ function updateMarker(markerId){
 	});
 }
 
+function reportLocation(markerId){
+	var marker = globalLayer.getLayer(markerId);
+	var json = getJsonDatastrucutreLocation("report");
+	
+	json.id = marker.info.id;
+	json.name = marker.info.name;
+	json.description = marker.info.description;
+	json.time.time = $("#updateLocationForm input[name=time").val();
+	
+	json.type = marker.info.type;
+	json.timesReported = marker.info.timesReported;
+	json.address = marker.info.address;
+	json.latitude = marker.info.latitude;
+	json.longitude = marker.info.longitude;
+	json.feedback = marker.info.feedback;
+	
+	var jsonArray = [json];
+	
+	$.ajax({
+		url: "LocationServlet",
+		type: "POST",
+		data: {
+			operation: "report",
+			json: JSON.stringify(jsonArray) //Json file
+
+		},
+		success: function(response) {
+			//TODO Set Point after success and close popup
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+}
 
 function getRoute(sType){
 	$.ajax({
@@ -197,22 +232,13 @@ function getRoute(sType){
 			boundNorthWestLng: getMap().getBounds().getNorthWest().lng,
 			boundSouthEastLat: getMap().getBounds().getSouthEast().lat,
 			boundSouthEastLng: getMap().getBounds().getSouthEast().lng,
-			stops: 0,
+			stops: 4,
 			time: {},
-			rating: 0
+			rating: 1
 
 		},
 		success: function(response) {
-			var json = response;
-			var marker;
-
-			for(var i = 0; i < json.length; i++){
-				var layer = L.marker(json[i].geometry.coordinates).addTo(getMap());
-				layer.bindPopup(json[i].properties.popupContent);
-			}	
-		},
-		error: function(error) {
-			console.log(error);
+			console.log(response);
 		}
 	});
 	

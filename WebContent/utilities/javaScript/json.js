@@ -45,6 +45,31 @@ function getJsonDatastrucutreLocation(type) {
 			description : "",
 			images : [null]
 		};
+		break;
+	case "report":
+		json = {
+			id : "",
+			name : "",
+			type : "",
+			time : {
+				time: ""
+			},
+			timesReported : 0,
+			address : {
+				id : "",
+				cityName : "",
+				country : "",
+				houseNumber : "",
+				postCode : "",
+				streetName : ""
+			},
+			latitude : "",
+			longitude : "",
+			feedback : [],
+			description : "",
+			images : [null]
+		};
+		break;
 	}
 
 	return json;
