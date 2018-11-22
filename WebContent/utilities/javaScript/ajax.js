@@ -81,9 +81,10 @@ function getLocationFromDatabase(sType) {
 				var marker
 				
 				marker = (L.marker([json[i].latitude, json[i].longitude])
-							.addTo(getMap()))
-							.bindPopup(json[i].name + "<br><button onClick=showUpdatePointPopup(this)>Ändern</button>");
+							.addTo(getMap()));
 				marker.info = json[i];
+				
+				marker.bindPopup(json[i].name + "<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>");
 				
 				markerLayer.addLayer(marker);
 				
@@ -120,7 +121,7 @@ function createNewMarker(sType) {
 	// Loading the time and split into min and hours
 	json.time.time = $("#createLocationForm input[name=time]").val()+":00";
 
-	json.description = "Test";
+	json.description = $("#createLocationForm textarea[name=description]").val();
 	
 	var jsonArray = [json];
 	
@@ -131,6 +132,47 @@ function createNewMarker(sType) {
 		type: "POST",
 		data: {
 			operation: "create",
+			json: JSON.stringify(jsonArray) //Json file
+
+		},
+		success: function(response) {
+			//TODO Set Point after success and close popup
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+}
+
+function updateMarker(markerId){
+	var marker = globalLayer.getLayer(markerId);
+	var json = getJsonDatastrucutreLocation("update");
+	
+	json.id = marker.info.id;
+	json.name = $("#updateLocationForm input[name=locationName").val();
+	json.description = $("#updateLocationForm textarea[name=description").val();
+	json.time.time = $("#updateLocationForm input[name=time").val();
+	
+	json.type = marker.info.type;
+	json.timesReported = marker.info.timesReported;
+	json.address = marker.info.address;
+	json.latitude = marker.info.latitude;
+	json.longitude = marker.info.longitude;
+	json.feedback = marker.info.feedback;
+	
+	// TODO Set images and tranform it
+
+	
+	var jsonArray = [json];
+	
+	console.log(json);
+	
+	$.ajax({
+		url: "LocationServlet",
+		type: "POST",
+		data: {
+			operation: "update",
 			json: JSON.stringify(jsonArray) //Json file
 
 		},

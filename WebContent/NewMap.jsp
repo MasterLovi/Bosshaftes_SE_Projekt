@@ -37,10 +37,9 @@
 
 <html>
 	<head>
-		<meta charset="ISO-8859-1">
 		<title>NewMap Design</title>
 		
-		<meta charset="ISO-8859-1">
+		<meta charset="UTF-8">
 		
         <link rel="stylesheet" type="text/css" href="stylesheets/NewDesign.css">
         <link rel="stylesheet" type="text/css" href="stylesheets/NewPositioning.css">
@@ -57,7 +56,9 @@
    	    <script src="utilities/javaScript/mapLoader.js"></script>
    	    <script src="utilities/javaScript/json.js"></script>
    	    <script src="utilities/javaScript/api.js"></script>
-   	    <script type="text/javascript" src="utilities/javaScript/ajax.js"></script>
+   	    <script src="utilities/javaScript/listener.js"></script>
+   	    <script src="utilities/javaScript/ajax.js"></script>
+   	    
    	    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
   		integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
    		crossorigin="">
@@ -121,14 +122,6 @@
 				</div>
 				<input type="hidden" value="3" name="rating" id="ratingValue">
 				<hr>
-				<!-- Slider wie von Google -->
-				<!-- <div id="sliderOptions">
-				<p class="sliderText">Test Text</p>
-				<label class="switch"> 
-					<input type="checkbox">
-					<span class="slider round"></span>
-				</label>
-				</div> -->
 				<input type="submit" value="Tour suchen" id="searchTour" onClick="$('#tours').show(); return false;" class="centered">
 			</form>
 		</div>
@@ -142,126 +135,16 @@
 			</div>
 			<ul id="tourList">
 			
-			<li class="inline tourdata">
-				<input type="hidden" class="startingPoint" value='{"coordinates": [49.46928, 8.419304]}'>
-				<p>Tour-Title 1</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP2.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<input type="hidden" class="startingPoint" value='{"coordinates": [49.463927, 8.348579]}'>
-				<p>Tour-Title 2</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP1.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<input type="hidden" class="startingPoint" value='{"coordinates": [49.444296, 8.395271]}'>
-				<p>Tour-Title 3</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP2.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<input type="hidden" class="startingPoint" value='{"coordinates": [49.46705, 8.482475]}'>
-				<p>Tour-Title 4</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP1.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<input type="hidden" class="startingPoint" value='{"coordinates": [49.498933, 8.455353]}'>
-				<p>Tour-Title 5</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP2.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<input type="hidden" class="startingPoint" value='{"coordinates": [49.494921, 8.500328]}'>
-				<p>Tour-Title 6</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP1.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<p>Tour-Title 7</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP2.jpg">
-				</div>
-			</li>
-			<li class="inline tourdata">
-				<p>Tour-Title 8</p>
-				<div class="centered">
-					<i class="material-icons activeStar" id="star1">grade</i>
-					<i class="material-icons activeStar" id="star2">grade</i>
-					<i class="material-icons " id="star3">grade</i>
-					<i class="material-icons" id="star4">grade</i>
-					<i class="material-icons" id="star5">grade</i>
-				</div>
-				<div class="iconWrapper">
-					<img class="tourIcon" src="utilities/pic/OP1.jpg">
-				</div>
-			</li>
 			</ul> 
 			<div class="absolute" id="rightArrow">
 				<i class="material-icons bigIcon">chevron_right</i>
 			</div>
 		</div>
 		
-		<!-- The Modal -->
+		<!-- The create Modal -->
 		<div id="myModal" class="modal">
 		
-		  <!-- Modal content -->
+		  <!-- Modal create content -->
 		  <div class="modal-content">
 		    <span class="close">&times;</span>
 		    <form id="createLocationForm" method="POST" action="">
@@ -316,14 +199,11 @@
 		</div>
 		
 		<div id="myUpdateModal" class="modal">
-		
-		  <!-- Modal content -->
+		  <!-- Modal update content -->
 		  <div class="modal-content">
 		    <span class="close">&times;</span>
 		    <form id="updateLocationForm" method="POST" action="">
-		    	<input type="hidden" name="lat" id="newLat" value=""/>
-		    	<input type="hidden" name="lng" id="newLng" value=""/>
-		    	<input type="hidden" name="userId" id="userId" value=""/>
+		    	<input type="hidden" name="id" value=""/>
 		    	<table id="popupTable">
 		    	<tr>
 			    	<td>
@@ -368,102 +248,6 @@
 		    	</table>
 		    </form>
 		  </div>
-		
 		</div>
-		<script>
-			// This part have to outsourced
-  	 		L.mapquest.key = 'y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6';
-  	 		
-  	 		var mymap = L.mapquest.map('map', {
-  	 		  center: [49.4775206, 8.4219807],
-  	 		  layers: L.mapquest.tileLayer('map'),
-  	 		  zoom: 12
-  	 		});
-  	 		
-  	 		
-  	 		//Loading all the Markers
-  	 		/* var hs = loadJson(); */
-
-  	 		getLocationFromDatabase("Party");
-    			
-  	 		//Putting the markers on the map
-  	 		/* for(var i = 0; i < hs.length; i++){
-	  	 		var layer = L.marker(hs[i].geometry.coordinates).addTo(mymap);
-	  	 		layer.bindPopup(hs[i].properties.popupContent);
-  	 		}	 */
-			
-  	 	 /*  L.mapquest.directions().route({
-  	 	  "locations": [{
-  	          "type": "s",
-  	          "latLng": {
-  	            "lat": 49.4775206,
-  	            "lng": 8.4219807
-  	          }
-  	        },
-  	      {
-  	          "type": "s",
-  	          "latLng": {
-  	            "lat": 49.47303236240146,
-  	            "lng": 8.394641872728245
-  	          }
-  	        },
-  	      {
-   	          "type": "s",
-   	          "latLng": {
-   	            "lat": 49.45674385539652,
-   	            "lng": 8.41655731201172
-   	          }
-   	        },
-	       {
- 	          "type": "s",
- 	          "latLng": {
- 	            "lat": 49.47035517151213,
- 	            "lng": 8.44139098422602
- 	          }
- 	        }],
-  	 	  "options": {
-  	 	    "allToAll": true
-  	 	  }
-  	 	});  */
-  	 		
-  	 		var marker;
-  	 		mymap.on('click', function(e){
-  	 			
-  	 			//Remove the last set marker if it was not safed 
-  	 			if(marker != null){mymap.removeLayer(marker)};
-  	 			
-  	 			// Creates a new marker and gives it a popup
-  	 		    marker = new L.marker(e.latlng, {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#00cc00'})}).addTo(mymap)
-  	 		    	.bindPopup("<button onClick='showNewPointPopup(marker)'>Add to Map</button>").openPopup()
-  	 		    	.on('click', function(e){
-  	 		    		// This has to be checked since the marker will be set to null if it is added to the map.
-  	 		    		if(marker != null){
-  	 		    			mymap.removeLayer(marker);
-  	 		    		}
- 		    		});
-  	 			
-  	  	 		
-  	 			// Adds a layer so it can be removed later on
-  	 		    mymap.addLayer(marker);
-  	 		});
-  	 		
-  	 		function addMarkerToMap(marker){
-  	 			console.log(marker.getLatLng());
-  	 		 	marker.setIcon( L.mapquest.icons.marker(
-  	 		 					{
-  	 		 							primaryColor: '#111111',
-  	 		 							secondaryColor: '#222222'
-	 								}
-	 						)
- 		 			); 
-  	 		 	marker.closePopup();
-  	 		 	marker._popup.setContent("Point set at: " + marker.getLatLng());
-  	 		 	this.marker=null;
-  	 		}
-  	 		
-  	 		function getMap(){
-  	 			return mymap;
-  	 		}
-  	 	</script>
 	</body>
 </html>

@@ -27,7 +27,9 @@ function getJsonDatastrucutreLocation(type) {
 			id : "",
 			name : "",
 			type : "",
-			time : "",
+			time : {
+				time: ""
+			},
 			timesReported : 0,
 			address : {
 				id : "",
@@ -41,7 +43,7 @@ function getJsonDatastrucutreLocation(type) {
 			longitude : "",
 			feedback : [],
 			description : "",
-			images : []
+			images : [null]
 		};
 	}
 
