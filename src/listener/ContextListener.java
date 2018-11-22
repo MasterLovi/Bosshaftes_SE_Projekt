@@ -121,7 +121,7 @@ public class ContextListener implements ServletContextListener {
 			Route route = new Route();
 			route.setName("Tims Duftpfad");
 			route.setDescription("Route über alle Punkte an denen Tim stinkt/gestunken hat/stinken wird.");
-			route.setAvgRating(0);
+			route.setAvgRating(5);
 			route.setFirstLat(location.getLatitude());
 			route.setFirstLong(location.getLongitude());
 			route.setNumberOfStops(4);

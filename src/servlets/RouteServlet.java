@@ -67,14 +67,12 @@ public class RouteServlet extends HttpServlet {
 		} else if (!(type.equals("Party") || type.equals("Kultur"))) {
 			throw new Exception("Type muss entweder \"Party\" oder \"Kultur\" sein!");
 		}
-
 		// Build query with given parameters
 		String selectQuery = "SELECT r FROM Route r"
 						+ " WHERE r.type = '" + type + "'"
-						+ " AND r.timeString <= \"" + maxTime + "\""
 						+ " AND r.avgRating >= " + minRating
 						+ " AND r.numberOfStops <= " + maxNoStops
-						+ " AND r.firstLat BETWEEN " + boundNorthWestLat + " AND " + boundSouthEastLat
+						+ " AND r.firstLat BETWEEN " + boundSouthEastLat + " AND " + boundNorthWestLat
 						+ " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
 
 		// Select Route from database table
@@ -270,7 +268,6 @@ public class RouteServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		// Send Response
-		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
 		writer.append(res);
 		em.close();
@@ -315,7 +312,6 @@ public class RouteServlet extends HttpServlet {
 			e.printStackTrace();
 			res = e.getMessage();
 		}
-		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
 		writer.print(res);
 		em.close();

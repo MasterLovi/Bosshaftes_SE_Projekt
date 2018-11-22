@@ -155,17 +155,17 @@ function getRoute(sType){
 			boundNorthWestLng: getMap().getBounds().getNorthWest().lng,
 			boundSouthEastLat: getMap().getBounds().getSouthEast().lat,
 			boundSouthEastLng: getMap().getBounds().getSouthEast().lng,
-			stops: 0,
-			time: {},
-			rating: 0
+			stops: 4,
+			time: "",
+			rating: 1
 
 		},
 		success: function(response) {
-			var json = response;
+			var json = JSON.parse(response);
 			var marker;
 
 			for(var i = 0; i < json.length; i++){
-				var layer = L.marker(json[i].geometry.coordinates).addTo(getMap());
+				var layer = L.marker([json[i].latitude, json[i].longitude]).addTo(getMap());
 				layer.bindPopup(json[i].properties.popupContent);
 			}	
 		},

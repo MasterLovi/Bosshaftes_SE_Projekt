@@ -129,7 +129,7 @@
 					<span class="slider round"></span>
 				</label>
 				</div> -->
-				<input type="submit" value="Tour suchen" id="searchTour" onClick="$('#tours').show(); return false;" class="centered">
+				<input type="submit" value="Tour suchen" id="searchTour" onClick="getRoute('Party'); return false;" class="centered">
 			</form>
 		</div>
 		<div id="tourInfoPanel">
