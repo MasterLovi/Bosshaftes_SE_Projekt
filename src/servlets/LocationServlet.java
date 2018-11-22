@@ -214,14 +214,20 @@ public class LocationServlet extends HttpServlet {
 				resultLocation.setDescription(location.getDescription());
 
 				// update Images
-//				List<byte[]> images = new ArrayList<byte[]>();
-//				if (location.getImages() != null) {
-//					for (String sBase64 : location.getImages()) {
-//						byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
-//						images.add(image);
-//					}
-//					resultLocation.setPictures(images);
-//				}
+
+				List<byte[]> images = new ArrayList<byte[]>();
+				if (location.getImages() != null) {
+					for (String sBase64 : location.getImages()) {
+						if(sBase64 != null) {
+							byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+							images.add(image);
+						}
+					}
+					resultLocation.setPictures(images);
+				} else {
+					resultLocation.setPictures(null);
+				}
+
 				// update corresponding Address
 				Address address = location.getAddress();
 				query = em.createQuery("SELECT a from Address a WHERE" + " a.id = " + address.getId());
