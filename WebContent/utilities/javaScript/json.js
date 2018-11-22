@@ -74,3 +74,10 @@ function getJsonDatastrucutreLocation(type) {
 
 	return json;
 }
+
+function getRoutingJsonStructure(){
+	var json = { locations: []};
+	
+	return json;
+}
+

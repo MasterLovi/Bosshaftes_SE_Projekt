@@ -116,44 +116,6 @@ $(document).ready(function(){
 	});
 })
 
-// When hovering over a route
-$(document).ready(function(){
-	var layer;
-	$(".tourdata").mouseenter(function(){
-		var json = $(this).children(".startingPoint").val();
-		var obj = JSON.parse(json);
-		
-		//TODO Data must be loaded before the panel is shown
-		
-		$("#tourInfoPanel").css("display","block");
-		
-		layer = L.marker(obj.coordinates, {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#00cc00'})}).addTo(getMap());
-	});
-	
-	$(".tourdata").mouseleave(function(){
-		//$("#tourInfoPanel").css("display", "none");
-		getMap().removeLayer(layer);
-	})
-})
-
-var permLayer; // Is used in multiple functions thats why it has to be global
-
-// This function will set a point after clicking on a route. If there is another marker 
-// it will be removed before the new marker is set
-$(document).ready(function(){
-
-	$(".tourdata").click(function(){
-		var json = $(this).children(".startingPoint").val();
-		var obj = JSON.parse(json);
-		
-		if(permLayer != null){getMap().removeLayer(permLayer)};
-		
-		getMap().panTo(obj.coordinates);
-		permLayer = L.marker(obj.coordinates, {icon: L.mapquest.icons.marker({primaryColor: '#009933', secondaryColor: '#00cc00'})}).addTo(getMap());
-	});
-
-})
-
 // Closes the Tour info and removes any set markers 
 $(document).ready(function(){
 	$("#closeTourInfo").click(function(){
@@ -161,18 +123,6 @@ $(document).ready(function(){
 		$("#tours").css("display", "none");
 		if(permLayer != null){getMap().removeLayer(permLayer)};
 	})
-})
-
-// Checks if there are enough element that the right scoll is needed
-$(document).ready(function(){
-	width = $("#tours").css("width");
-	var viewPortSize = Number(width.substring(0, width.length - 2));
-	
-	var toureListSize = ($("#tourList li").length - 1)  * 170;
-	
-	if (toureListSize <= viewPortSize){
-		$("#rightArrow").css("display", "none");
-	}
 })
 
 // Call the create request for a new marker 

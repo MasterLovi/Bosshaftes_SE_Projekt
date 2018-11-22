@@ -103,6 +103,147 @@ function toureListRightShift() {
 	});
 }
 
+function addRoutesToSelection(data){
+	var json = JSON.parse(data);
+	
+	// Clears the List
+	$("#tourList").empty();
+	
+	for(var i = 0; i < json.length; i++) {
+		var listelement = 
+			"<li class='inline tourdata'>" +
+				"<input type='hidden' class='startingPoint' value='{\"coordinates\": ["+json[i].firstLat+", "+json[i].firstLong+"]}'>" +
+				"<input type='hidden' class='tourId' value='" +json[i].id+"'>" +
+				"<p>"+json[i].name+"</p>" +
+				"<div class='centered'>" +
+					"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
+					"<i class='material-icons " + (json[i].avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
+					"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
+					"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
+					"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
+				"</div>" +
+				"<div class='iconWrapper'>" +
+					"<img class='tourIcon' src='"+ (json[i].images.length > 0 ? json[i].images[i] +"'" : "utilities/pic/OP2.jpg'") + ">" +
+				"</div>" +
+			"</li>";
+		
+		$("#tourList").append(listelement);
+	}
+	
+	// Setting all Listeners
+	toursSliderRight();
+	toursClickEvent();
+	toursHoverEvent();
+	
+	$("#tours").show();
+}
 
+//Checks if there are enough element that the right scoll is needed
+function toursSliderRight(){
+	width = $("#tours").css("width");
+	var viewPortSize = Number(width.substring(0, width.length - 2));
+	
+	var toureListSize = ($("#tourList li").length - 1)  * 170;
+	
+	if (toureListSize <= viewPortSize){
+		$("#rightArrow").css("display", "none");
+	}
+}
 
+var permLayer; // Is used in multiple functions thats why it has to be global
 
+//This function will set a point after clicking on a route. If there is another marker 
+//it will be removed before the new marker is set
+function toursClickEvent(){
+
+	$(".tourdata").click(function(){
+		var json = $(this).children(".startingPoint").val();
+		var obj = JSON.parse(json);
+		
+		if(permLayer != null){getMap().removeLayer(permLayer)};
+		
+		getMap().panTo(obj.coordinates);
+		permLayer = L.marker(obj.coordinates, {icon: L.mapquest.icons.marker({primaryColor: '#009933', secondaryColor: '#00cc00'})}).addTo(getMap());
+		permLayer._icon.style.zIndex = 1000;
+	});
+
+}
+
+// When hovering over a route
+function toursHoverEvent(){
+	var layer;
+	$(".tourdata").mouseenter(function(){
+		var json = $(this).children(".startingPoint").val();
+		var obj = JSON.parse(json);
+		
+		var tour = $(this).children(".tourId").val();
+		var tourObj;
+		
+		var ratingElement;
+		
+		$.each(globalRoutes, function(i, v){
+			if(v.id == tour) {
+				tourObj = v;
+				return;
+			}
+		});
+		//TODO Data must be loaded before the panel is shown
+		
+		$("#infoTourName").html(tourObj.name);
+		$("#infoTourDescription").html(tourObj.description);
+		$("#tourIdOnPanle").val(tourObj.id);
+		
+		ratingElement = "<i class='material-icons " + (tourObj.avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
+						"<i class='material-icons " + (tourObj.avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
+						"<i class='material-icons " + (tourObj.avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
+						"<i class='material-icons " + (tourObj.avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
+						"<i class='material-icons " + (tourObj.avgRating >= 5 ? "activeStar" : "") + "'>grade</i>"; 
+		
+		$("#infoTourRating").html(ratingElement);
+		
+		$("#tourStops").empty();
+		
+		$.each(globalRoutes, function(i, v) {
+			if(v.id == tour) {
+				$.each(v.stops, function(i, v) {
+					$("#tourStops").append("<li class='infotext'>"+v.name+"</li><hr>");
+				})
+			}
+		})
+		
+		
+		
+		$("#tourInfoPanel").css("display","block");
+		
+		layer = L.marker(obj.coordinates, {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#00cc00'})}).addTo(getMap());
+		layer._icon.style.zIndex = 1001;
+	});
+	
+	$(".tourdata").mouseleave(function(){
+		//$("#tourInfoPanel").css("display", "none");
+		getMap().removeLayer(layer);
+	})
+}
+
+function calculateRoute() {
+	var tour = $("#tourIdOnPanle").val();
+	var tourObj;
+	
+	$.each(globalRoutes, function(i, v){
+		if(v.id == tour) {
+			tourObj = v;
+			return;
+		}
+	});
+	
+	var routeObj = getRoutingJsonStructure();
+	
+	$.each(tourObj.stops, function(i,v) {
+		var newElement = { type: "s", latLng: { lat: v.latitude, lng: v.longitude } };
+		routeObj.locations.push(newElement)
+	});
+	
+	routeObj.options = {routeType: "pedestrian"};
+	
+	L.mapquest.directions().route(routeObj);
+}

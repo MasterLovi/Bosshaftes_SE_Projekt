@@ -73,7 +73,9 @@ function getLocationFromDatabase(sType) {
 				});
 				globalLayer = null;
 			}
-
+			
+			if(getMap()._zoom < 12) { return; }
+			
 			var json = JSON.parse(response);
 			var markerLayer = L.layerGroup();
 			
@@ -87,7 +89,7 @@ function getLocationFromDatabase(sType) {
 				
 				marker.bindPopup(json[i].name + "<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
 						"<button onClick=reportLocation("+marker._leaflet_id+")>Melden</button>");
-				
+				marker._icon.style.zIndex = 50; // Makes sure everything is in front of the default marker 
 				markerLayer.addLayer(marker);
 				
 			}
@@ -222,7 +224,13 @@ function reportLocation(markerId){
 	});
 }
 
+var globalRoutes;
+
 function getRoute(sType){
+	var stops = $("#routeForm input[name=spots]").val();
+	var rating = $("#routeForm input[name=rating]").val();
+	var time = $("#routeForm input[name=time]").val()+":00";
+	
 	$.ajax({
 		url: "RouteServlet",
 		type: "GET",
@@ -232,19 +240,17 @@ function getRoute(sType){
 			boundNorthWestLng: getMap().getBounds().getNorthWest().lng,
 			boundSouthEastLat: getMap().getBounds().getSouthEast().lat,
 			boundSouthEastLng: getMap().getBounds().getSouthEast().lng,
-			stops: 4,
-			time: "",
-			rating: 1
+			stops: stops,
+			time: time,
+			rating: rating
 
 		},
 		success: function(response) {
-			console.log(response);
+			addRoutesToSelection(response);
+			globalRoutes = JSON.parse(response);
 		},
 		error: function(error) {
 			console.log(error);
-
-			
-
 		}
 	});
 	

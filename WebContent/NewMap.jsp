@@ -103,7 +103,7 @@
 			</span>
 		</div>
 		<div class="absolute" id="optionpanle">
-			<form action="" method="POST">
+			<form action="" method="POST" id="routeForm">
 				<p>Sehenwürdigkeiten</p>
 				<input type="text" id="spotValue" size="1" value="10" min="1" max="20">
 			    <input type="range" id="spotRange" name="spots" min="1" max="20" />
@@ -128,6 +128,61 @@
 		</div>
 		<div id="tourInfoPanel">
 			<i class="absolute material-icons" id="closeTourInfo">search</i>
+			<input type="hidden" id="tourIdOnPanle" value="">
+			<table>
+				<tr>
+					<td class="infoHeader">
+						Name:
+					</td>
+				</tr>
+				<tr>
+					<td id="infoTourName" class="infotext">
+					
+					</td>
+				</tr>
+			
+				<tr>
+					<td class="infoHeader">
+						Beschreibung:
+					</td>
+				</tr>
+				<tr>
+					<td id="infoTourDescription" class="infotext">
+					
+					</td>
+				</tr>
+	
+				<tr>
+					<td class="infoHeader">
+						Bewertung:
+					</td>
+				</tr>
+				<tr>
+					<td id="infoTourRating" class="infotext">
+					
+					</td>
+				</tr>
+
+				<tr>
+					<td class="infoHeader">
+						Bilder:
+					</td>
+				</tr>
+				<tr>
+					<td id="infoTourPics" class="infotext">
+					
+					</td>
+				</tr>
+			</table>
+			<div id="tourStopsWrapper">
+				<p class="infoHeader">Stops</p>
+				<ul id="tourStops">
+					
+					
+				</ul>
+			</div>
+			<button class="absolute" id="buttonLoad" onClick="calculateRoute()">Laden</button>
+			<button class="absolute" id="buttonRate">Bewerten</button>
 		</div>
 		<div id="map"></div>
 		<div class="absolute" id="tours" style="display: none;">
