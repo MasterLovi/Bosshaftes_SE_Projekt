@@ -89,7 +89,7 @@ function getLocationFromDatabase(sType) {
 				
 				marker.bindPopup(json[i].name + "<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
 						"<button onClick=reportLocation("+marker._leaflet_id+")>Melden</button>" +
-						"<button onClick=rateLocation("+marker._leaflet_id+")>Bewerten</button>");
+						"<button onClick=feedbackLocation("+marker._leaflet_id+")>Bewerten</button>");
 				marker._icon.style.zIndex = 50; // Makes sure everything is in front of the default marker 
 				markerLayer.addLayer(marker);
 				

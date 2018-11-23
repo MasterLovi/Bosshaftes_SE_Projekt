@@ -5,12 +5,13 @@ function clearInput(inputId) {
 }
 
 function showNewPointPopup(marker) { 
+	loadPopupContent("createNew");
 	loadMarkerinfoToSubmitForm(marker);
 	$("#myModal").css("display", "block");
 }
 
 function showUpdatePointPopup(markerId) { 
-	console.log(markerId);
+	loadPopupContent("update");
 	loadDataToUpdateForm(markerId)
 	$("#myUpdateModal").css("display", "block");
 }
@@ -260,18 +261,20 @@ function removeCurrentRoute(){
 	});
 }
 
-function rateRoute(){
+function feedbackRoute(){
 	var tour = $("#tourIdOnPanle").val();
-
+	
+	loadPopupContent("feedback");
+	
 	$("#ratingForm input[name=type]").val("route");
 	$("#ratingForm input[name=id]").val(tour);
-	
-	$("#myRatingModal").show();
-	
+
 }
 
-function rateLocation(markerId) {
+function feedbackLocation(markerId) {
 	var location = globalLayer.getLayer(markerId);
+	
+	loadPopupContent("feedback");
 	
 	$("#ratingForm input[name=type]").val("location");
 	$("#ratingForm input[name=id").val(location.info.id);

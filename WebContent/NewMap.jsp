@@ -58,6 +58,7 @@
    	    <script src="utilities/javaScript/api.js"></script>
    	    <script src="utilities/javaScript/listener.js"></script>
    	    <script src="utilities/javaScript/ajax.js"></script>
+   	    <script src="utilities/javaScript/popupLoader.js"></script>
    	    
    	    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
   		integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
@@ -182,7 +183,7 @@
 				</ul>
 			</div>
 			<button class="absolute" id="buttonLoad" onClick="calculateRoute()">Laden</button>
-			<button class="absolute" id="buttonRate" onClick="rateRoute()">Bewerten</button>
+			<button class="absolute" id="buttonRate" onClick="feedbackRoute()">Bewerten</button>
 		</div>
 		<div id="map"></div>
 		<div class="absolute" id="tours" style="display: none;">
@@ -215,134 +216,9 @@
 		
 		  <!-- Modal create content -->
 		  <div class="modal-content">
-		    <span class="close">&times;</span>
-		    <form id="createLocationForm" method="POST" action="">
-		    	<input type="hidden" name="lat" id="newLat" value=""/>
-		    	<input type="hidden" name="lng" id="newLng" value=""/>
-		    	<input type="hidden" name="userId" id="userId" value=""/>
-		    	<table id="popupTable">
-		    	<tr>
-			    	<td>
-			    		<p>Angezeigter Name:</p>
-			    	</td>
-		    		<td>
-		    			<input type="text" name="locationName" value=""/>
-		    		</td>
-		    	</tr>
-		    	<tr>
-			    	<td>
-			    		<p>Bild:</p>
-			    	</td>
-		    		<td>
-		    			<input type="file" name="picture" value=""/>
-		    		</td>
-		    	</tr>
-		    	<tr>
-			    	<td>
-			    		<p>Beschreibung:</p>
-			    	</td>
-		    		<td>
-		    			<textarea rows="7" form="createLocationForm" name="description"></textarea>
-		    		</td>
-		    	</tr>
-		    	<tr>
-		    		<td>
-			    		<p>Aufenthaltszeit:</p>
-			    	</td>
-		    		<td>
-		    			<input type="time" name="time" value=""/>
-		    		</td>
-		    	</tr>
-		    	<tr>
-		    		<td>
-		    			<!-- Some button -->
-		    		</td>
-		    		<td>
-		    			<input type="submit" name="confirm" value="Anlegen"/>
-		    		</td>
-		    	</tr>
-		    	</table>
-		    </form>
+		    <!-- Content will be loaded here -->
 		  </div>
 		
-		</div>
-		
-		<div id="myUpdateModal" class="modal">
-		  <!-- Modal update content -->
-		  <div class="modal-content">
-		    <span class="close">&times;</span>
-		    <form id="updateLocationForm" method="POST" action="">
-		    	<input type="hidden" name="id" value=""/>
-		    	<table id="popupTable">
-		    	<tr>
-			    	<td>
-			    		<p>Angezeigter Name:</p>
-			    	</td>
-		    		<td>
-		    			<input type="text" name="locationName" value=""/>
-		    		</td>
-		    	</tr>
-		    	<tr>
-			    	<td>
-			    		<p>Bild:</p>
-			    	</td>
-		    		<td>
-		    			<input type="file" name="picture" value=""/>
-		    		</td>
-		    	</tr>
-		    	<tr>
-			    	<td>
-			    		<p>Beschreibung:</p>
-			    	</td>
-		    		<td>
-		    			<textarea rows="7" form="createLocationForm" name="description"></textarea>
-		    		</td>
-		    	</tr>
-		    	<tr>
-		    		<td>
-			    		<p>Aufenthaltszeit:</p>
-			    	</td>
-		    		<td>
-		    			<input type="time" name="time" value=""/>
-		    		</td>
-		    	</tr>
-		    	<tr>
-		    		<td>
-		    			<!-- Some button -->
-		    		</td>
-		    		<td>
-		    			<input type="submit" name="confirm" value="Anlegen"/>
-		    		</td>
-		    	</tr>
-		    	</table>
-		    </form>
-		  </div>
-		</div>
-		
-		<div id="myRatingModal" class="modal">
-		  <!-- Modal update content -->
-		  <div class="modal-content">
-		    <span class="close">&times;</span>
-		    <form id="ratingForm" method="POST" action="">
-		    	<input type="hidden" name="id" value=""/>
-		    	<input type="hidden" name="type" value=""/>
-				<h4 class="centered">Ihre Meinung ist uns wichitg!</h4>
-				<p class="centered infoHeader">Bewertung</p>
-				<div class="centered" id="ratingForm">
-					<i class="ratingStarR material-icons activeStar" id="star1r">grade</i>
-					<i class="ratingStarR material-icons activeStar" id="star2r">grade</i>
-					<i class="ratingStarR material-icons activeStar" id="star3r">grade</i>
-					<i class="ratingStarR material-icons" id="star4r">grade</i>
-					<i class="ratingStarR material-icons" id="star5r">grade</i>
-				</div>
-				<p class="centered infoHeader">Kommentar</p>
-				<input type="hidden" value="3" name="rating" id="ratingValueR">
-		    	<textarea rows="4" form="ratingForm" name="comment"></textarea>
-		    	<div class="right">
-		    		<input type="submit" id="sendFeedback" name="confirm" value="Senden"/>
-		    	</div>
-		    </form>
-		  </div>
 		</div>
 	</body>
 </html>
