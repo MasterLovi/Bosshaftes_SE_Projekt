@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * This class represents the Feedback database table as mapped Java object
  */
@@ -19,12 +21,18 @@ public class Feedback {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
+	@Expose
 	private int id;
+	
+	@Expose
 	private String comment;
+	
+	@Expose
 	private int rating;
 
 	@OneToOne
 	@JoinColumn(name = "AUTHOR_ID")
+	@Expose
 	private Users author;
 
 	// getter

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -26,12 +27,15 @@ public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
+	@Expose
 	private int id;
 
 	@Column(unique = true)
+	@Expose
 	private String username;
+	
+	@Expose
 	private String email;
-	@Expose(serialize = false)
 	private String password;
 
 	@OneToMany(mappedBy = "owner", orphanRemoval = true, cascade = CascadeType.ALL)
@@ -85,7 +89,16 @@ public class Users {
 
 	// other methods
 	public void addRoute(Route route) {
-		this.visitedRoutes.add(route);
+		this.routes.add(route);
+	}
+	
+	public void removeRoute(Route route) {
+		for (Iterator<Route> iter = this.routes.iterator(); iter.hasNext();) {
+			Route r = iter.next();
+			if(r.getId() == route.getId()) {
+				iter.remove();
+			}
+		}
 	}
 
 	public List<Route> getRoutes() {

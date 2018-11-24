@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * This class represents the Address database table as mapped Java object
  */
@@ -17,11 +19,22 @@ public class Address {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
+	@Expose
 	private int id;
+	
+	@Expose
 	private String country;
+	
+	@Expose
 	private int postCode;
+	
+	@Expose
 	private String cityName;
+	
+	@Expose
 	private String streetName;
+	
+	@Expose
 	private int houseNumber;
 
 	// getter
