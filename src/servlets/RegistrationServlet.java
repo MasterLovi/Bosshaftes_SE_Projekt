@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.Route;
 import model.Users;
 
 /**
@@ -32,18 +34,6 @@ public class RegistrationServlet extends HttpServlet {
 	 */
 	public RegistrationServlet() {
 		super();
-	}
-
-	/**
-	 * 
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -69,6 +59,7 @@ public class RegistrationServlet extends HttpServlet {
 
 			// retrieve all parameters
 			Users user = new Users();
+			user.setRoutes((List<Route>) new ArrayList<Route>()); 
 			user.setUsername(request.getParameter("username"));
 			user.setEmail(request.getParameter("email"));
 
