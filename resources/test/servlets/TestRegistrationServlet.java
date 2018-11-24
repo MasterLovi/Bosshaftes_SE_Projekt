@@ -14,9 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import servlets.RegistrationServlet;
 
@@ -27,7 +31,22 @@ public class TestRegistrationServlet {
 	HttpSession session;
 	ServletContext servletContext;
 	RegistrationServlet registrationServlet;
-
+	static EntityManagerFactory emf;
+	
+	String testName;
+	Boolean testSession;
+	Integer testId;
+	
+	@BeforeClass
+	public static void connectDB() {
+		emf = Persistence.createEntityManagerFactory("DerbyDB");
+	}
+	
+	@AfterClass
+	public static void closeDB() {
+		emf.close();
+	}
+	
 	@SuppressWarnings("serial")
 	@Before
 	public void setUp() throws Exception {
@@ -40,13 +59,37 @@ public class TestRegistrationServlet {
 				return servletContext;
 			}
 		};
-		Exception e = new Exception();
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("DerbyDB");
+		Exception e = new Exception("TestException");
 		Mockito.doReturn(emf).when(servletContext).getAttribute("emf");
 		Mockito.doReturn(session).when(request).getSession();
 		Mockito.doReturn(null).when(request).getHeader("referer");
 		Mockito.doNothing().when(response).sendRedirect(null);
 		Mockito.doNothing().when(response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+		
+		
+		Answer<Integer> username = new Answer<Integer>() {
+	        public Integer answer(InvocationOnMock invocation) throws Throwable {
+	            testName = invocation.getArgument(1);
+	            return null;
+	        }
+	    };
+	    Answer<Integer> loggedin = new Answer<Integer>() {
+	        public Integer answer(InvocationOnMock invocation) throws Throwable {
+	        	System.out.println(invocation.getArgument(1).toString());
+	            testSession = invocation.getArgument(1);
+	            return null;
+	        }
+	    };
+	    Answer<Integer> id = new Answer<Integer>() {
+	        public Integer answer(InvocationOnMock invocation) throws Throwable {
+	            testId = invocation.getArgument(1);
+	            return null;
+	        }
+	    };
+		
+		Mockito.doAnswer(username).when(session).setAttribute(eq("username"), anyString());
+		Mockito.doAnswer(loggedin).when(session).setAttribute(eq("loggedin"), anyBoolean());
+		Mockito.doAnswer(id).when(session).setAttribute(eq("userid"), anyInt());
 	}
 
 	@Test
@@ -61,10 +104,20 @@ public class TestRegistrationServlet {
 
 		registrationServlet.doPost(request, response);
 		
-		assertTrue(session.getAttribute("loggedin").equals("true"));
-		assertTrue(session.getAttribute("username").equals("test"));
-		assertTrue(session.getAttribute("userId") != null);
-
+		System.out.println(testName + " " + testSession + " " + testId);
+		assertTrue(testSession);
+		assertTrue(testName.equals("test"));
+		assertTrue(testId != null);
+		
+		registrationServlet.doPost(request, response);
+		
+		when(request.getParameter("username")).thenReturn("test1");
+		when(request.getParameter("passwordRep")).thenReturn("testp1w");
+		
+		registrationServlet.doPost(request, response);
+		
+		when(request.getParameter("passwordRep")).thenReturn("testpw");
+		registrationServlet.doPost(request, response);
 	}
 
 }
