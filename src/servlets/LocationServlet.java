@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import model.Address;
@@ -95,7 +96,9 @@ public class LocationServlet extends HttpServlet {
 					location.setImages(null);
 				}
 			}
-			Gson gson = new Gson();
+			GsonBuilder builder = new GsonBuilder();  
+			builder.excludeFieldsWithoutExposeAnnotation();
+			Gson gson = builder.create();
 			JSONData = gson.toJson(result);
 		} else {
 			JSONData = "[]";
@@ -114,7 +117,6 @@ public class LocationServlet extends HttpServlet {
 	 */
 	private static String create(List<Location> locations, EntityManager em) throws Exception {
 		// Loop over Routes that should be created
-		em.getTransaction().begin();
 		for (Location location : locations) {
 
 			// find out if location already exists
@@ -155,7 +157,6 @@ public class LocationServlet extends HttpServlet {
 				throw new Exception("Location \"" + location.getName() + "\" existiert bereits.");
 			}
 		}
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -170,7 +171,6 @@ public class LocationServlet extends HttpServlet {
 	 */
 	private static String delete(List<Location> locations, EntityManager em) throws Exception {
 		// Loop over Locations that should be deleted
-		em.getTransaction().begin();
 		for (Location location : locations) {
 			Location result = em.find(Location.class, location.getId());
 			if (result != null) {
@@ -180,7 +180,6 @@ public class LocationServlet extends HttpServlet {
 								+ "\"existiert nicht und kann daher nicht gelöscht werden");
 			}
 		}
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -194,7 +193,6 @@ public class LocationServlet extends HttpServlet {
 	 * @exception Exception if one location that should be updated doesn't exist
 	 */
 	private static String update(List<Location> locations, EntityManager em) throws Exception {
-		em.getTransaction().begin();
 
 		// Loop over Locations that should be updated
 		for (Location location : locations) {
@@ -243,7 +241,6 @@ public class LocationServlet extends HttpServlet {
 				throw new Exception("Location \"" + location.getName() + "\" existiert nicht.");
 			}
 		}
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -256,7 +253,6 @@ public class LocationServlet extends HttpServlet {
 	 * @exception is the location that should be reported doesn't exist
 	 */
 	private static String report(List<Location> locations, EntityManager em) throws Exception {
-
 		// Loop over Locations that should be reported
 		for (Location location : locations) {
 			Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
@@ -266,19 +262,21 @@ public class LocationServlet extends HttpServlet {
 			if (result.size() > 0) {
 				Location resultLocation = result.get(0);
 				int timesReported = resultLocation.getTimesReported();
-
+				
 				if (timesReported == 2) {
 					// delete Location
 					ArrayList<Location> deleteLocations = new ArrayList<Location>();
 					deleteLocations.add(location);
 					delete(deleteLocations, em);
 				} else {
-					resultLocation.setTimesReported(timesReported++);
+					timesReported++;
+					resultLocation.setTimesReported(timesReported);
 				}
 
 			} else {
 				throw new Exception("Location \"" + location.getName() + "\" existiert nicht.");
 			}
+			
 		}
 		return "Success";
 	}
@@ -315,7 +313,6 @@ public class LocationServlet extends HttpServlet {
 			// send back error
 			response.setStatus(500);
 			res = e.getMessage();
-			e.printStackTrace();
 		}
 		// Send Response
 		PrintWriter writer = response.getWriter();
@@ -341,7 +338,7 @@ public class LocationServlet extends HttpServlet {
 		List<Location> locations = gson.fromJson(request.getParameter("json"), new TypeToken<List<Location>>() {
 		}.getType());
 		String res = "";
-
+		em.getTransaction().begin();
 		try {
 			if ((boolean)session.getAttribute("loggedin") != true) {
 				throw new Exception("You are not logged in.");
@@ -362,11 +359,12 @@ public class LocationServlet extends HttpServlet {
 				break;
 			}
 			response.setStatus(200);
+			em.getTransaction().commit();
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
 			res = e.getMessage();
-			e.printStackTrace();
+			em.getTransaction().rollback();
 		}
 		PrintWriter writer = response.getWriter();
 		writer.append(res);
