@@ -71,6 +71,7 @@ public class ContextListener implements ServletContextListener {
 			em.getTransaction().begin();
 			Users user = new Users();
 			user.setUsername("test");
+			user.setRoutes((List<Route>) new ArrayList<Route>()); 
 			user.setEmail("test@test.com");
 			String password = "test";
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
