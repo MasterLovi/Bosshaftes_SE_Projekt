@@ -5,7 +5,6 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="DerbyDB"
 		transaction-type="RESOURCE_LOCAL">
-		<class>model.exampleJPAEntity</class>
 		<class>model.Address</class>
 		<class>model.Feedback</class>
 		<class>model.Location</class>
@@ -29,7 +28,6 @@
 	</persistence-unit>
 	<persistence-unit name="TEST"
 		transaction-type="RESOURCE_LOCAL">
-		<class>model.exampleJPAEntity</class>
 		<class>model.Address</class>
 		<class>model.Feedback</class>
 		<class>model.Location</class>
