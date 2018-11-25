@@ -263,3 +263,18 @@ function sendFeedback(type, id) {
 	//TODO Send the feedback to the backend
 }
 
+function deleteFeedback(type, id) {
+	console.log(type + " " + id);
+}
+
+function createNewRoute() {
+	
+}
+
+function addPointToRoute() {
+	
+}
+
+function removeFromRoute() {
+	
+}

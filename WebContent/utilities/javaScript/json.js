@@ -81,3 +81,10 @@ function getRoutingJsonStructure(){
 	return json;
 }
 
+function getDatastructureRoute() {
+	
+}
+
+function getDatastructureFeedback() {
+	
+}
