@@ -2,20 +2,23 @@ package util;
 
 import java.io.Serializable;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * This class is an individual util class that represents duration.
  *
  */
+
 public class Time implements Serializable {
 
 	private static final long serialVersionUID = 1156215663793678712L;
-
+	@Expose
 	private String time;
-
+	@Expose
 	private Integer hours;
-
+	@Expose
 	private Integer minutes;
-
+	@Expose
 	private Integer seconds;
 
 	/**
@@ -31,9 +34,10 @@ public class Time implements Serializable {
 			Integer hours = Integer.parseInt(time.substring(0, time.indexOf(":")));
 
 			String sMinutes = time.substring(time.indexOf(":") + 1);
-			Integer minutes = Integer.parseInt(sMinutes.substring(0, time.indexOf(":")));
+			
+			Integer minutes = Integer.parseInt(sMinutes.substring(0, sMinutes.indexOf(":")));
 
-			Integer seconds = Integer.parseInt(sMinutes.substring(time.indexOf(":") + 1));
+			Integer seconds = Integer.parseInt(sMinutes.substring(sMinutes.indexOf(":") + 1));
 
 			this.setTime(hours, minutes, seconds);
 		} catch (Exception e) {
@@ -108,7 +112,6 @@ public class Time implements Serializable {
 	}
 
 	public Boolean IsLessThan(Time t) {
-
 		if (this.getHours() < t.getHours()) {
 			return true;
 		} else if (this.getHours() > t.getHours()) {
