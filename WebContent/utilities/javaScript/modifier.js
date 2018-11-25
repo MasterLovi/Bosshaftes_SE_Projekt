@@ -288,8 +288,6 @@ $(document).ready(function() {
 	
 	var currentAction = url.searchParams.get("type");
 	
-	console.log(currentAction);
-	
 	if(currentAction != null) {
 		$("#currentAction").val(currentAction);
 	} else {
@@ -304,4 +302,56 @@ $(document).ready(function() {
 		$("#headerIconMiddle").html("chevron_left");
 	}
 })
+
+function loadFeedbackToPopup(type, id) {
+	var data;
+	var dataElement;
+	var htmlElement;
+	
+	$("#feedbackList").empty();
+	
+	if(type == "location") {
+		data == JSON.parse(globalLayer);
+
+		$.each(data, function(i,v) {	
+			if(v.info.id == id){
+				dataElement = v.info;
+				return;
+			}
+		});
+				
+	} else {
+		data == JSON.parse(globalRoutes);
+		
+		$.each(data, function(i,v) {	
+			if(v.id == id){
+				dataElement = v;
+				return;
+			}
+		});
+	}
+	
+	//TODO add delete Button if user is logged in and is 
+	$.each(dataElement.feedback, function(i,v) {
+		htmlElement = "<li class=\"popupFeedback\">" +
+			"<div class=\"feebackRatingWrapper\">" +
+				"<i class='material-icons " + (dataElement.avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
+				"<i class='material-icons " + (dataElement.avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
+				"<i class='material-icons " + (dataElement.avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
+				"<i class='material-icons " + (dataElement.avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
+				"<i class='material-icons " + (dataElement.avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
+			"</div>" +
+			"<div class=\"feebackCommentWrapper\">" +
+				"<p class=\"feedbackComment\">" + v.comment + "</p>" +
+			"</div>" +
+		"</li>";
+		
+		$("#feedbackList").append(htmlElement);
+	});
+		
+}
+
+function unloadPopup() {
+	$("#myModal").hide();
+}
 	

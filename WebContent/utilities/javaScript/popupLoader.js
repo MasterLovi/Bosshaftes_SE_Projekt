@@ -209,7 +209,7 @@ function loadPopupContent(popupType) {
 	break;
 	case "createNew": {
 		$('#createLocationForm').submit(function () {
-			createNewMarker($("#currentAction").val()); //TODO Load right category
+			createNewMarker($("#currentAction").val());
 			return false;
 		});
 	};
@@ -229,9 +229,10 @@ function loadPopupContent(popupType) {
 	};
 	break;
 	case "showFeedback": {
-		loadFeedbackToPopup(); //Parameter 'type' & 'id' needed
-		//TODO Whatever has to be done here
+		loadFeedbackToPopup();
+		//TODO Add Function to the delete button
 	}
+	break;
 	};
 	
 	$(".close").click(function(){

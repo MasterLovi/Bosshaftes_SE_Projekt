@@ -91,9 +91,9 @@
 	        <div id='otherMapHeader'>
 	    		<div id='mapHeader'>
 	    			<input type="hidden" id="currentAction" value="">
-    				<i id="partyText">Party</i>
-    				<i id="headerIconMiddle" class="material-icons">chevron_left</i>
-    				<i id="cultureText">Kultur</i>
+    				<i id="partyText" class="clickable">Party</i>
+    				<i id="headerIconMiddle" class="material-icons clickable">chevron_left</i>
+    				<i id="cultureText" class="clickable">Kultur</i>
    				</div>
 	    	</div>
 		</div>

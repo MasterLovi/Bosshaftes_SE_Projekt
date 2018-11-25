@@ -139,8 +139,15 @@ function createNewMarker(sType) {
 
 		},
 		success: function(response) {
-			//TODO Set Point after success and close popup
-			console.log(response);
+			// Reloading database information;
+			getLocationFromDatabase($("#currentAction").val()); 
+			
+			if(newMarker != null){
+				mymap.removeLayer(newMarker);
+			}
+			
+			unloadPopup();
+			
 		},
 		error: function(error) {
 			console.log(error);
@@ -180,8 +187,7 @@ function updateMarker(markerId){
 
 		},
 		success: function(response) {
-			//TODO Set Point after success and close popup
-			console.log(response);
+			unloadPopup();
 		},
 		error: function(error) {
 			console.log(error);

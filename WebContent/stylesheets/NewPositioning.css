@@ -410,3 +410,7 @@ p{
  	text-align: center;
  	border-radius: 3px;
 }
+
+.clickable:hover{
+	cursor: pointer !important;
+}
