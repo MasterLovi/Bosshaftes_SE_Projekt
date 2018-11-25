@@ -12,7 +12,8 @@ import test.servlets.TestRouteServlet;
 @SuiteClasses({
 	TestJPAClasses.class, 
 	TestRegistrationServlet.class, 
-	TestLocationServlet.class, 
+	TestLocationServlet.class,
+	TestRouteServlet.class
 	})
 public class AllTests {
 
