@@ -11,7 +11,7 @@ $(document).ready(function() {
 		zoom: 12
 	});
 
-	getLocationFromDatabase("Party"); //TODO Get right property
+	getLocationFromDatabase($("#currentAction").val());
 
 //	----- Setting the Map Listener for new Points
 

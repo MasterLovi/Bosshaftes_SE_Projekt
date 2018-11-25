@@ -131,6 +131,19 @@ public class ContextListener implements ServletContextListener {
 			route.setPictures((List<byte[]>) new ArrayList<byte[]>());
 			route.setType("Party");
 			
+			Route route2 = new Route();
+			route.setName("Tims Duftpfad Reloaded");
+			route.setDescription("Route über alle Punkte an denen Tim stinkt/gestunken hat/stinken wird.");
+			route.setAvgRating(5);
+			route.setFirstLat(location.getLatitude());
+			route.setFirstLong(location.getLongitude());
+			route.setNumberOfStops(4);
+			route.setOwner(user);
+			route.setTimeString("03:30:00");
+			route.setTime(time);
+			route.setPictures((List<byte[]>) new ArrayList<byte[]>());
+			route.setType("Party");
+			
 			List<Location> l = new ArrayList<Location>();
 			l.add(location);
 			l.add(location2);
@@ -138,7 +151,10 @@ public class ContextListener implements ServletContextListener {
 			l.add(location4);
 			route.setStops(l);
 			
+			route2.setStops(l);
+			
 			em.persist(route);
+			em.persist(route2);
 			em.getTransaction().commit();
 
 		} catch (Exception e) {

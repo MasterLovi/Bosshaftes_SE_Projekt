@@ -210,9 +210,7 @@ function toursHoverEvent(){
 					$("#tourStops").append("<li class='infotext'>"+v.name+"</li><hr>");
 				})
 			}
-		})
-		
-		
+		});
 		
 		$("#tourInfoPanel").css("display","block");
 		
@@ -282,4 +280,28 @@ function feedbackLocation(markerId) {
 	$("#myRatingModal").show();
 	
 }
+
+//Checks what the user is looking for
+$(document).ready(function() {
+	var urlString = window.location.href;
+	var url = new URL(urlString);
+	
+	var currentAction = url.searchParams.get("type");
+	
+	console.log(currentAction);
+	
+	if(currentAction != null) {
+		$("#currentAction").val(currentAction);
+	} else {
+		$("#currentAction").val("Party");
+	}
+	
+	if(currentAction == "Party") {
+		$("#headerIconMiddle").html("chevron_left");
+	} else if (currentAction == "Kultur") {
+		$("#headerIconMiddle").html("chevron_right");
+	} else {
+		$("#headerIconMiddle").html("chevron_left");
+	}
+})
 	

@@ -90,6 +90,7 @@
 			</div>
 	        <div id='otherMapHeader'>
 	    		<div id='mapHeader'>
+	    			<input type="hidden" id="currentAction" value="">
     				<i id="partyText">Party</i>
     				<i id="headerIconMiddle" class="material-icons">chevron_left</i>
     				<i id="cultureText">Kultur</i>
@@ -124,7 +125,7 @@
 				<input type="hidden" value="3" name="rating" id="ratingValue">
 				<hr>
 
-				<input type="submit" value="Tour suchen" id="searchTour" onClick="getRoute('Party'); return false;" class="centered">
+				<input type="submit" value="Tour suchen" id="searchTour" class="centered">
 			</form>
 		</div>
 		<div id="tourInfoPanel">
@@ -182,8 +183,8 @@
 					
 				</ul>
 			</div>
-			<button class="absolute" id="buttonLoad" onClick="calculateRoute()">Laden</button>
-			<button class="absolute" id="buttonRate" onClick="feedbackRoute()">Bewerten</button>
+			<button class="absolute" id="buttonLoad">Laden</button>
+			<button class="absolute" id="buttonRate">Bewerten</button>
 		</div>
 		<div id="map"></div>
 		<div class="absolute" id="tours" style="display: none;">

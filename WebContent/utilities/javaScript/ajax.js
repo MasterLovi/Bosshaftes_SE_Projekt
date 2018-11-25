@@ -112,7 +112,7 @@ function createNewMarker(sType) {
 	json.type = sType;
 
 	// ToDo Split the time
-	if(sType == "culture") json.time = $("#createLocationForm input[name=locationName]").val();
+	if(sType == "Kultur") json.time = $("#createLocationForm input[name=locationName]").val();
 
 	json.address.cityName = addressData.cityName;
 	json.address.country = addressData.country;

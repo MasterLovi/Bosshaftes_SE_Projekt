@@ -117,9 +117,53 @@ $(document).ready(function(){
 // Is called when the bounds of the map changes 
 $(document).ready(function() {
 	getMap().on("moveend", function(e) {
-		getLocationFromDatabase("Party"); //TODO Load right category
+		getLocationFromDatabase($("#currentAction").val()); 
 	});
 })
 
 
+// Changes the type of search if the user clicks on the header icons 
+$(document).ready(function() {
+	$("#headerIconMiddle").click(function() {
+		if ($("#headerIconMiddle").html() == "chevron_left") {
+			$("#headerIconMiddle").html("chevron_right");
+			$("#currentAction").val("Kultur");
+			getLocationFromDatabase($("#currentAction").val()); 
+		} else {
+			$("#headerIconMiddle").html("chevron_left");
+			$("#currentAction").val("Party");
+			getLocationFromDatabase($("#currentAction").val()); 
+		}
+	});
+	
+	$("#partyText").click(function() {
+		if($("#currentAction").val() == "Party") {return}
+		$("#headerIconMiddle").html("chevron_left");
+		$("#currentAction").val("Party");
+		getLocationFromDatabase($("#currentAction").val()); 
+	});
+	
+	$("#cultureText").click(function() {
+		if($("#currentAction").val() == "Kultur") {return}
+		$("#headerIconMiddle").html("chevron_right");
+		$("#currentAction").val("Kultur");
+		getLocationFromDatabase($("#currentAction").val()); 
+	});
+})
 
+$(document).ready(function() {
+	$("#routeForm").submit(function() {
+		getRoute($("#currentAction").val()); 
+		return false;
+	});
+})
+
+$(document).ready(function() {
+	$("#buttonLoad").click(function(){
+		calculateRoute();
+	});
+	
+	$("#buttonRate").click(function() {
+		feedbackRoute();
+	})
+})

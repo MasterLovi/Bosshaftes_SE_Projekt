@@ -162,6 +162,9 @@ function loadPopupContent(popupType) {
 	$(".modal-content").html("");
 	$(".modal-content").html(content);
 	
+	
+	
+	// ############ LOADING POPUP FUNCTIONALITY ###########
 	// Load button functionality
 	switch (popupType) {
 	case "feedback": {
@@ -199,33 +202,34 @@ function loadPopupContent(popupType) {
 	break;
 	case "update": {
 		$('#updateLocationForm').submit(function () {
-			updateMarker($("#updateLocationForm input[name=id]").val()); //TODO Load right category
+			updateMarker($("#updateLocationForm input[name=id]").val());
 			return false;
 		});
 	};
 	break;
 	case "createNew": {
 		$('#createLocationForm').submit(function () {
-			createNewMarker("Party"); //TODO Load right category
+			createNewMarker($("#currentAction").val()); //TODO Load right category
 			return false;
 		});
 	};
 	break;
 	case "addToRoute": {
 		$('#newRouteForm').submit(function () {
-			createRoute("Party"); //TODO CreateFunction
+			addToRoute($("#updateLocationForm input[name=id]").val()); //TODO Create Function (markerId)
 			return false;
 		});
 	};
 	break;
 	case "createRoute": {
 		$('#newRouteForm').submit(function () {
-			createRoute("Party"); //TODO CreateFunction
+			createRoute(); //TODO Create Function
 			return false;
 		});
 	};
 	break;
 	case "showFeedback": {
+		loadFeedbackToPopup(); //Parameter 'type' & 'id' needed
 		//TODO Whatever has to be done here
 	}
 	};
