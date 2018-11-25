@@ -116,7 +116,6 @@ public class TestLocationServlet {
 		
 		when(response.getWriter()).thenReturn(pw);
 		
-		when(request.getParameter("json")).thenReturn(testData);
 		when(request.getParameter("rating")).thenReturn("0");
 		when(request.getParameter("boundNorthWestLat")).thenReturn("180");
 		when(request.getParameter("boundNorthWestLng")).thenReturn("0");
@@ -127,7 +126,6 @@ public class TestLocationServlet {
 		locationServlet.doGet(request, response);
 		String result = sw.getBuffer().toString();
 		
-		System.out.println(result);
         assertTrue(result.equals(testData));
         
         
