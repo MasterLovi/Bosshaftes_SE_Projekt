@@ -1,3 +1,5 @@
+var permLayer; // Is used in multiple functions thats why it has to be global
+
 //This function clears the searchbar
 // Parameter inputId: Contains the ID of the element that should be cleared
 function clearInput(inputId) {
@@ -151,7 +153,7 @@ function toursSliderRight(){
 	}
 }
 
-var permLayer; // Is used in multiple functions thats why it has to be global
+
 
 //This function will set a point after clicking on a route. If there is another marker 
 //it will be removed before the new marker is set
@@ -309,9 +311,9 @@ function loadFeedbackToPopup(type, id) {
 	$("#feedbackList").empty();
 	
 	if(type == "Location") {
-		data == JSON.parse(globalLayer);
+		data = JSON.parse(globalLayer);
 
-		$.each(data, function(i,v) {	
+		$.each(data._layers, function(i,v) {	
 			if(v.info.id == id){
 				dataElement = v.info;
 				return;
@@ -319,7 +321,7 @@ function loadFeedbackToPopup(type, id) {
 		});
 				
 	} else {
-		data == JSON.parse(globalRoutes);
+		data = JSON.parse(globalRoutes);
 		
 		$.each(data, function(i,v) {	
 			if(v.id == id){
@@ -349,7 +351,44 @@ function loadFeedbackToPopup(type, id) {
 		
 }
 
+function showNewRoutePopup(id) {
+	loadPopupContent("createRoute");
+	
+	$("#newRouteForm input[name=locationId]").val(id);
+}
+
+function showUpdateRoutePopup(id) {
+	loadPopupContent("updateFromRoute")
+	$("#updateRouteform input[name=locationId]").val(id);
+	loadUserRoutes();
+	
+}
+
+function showFeedbackPopup(id) {
+	loadPopupContent("showFeedback");
+	
+	loadFeedbackToPopup(id);
+}
+
 function unloadPopup() {
 	$("#myModal").hide();
 }
+
+function loadUserRoutes() {
+	$.each(userRoutes, function(i,v) {
+		if(i == 0) { changeRouteInformation (v.id) }
+		$("#updateRouteForm select[name=routes]").append("<option value="+v.id+">"+v.name+"</option>");
+	});
+}
+
+function changeRouteInformation(routeId) {
+	$("#tourStopsPopup").empty();
 	
+	$.each(userRoutes, function(i,v) {
+		if(v.id == routeId) {
+			$.each(v.stops, function(i,v) {
+				$("#tourStopsPopup").append("<li class=\"tourStopsPopupData\">"+v.name+"</li>");
+			});
+		}
+	});
+}

@@ -20,7 +20,7 @@ function getJsonDatastrucutreLocation(type) {
 			feedback : [],
 			description : "",
 			images : [null]
-		};
+	};
 		break;
 	case "update":
 		json = {
@@ -44,7 +44,7 @@ function getJsonDatastrucutreLocation(type) {
 			feedback : [],
 			description : "",
 			images : [null]
-		};
+	};
 		break;
 	case "report":
 		json = {
@@ -68,7 +68,7 @@ function getJsonDatastrucutreLocation(type) {
 			feedback : [],
 			description : "",
 			images : [null]
-		};
+	};
 		break;
 	}
 
@@ -76,20 +76,42 @@ function getJsonDatastrucutreLocation(type) {
 }
 
 function getRoutingJsonStructure(){
-	var json = { locations: []};
-	
+	var json = { locations: [] };
+
 	return json;
 }
 
 function getDatastructureRoute() {
-	
+	var json = {  
+			id: "",
+			name: "",
+			type: "",
+			time:{  
+				time: "",
+			},
+			description: "",
+			images:[],
+			feedback:[],
+			avgRating: "",
+			stops:[], // Will be filled with location objects
+			numberOfStops: "",
+			firstLong: "",
+			firstLat: "",
+			owner:{  
+				id: "",
+				username: "",
+				email: ""
+			}
+	}
+
+	return json;
 }
 
 function getDatastructureFeedback() {
 	var json = {
-		comment: "",
-		rating: "",
+			comment: "",
+			rating: "",
 	}
-	
+
 	return json;
 }
