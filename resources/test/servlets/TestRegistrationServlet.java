@@ -109,14 +109,13 @@ public class TestRegistrationServlet {
 		assertTrue(testName.equals("test"));
 		assertTrue(testId != null);
 		
-		registrationServlet.doPost(request, response);
-		
 		when(request.getParameter("username")).thenReturn("test1");
-		when(request.getParameter("passwordRep")).thenReturn("testp1w");
-		
 		registrationServlet.doPost(request, response);
 		
-		when(request.getParameter("passwordRep")).thenReturn("testpw");
+		when(request.getParameter("username")).thenReturn("test");
+		registrationServlet.doPost(request, response);
+		
+		when(request.getParameter("passwordRep")).thenReturn("testpw1");
 		registrationServlet.doPost(request, response);
 	}
 

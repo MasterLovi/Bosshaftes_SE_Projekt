@@ -42,25 +42,5 @@
       "username": "test",
       "email": "test@test.de"
     }
-  },
-  {
-    "id": 2,
-    "name": "test Route 2 Update",
-    "type": "Party",
-    "time": {
-      "time": "05:05:04",
-      "hours": 5,
-      "minutes": 5,
-      "seconds": 4
-    },
-    "description": "test",
-    "feedback": [],
-    "avgRating": 0,
-    "stops": [],
-    "owner": {
-      "id": 1,
-      "username": "test",
-      "email": "test@test.de"
-    }
   }
 ]

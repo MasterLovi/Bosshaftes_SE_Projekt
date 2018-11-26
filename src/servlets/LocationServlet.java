@@ -20,6 +20,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import model.Address;
+import model.Feedback;
 import model.Location;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -132,7 +133,7 @@ public class LocationServlet extends HttpServlet {
 				newLocation.setName(location.getName());
 				newLocation.setType(location.getType());
 				newLocation.setTimeString(location.getTime().getTime());
-				newLocation.setFeedback(null);
+				newLocation.setFeedback((List<Feedback>) new ArrayList<Feedback>());
 				newLocation.setAddress(location.getAddress());
 				newLocation.setLatitude(location.getLatitude());
 				newLocation.setLongitude(location.getLongitude());

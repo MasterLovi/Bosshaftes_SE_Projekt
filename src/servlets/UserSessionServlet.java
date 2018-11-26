@@ -40,7 +40,7 @@ public class UserSessionServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException {
 		// get URI Parameter for logout and retrieve session
 		String sLogout = request.getParameter("logout");
@@ -66,7 +66,7 @@ public class UserSessionServlet extends HttpServlet {
 	 * @exception Exception if username or password is incorrect
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
@@ -90,7 +90,6 @@ public class UserSessionServlet extends HttpServlet {
 
 			// compare user input with user password in db
 			// set session if user input is correct
-
 			if (resultUser.size() > 0 && resultUser.get(0).getPassword().equals(hashedPW)) {
 				Users resUser = resultUser.get(0);
 				session.setAttribute("userid", resUser.getId());
@@ -108,7 +107,6 @@ public class UserSessionServlet extends HttpServlet {
 			response.sendRedirect(request.getHeader("referer"));
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-			e.printStackTrace();
 		}
 		em.close();
 	}

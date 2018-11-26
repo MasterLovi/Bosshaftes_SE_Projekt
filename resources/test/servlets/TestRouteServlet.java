@@ -119,6 +119,7 @@ public class TestRouteServlet {
 		routeServlet.doGet(request, response);
 		String result = sw.getBuffer().toString();
 		
+		System.out.println(result);
 		assertTrue(result.equals(testData));
 		
 		when(request.getParameter("time")).thenReturn("00:00:05");
@@ -210,8 +211,7 @@ public class TestRouteServlet {
 	public void t4Delete() throws IOException, ServletException {
 		System.out.println("\n\nRoute Test Delete");
 		
-		String testData = Reader.readFile("resources/test/data/routeUpdate.json", StandardCharsets.UTF_8);
-		when(request.getParameter("data")).thenReturn(testData);
+		when(request.getParameter("data")).thenReturn("[{\"id\":1}]");
 		when(request.getSession()).thenReturn(session);
 		when(request.getParameter("operation")).thenReturn("delete");
 
