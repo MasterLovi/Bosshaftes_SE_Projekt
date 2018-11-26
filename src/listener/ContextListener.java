@@ -133,17 +133,17 @@ public class ContextListener implements ServletContextListener {
 			route.setType("Party");
 			
 			Route route2 = new Route();
-			route.setName("Tims Duftpfad Reloaded");
-			route.setDescription("Route über alle Punkte an denen Tim stinkt/gestunken hat/stinken wird.");
-			route.setAvgRating(5);
-			route.setFirstLat(location.getLatitude());
-			route.setFirstLong(location.getLongitude());
-			route.setNumberOfStops(4);
-			route.setOwner(user);
-			route.setTimeString("03:30:00");
-			route.setTime(time);
-			route.setPictures((List<byte[]>) new ArrayList<byte[]>());
-			route.setType("Party");
+			route2.setName("Tims Duftpfad Reloaded");
+			route2.setDescription("Route über alle Punkte an denen Tim stinkt/gestunken hat/stinken wird.");
+			route2.setAvgRating(5);
+			route2.setFirstLat(location.getLatitude());
+			route2.setFirstLong(location.getLongitude());
+			route2.setNumberOfStops(4);
+			route2.setOwner(user);
+			route2.setTimeString("03:30:00");
+			route2.setTime(time);
+			route2.setPictures((List<byte[]>) new ArrayList<byte[]>());
+			route2.setType("Party");
 			
 			List<Location> l = new ArrayList<Location>();
 			l.add(location);
