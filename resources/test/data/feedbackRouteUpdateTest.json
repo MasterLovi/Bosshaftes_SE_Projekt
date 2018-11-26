@@ -1,0 +1,1 @@
+{"id":2,"name":"test Route 2","type":"Party","description":"test","feedback":[{"id":2,"comment":"Test Comment Update","rating":4,"author":{"id":1,"username":"test","email":"test@test.de"}}],"avgRating":4.0,"stops":[],"owner":{"id":1,"username":"test","email":"test@test.de"}}

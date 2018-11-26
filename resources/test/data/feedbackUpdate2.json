@@ -1,0 +1,10 @@
+[
+	{
+		"id": 2,
+		"comment": "Test Comment Update",
+		"rating": 4,
+		"author": {
+			"username": "test"
+		}
+	}
+]

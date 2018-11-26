@@ -55,7 +55,7 @@ public class Route {
 	private List<String> images;
 
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-	@JoinColumn(name = "FEEDBACK_ID")
+	@JoinColumn(name = "FEEDBACK_ID_R")
 	@Expose
 	private List<Feedback> feedback;
 	

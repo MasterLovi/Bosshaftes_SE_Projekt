@@ -67,7 +67,7 @@ public class Location {
 	private Address address;
 
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-	@JoinColumn(name = "FEEDBACK_ID")
+	@JoinColumn(name = "FEEDBACK_ID_L")
 	@Expose
 	private List<Feedback> feedback;
 

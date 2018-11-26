@@ -1,0 +1,1 @@
+{"id":5,"name":"test 5","longitude":54.0,"latitude":54.0,"type":"Party","timesReported":0,"description":"test","address":{"id":5,"country":"Deutschland","postCode":68169,"cityName":"Mannheim","streetName":"Test","houseNumber":4},"feedback":[{"id":1,"comment":"Test Comment Update","rating":4,"author":{"id":1,"username":"test","email":"test@test.de"}}]}

@@ -51,8 +51,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if user has already given feedback for this route
 	 */
 	private static String createRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session)
-					throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding route, check if it exists
 		Route route = em.find(Route.class, id);
@@ -62,27 +61,29 @@ public class FeedbackServlet extends HttpServlet {
 
 		// get corresponding user
 		String username = (String) session.getAttribute("username");
-		Query query = em.createQuery("SELECT u from Users u WHERE u.username = " + username);
+		Query query = em.createQuery("SELECT u from Users u WHERE u.username = '" + username + "'");
 		List<Users> result = query.getResultList();
-		Users user = result.get(0);
 
-		// check if user has already given feedback for this route
-		query = em.createQuery("SELECT f from Feedback f WHERE f.author.username = " + username);
-		result = query.getResultList();
 		if (result.size() > 0) {
-			throw new Exception("Dieser User hat schon ein Feedback für diese Route abgegeben");
-		}
+			Users user = result.get(0);
+			// check if user has already given feedback for this route
+			query = em.createQuery("SELECT f from Feedback f WHERE f.author.username = '" + username + "'");
+			result = query.getResultList();
+			if (result.size() > 0) {
+				throw new Exception("Dieser User hat schon ein Feedback für diese Route abgegeben.");
+			} else {
 
-		em.getTransaction().begin();
-
-		for (Feedback feedback : feedbackList) {
-			// persist feedback
-			feedback.setAuthor(user);
-			em.persist(feedback);
-			route.getFeedback().add(feedback);
+				for (Feedback feedback : feedbackList) {
+					// persist feedback
+					em.persist(feedback);
+					feedback.setAuthor(user);
+					route.getFeedback().add(feedback);
+				}
+			}
+			route.setAvgRating(updateAvgRouteRating(route));
+		} else {
+			throw new Exception("User \"" + username + "\" existiert nicht.");
 		}
-		route.setAvgRating(updateAvgRouteRating(route));
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -98,8 +99,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if user has already given feedback for this location
 	 */
 	private static String createLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session)
-					throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding location, check if it exists
 		Location location = em.find(Location.class, id);
@@ -109,26 +109,28 @@ public class FeedbackServlet extends HttpServlet {
 
 		// get corresponding user
 		String username = (String) session.getAttribute("username");
-		Query query = em.createQuery("SELECT u from Users u WHERE u.username = " + username);
+		Query query = em.createQuery("SELECT u from Users u WHERE u.username = '" + username + "'");
 		List<Users> result = query.getResultList();
-		Users user = result.get(0);
-
-		// check if user has already given feedback for this location
-		query = em.createQuery("SELECT f from Feedback f WHERE f.author.username = " + username);
-		result = query.getResultList();
 		if (result.size() > 0) {
-			throw new Exception("Dieser User hat schon ein Feedback für diese Location abgegeben");
-		}
+			Users user = result.get(0);
 
-		em.getTransaction().begin();
+			// check if user has already given feedback for this location
+			query = em.createQuery("SELECT f from Feedback f WHERE f.author.username = '" + username + "'");
+			result = query.getResultList();
+			if (result.size() > 0) {
+				throw new Exception("Dieser User hat schon ein Feedback für diese Location abgegeben.");
+			} else {
 
-		for (Feedback feedback : feedbackList) {
-			// persist location
-			feedback.setAuthor(user);
-			em.persist(feedback);
-			location.getFeedback().add(feedback);
+				for (Feedback feedback : feedbackList) {
+					// persist location
+					em.persist(feedback);
+					feedback.setAuthor(user);
+					location.getFeedback().add(feedback);
+				}
+			}
+		} else {
+			throw new Exception("User \"" + username + "\" existiert nicht.");
 		}
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -144,7 +146,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String deleteRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding route, check if it exists
 		Route route = em.find(Route.class, id);
@@ -154,33 +156,36 @@ public class FeedbackServlet extends HttpServlet {
 
 		// get corresponding user
 		String username = (String) session.getAttribute("username");
-		Query query = em.createQuery("SELECT u from Users u WHERE u.username = " + username);
+		Query query = em.createQuery("SELECT u from Users u WHERE u.username = '" + username + "'");
 		List<Users> result = query.getResultList();
-		Users user = result.get(0);
+		if (result.size() > 0) {
+			Users user = result.get(0);
 
-		for (Feedback feedback : feedbackList) {
+			for (Feedback feedback : feedbackList) {
 
-			// get feedback
-			feedback = em.find(Feedback.class, feedback.getId());
+				// get feedback
+				feedback = em.find(Feedback.class, feedback.getId());
 
-			// check if the feedback belongs to the user
-			if (feedback.getAuthor().getUsername().equals(user.getUsername())) {
+				// check if the feedback belongs to the user
+				if (feedback.getAuthor().getUsername().equals(user.getUsername())) {
 
-				List<Feedback> ratings = route.getFeedback();
-				for (Iterator<Feedback> iter = ratings.iterator(); iter.hasNext();) {
-					Feedback rating = iter.next();
-					if (rating.getId() == feedback.getId()) {
-						iter.remove();
+					List<Feedback> ratings = route.getFeedback();
+					for (Iterator<Feedback> iter = ratings.iterator(); iter.hasNext();) {
+						Feedback rating = iter.next();
+						if (rating.getId() == feedback.getId()) {
+							iter.remove();
+						}
 					}
+					// if everything went fine, delete feedback
+					em.remove(feedback);
+				} else {
+					throw new Exception("Du kannst nur dein eigenes Feedback löschen.");
 				}
-				// if everything went fine, delete feedback
-				em.remove(feedback);
-			} else {
-				throw new Exception("Du kannst nur dein eigenes Feedback löschen");
 			}
+			route.setAvgRating(updateAvgRouteRating(route));
+		} else {
+			throw new Exception("User \"" + username + "\" existiert nicht.");
 		}
-		route.setAvgRating(updateAvgRouteRating(route));
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -196,7 +201,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String deleteLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding location, check if it exists
 		Location location = em.find(Location.class, id);
@@ -206,30 +211,33 @@ public class FeedbackServlet extends HttpServlet {
 
 		// get corresponding user
 		String username = (String) session.getAttribute("username");
-		Query query = em.createQuery("SELECT u from Users u WHERE u.username = " + username);
+		Query query = em.createQuery("SELECT u from Users u WHERE u.username = '" + username + "'");
 		List<Users> result = query.getResultList();
-		Users user = result.get(0);
+		if (result.size() > 0) {
+			Users user = result.get(0);
 
-		for (Feedback feedback : feedbackList) {
-			// get feedback
-			feedback = em.find(Feedback.class, feedback.getId());
+			for (Feedback feedback : feedbackList) {
+				// get feedback
+				feedback = em.find(Feedback.class, feedback.getId());
 
-			// check if the feedback belongs to the user
-			if (feedback.getAuthor().getUsername().equals(user.getUsername())) {
-				List<Feedback> ratings = location.getFeedback();
-				for (Iterator<Feedback> iter = ratings.iterator(); iter.hasNext();) {
-					Feedback rating = iter.next();
-					if (rating.getId() == feedback.getId()) {
-						iter.remove();
+				// check if the feedback belongs to the user
+				if (feedback.getAuthor().getUsername().equals(user.getUsername())) {
+					List<Feedback> ratings = location.getFeedback();
+					for (Iterator<Feedback> iter = ratings.iterator(); iter.hasNext();) {
+						Feedback rating = iter.next();
+						if (rating.getId() == feedback.getId()) {
+							iter.remove();
+						}
 					}
+					// if everything went fine, delete feedback
+					em.remove(feedback);
+				} else {
+					throw new Exception("Du kannst nur dein eigenes Feedback löschen.");
 				}
-				// if everything went fine, delete feedback
-				em.remove(feedback);
-			} else {
-				throw new Exception("Du kannst nur dein eigenes Feedback löschen");
 			}
+		} else {
+			throw new Exception("User \"" + username + "\" existiert nicht.");
 		}
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -245,7 +253,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String updateRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding route, check if it exists
 		Route route = em.find(Route.class, id);
@@ -255,24 +263,26 @@ public class FeedbackServlet extends HttpServlet {
 
 		// get corresponding user
 		String username = (String) session.getAttribute("username");
-		Query query = em.createQuery("SELECT u from Users u WHERE u.username = " + username);
+		Query query = em.createQuery("SELECT u from Users u WHERE u.username = '" + username + "'");
 		List<Users> result = query.getResultList();
-		Users user = result.get(0);
+		if (result.size() > 0) {
+			Users user = result.get(0);
 
-		em.getTransaction().begin();
-		for (Feedback feedback : feedbackList) {
-			// check if the feedback belongs to the user
-			if (feedback.getAuthor().getUsername().equals(user.getUsername())) {
-				// if yes, update feedback
-				Feedback resultFeedback = em.find(Feedback.class, feedback.getId());
-				resultFeedback.setComment(feedback.getComment());
-				resultFeedback.setRating(feedback.getRating());
-			} else {
-				throw new Exception("Du kannst nur dein eigenes Feedback bearbeiten");
+			for (Feedback feedback : feedbackList) {
+				// check if the feedback belongs to the user
+				if (feedback.getAuthor().getUsername().equals(user.getUsername())) {
+					// if yes, update feedback
+					Feedback resultFeedback = em.find(Feedback.class, feedback.getId());
+					resultFeedback.setComment(feedback.getComment());
+					resultFeedback.setRating(feedback.getRating());
+				} else {
+					throw new Exception("Du kannst nur dein eigenes Feedback bearbeiten.");
+				}
 			}
+			route.setAvgRating(updateAvgRouteRating(route));
+		} else {
+			throw new Exception("User \"" + username + "\" existiert nicht.");
 		}
-		route.setAvgRating(updateAvgRouteRating(route));
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -288,7 +298,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String updateLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding location, check if it exists
 		Location location = em.find(Location.class, id);
@@ -298,52 +308,45 @@ public class FeedbackServlet extends HttpServlet {
 
 		// get corresponding user
 		String username = (String) session.getAttribute("username");
-		Query query = em.createQuery("SELECT u from Users u WHERE u.username = " + username);
+		Query query = em.createQuery("SELECT u from Users u WHERE u.username = '" + username + "'");
 		List<Users> result = query.getResultList();
-		Users user = result.get(0);
+		if (result.size() > 0) {
 
-		em.getTransaction().begin();
-		for (Feedback feedback : feedbackList) {
-			// check if the feedback belongs to the user
-			if (feedback.getAuthor().getUsername().equals(user.getUsername())) {
-				// if yes, update feedback
-				Feedback resultFeedback = em.find(Feedback.class, feedback.getId());
-				resultFeedback.setComment(feedback.getComment());
-				resultFeedback.setRating(feedback.getRating());
-			} else {
-				throw new Exception("Du kannst nur dein eigenes Feedback bearbeiten");
+			Users user = result.get(0);
+
+			for (Feedback feedback : feedbackList) {
+				// check if the feedback belongs to the user
+				if (feedback.getAuthor().getUsername().equals(user.getUsername())) {
+					// if yes, update feedback
+					Feedback resultFeedback = em.find(Feedback.class, feedback.getId());
+					resultFeedback.setComment(feedback.getComment());
+					resultFeedback.setRating(feedback.getRating());
+				} else {
+					throw new Exception("Du kannst nur dein eigenes Feedback bearbeiten.");
+				}
 			}
+		} else {
+			throw new Exception("User \"" + username + "\" existiert nicht.");
 		}
-		em.getTransaction().commit();
 		return "Success";
 	}
 
-	private static double updateAvgRouteRating(Route route)
-					throws Exception {
+	private static double updateAvgRouteRating(Route route) throws Exception {
 		// get current feedback from route
-		List<Feedback> routeFeedback = new ArrayList<Feedback>();
-		routeFeedback = route.getFeedback();
+		List<Feedback> routeFeedback = route.getFeedback();
 		double avgRating = 0;
 
 		// update avg rating
-		for (Feedback feedback : routeFeedback) {
-			avgRating = avgRating + feedback.getRating();
+		if (routeFeedback != null && routeFeedback.size() > 0) {
+			for (Feedback feedback : routeFeedback) {
+				avgRating = avgRating + feedback.getRating();
+			}
+			avgRating = avgRating / routeFeedback.size();
+			avgRating = Math.round(avgRating * Math.pow(10, 1)) / Math.pow(10, 1);
+		} else {
+			avgRating = 5;
 		}
-		avgRating = avgRating / routeFeedback.size();
-		avgRating = Math.round(avgRating * Math.pow(10, 1)) / Math.pow(10, 1);
 		return avgRating;
-	}
-
-	/**
-	 * Unused method
-	 * 
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
-		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	}
 
 	/**
@@ -353,8 +356,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if type is neither "Route" nor "Location"
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data
 		HttpSession session = request.getSession();
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
@@ -369,10 +371,10 @@ public class FeedbackServlet extends HttpServlet {
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		try {
+			em.getTransaction().begin();
 			if ((boolean) session.getAttribute("loggedin") != true) {
 				throw new Exception("You are not logged in.");
 			}
-
 			if (type.equals("Route")) {
 				switch (request.getParameter("operation")) {
 				case "update":
@@ -400,13 +402,15 @@ public class FeedbackServlet extends HttpServlet {
 			} else {
 				throw new Exception("Type muss entweder \"Route\" oder \"Location\" sein!");
 			}
+			em.getTransaction().commit();
 			response.setStatus(200);
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			res = e.getStackTrace().toString();
+			res = e.getMessage();
+			e.printStackTrace();
+			em.getTransaction().rollback();
 		}
-		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
 		writer.append(res);
 		em.close();

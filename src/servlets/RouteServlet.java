@@ -144,7 +144,7 @@ public class RouteServlet extends HttpServlet {
 			newRoute.setType(route.getType());
 			newRoute.setTimeString(route.getTime().getTime());
 			newRoute.setFeedback((List<Feedback>) new ArrayList<Feedback>());
-			newRoute.setAvgRating(0);
+			newRoute.setAvgRating(5);
 			newRoute.setDescription(route.getDescription());
 
 			// Select Route from database table
