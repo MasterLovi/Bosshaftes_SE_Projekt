@@ -139,6 +139,7 @@ public class LocationServlet extends HttpServlet {
 				newLocation.setLongitude(location.getLongitude());
 				newLocation.setTimesReported(0);
 				newLocation.setDescription(location.getDescription());
+				newLocation.setUserReports((List<String>) new ArrayList<String>());
 
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (location.getImages() != null) {
@@ -254,7 +255,7 @@ public class LocationServlet extends HttpServlet {
 	 * @return "Success" if timesReported was successfully updated
 	 * @exception is the location that should be reported doesn't exist
 	 */
-	private static String report(List<Location> locations, EntityManager em) throws Exception {
+	private static String report(List<Location> locations, EntityManager em, HttpSession session) throws Exception {
 		// Loop over Locations that should be reported
 		for (Location location : locations) {
 			Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
@@ -265,6 +266,12 @@ public class LocationServlet extends HttpServlet {
 				Location resultLocation = result.get(0);
 				int timesReported = resultLocation.getTimesReported();
 				
+				for(String username : resultLocation.getUserReports()) {
+					if (username.equals((String) session.getAttribute("username"))) {
+						throw new Exception("Du hast diese Location bereits gemeldet.");
+					}
+				}
+				
 				if (timesReported == 2) {
 					// delete Location
 					ArrayList<Location> deleteLocations = new ArrayList<Location>();
@@ -273,6 +280,7 @@ public class LocationServlet extends HttpServlet {
 				} else {
 					timesReported++;
 					resultLocation.setTimesReported(timesReported);
+					resultLocation.getUserReports().add((String) session.getAttribute("username"));
 				}
 
 			} else {
@@ -357,7 +365,7 @@ public class LocationServlet extends HttpServlet {
 				res = delete(locations, em);
 				break;
 			case "report":
-				res = report(locations, em);
+				res = report(locations, em, session);
 				break;
 			}
 			response.setStatus(200);

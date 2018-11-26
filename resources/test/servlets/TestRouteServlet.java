@@ -119,7 +119,6 @@ public class TestRouteServlet {
 		routeServlet.doGet(request, response);
 		String result = sw.getBuffer().toString();
 		
-		System.out.println(result);
 		assertTrue(result.equals(testData));
 		
 		when(request.getParameter("time")).thenReturn("00:00:05");
