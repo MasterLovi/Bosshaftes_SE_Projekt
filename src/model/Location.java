@@ -28,32 +28,47 @@ public class Location {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
+	@Expose
 	private int id;
+	
+	@Expose
 	private String name;
+	
+	@Expose
 	private double longitude;
+	
+	@Expose
 	private double latitude;
+	
+	@Expose
 	private String type;
 
-	@Expose(serialize = false)
 	private String timeString;
 
 	@Transient
+	@Expose
 	private Time time;
-	private int timesReported;
+	
+	@Expose
+	private Integer timesReported;
+	
+	@Expose
 	private String description;
 
-	@Expose(serialize = false)
 	private List<byte[]> pictures;
 
 	@Transient
+	@Expose
 	private List<String> images;
 
 	@OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS_ID")
+	@Expose
 	private Address address;
 
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FEEDBACK_ID")
+	@Expose
 	private List<Feedback> feedback;
 
 	// getter

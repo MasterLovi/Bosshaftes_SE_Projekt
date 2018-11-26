@@ -18,7 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -34,6 +36,17 @@ public class TestRouteServlet {
 	HttpSession session;
 	ServletContext servletContext;
 	RouteServlet routeServlet;
+	static EntityManagerFactory emf;
+	
+	@BeforeClass
+	public static void connectDB() {
+		emf = Persistence.createEntityManagerFactory("TEST");
+	}
+	
+	@AfterClass
+	public static void closeDB() {
+		emf.close();
+	}
 	
 	@SuppressWarnings("serial")
 	@Before
@@ -49,15 +62,23 @@ public class TestRouteServlet {
 	       }
 	     };
 	     
-	     EntityManagerFactory emf = Persistence.createEntityManagerFactory("DerbyDB");
 	     Mockito.doReturn(emf).when(servletContext).getAttribute("emf");
 	     Mockito.doReturn(session).when(request).getSession();
-	     Mockito.doReturn("true").when(session).getAttribute("loggedin");
+	     Mockito.doReturn(true).when(session).getAttribute("loggedin");
 	     Mockito.doReturn("test").when(session).getAttribute("username");
 	}
 	
 	@Test
-	public void testCreate() throws IOException, ServletException {
+	public void run() throws IOException, ServletException {
+		t1Create();
+		t2Read();
+		t3Update();
+		t4Delete();
+		t5LoggedOut();
+	}
+	
+	
+	public void t1Create() throws IOException, ServletException {
 		System.out.println("\n\nRoute Test Create");
 		
 		String testData = Reader.readFile("resources/test/data/routeCreate.json", StandardCharsets.UTF_8);
@@ -73,34 +94,53 @@ public class TestRouteServlet {
 		
 		System.out.println(result);
         assertTrue(result.equals("Success"));
+        
 	}
 	
-	@Test
-	public void testRead() throws IOException, ServletException {
+	public void t2Read() throws IOException, ServletException {
 		System.out.println("\n\nRoute Test Read");
 		
 		String testData = Reader.readFile("resources/test/data/routeCreate.json", StandardCharsets.UTF_8);
-		String[] northWest = {"90", "90"};
-		String[] southEast = {"90", "90"};
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		
 		when(response.getWriter()).thenReturn(pw);
 		
-		when(request.getParameter("data")).thenReturn(testData);
-		when(request.getParameter("time")).thenReturn("20:00:00");
+		when(request.getParameter("time")).thenReturn("180:00:00");
 		when(request.getParameter("stops")).thenReturn("20");
-		when(request.getParameter("rating")).thenReturn("100");
-		when(request.getParameterValues("boundNorthWest")).thenReturn(northWest);
-		when(request.getParameterValues("boundSouthEast")).thenReturn(southEast);
-
+		when(request.getParameter("rating")).thenReturn("0");
+		when(request.getParameter("boundNorthWestLat")).thenReturn("180");
+		when(request.getParameter("boundNorthWestLng")).thenReturn("0");
+		when(request.getParameter("boundSouthEastLat")).thenReturn("0");
+		when(request.getParameter("boundSouthEastLng")).thenReturn("180");
+		
 		
 		when(request.getParameter("type")).thenReturn("Party");
 		routeServlet.doGet(request, response);
 		String result = sw.getBuffer().toString();
 		
-        assertTrue(result.equals(testData));
-
+		assertTrue(result.equals(testData));
+		
+		when(request.getParameter("time")).thenReturn("00:00:05");
+        pw.flush();
+ 	    sw.getBuffer().delete(0, sw.getBuffer().length());
+        routeServlet.doGet(request, response);
+        result = sw.getBuffer().toString();
+        
+        System.out.println(result);
+        assertTrue(result.equals("[]"));
+        
+        
+        when(request.getParameter("time")).thenReturn("180:00:00");
+        when(request.getParameter("rating")).thenReturn("100");
+        pw.flush();
+ 	    sw.getBuffer().delete(0, sw.getBuffer().length());
+        routeServlet.doGet(request, response);
+        result = sw.getBuffer().toString();
+        
+        System.out.println(result);
+        assertTrue(result.equals("[]"));
+        
         
         when(request.getParameter("type")).thenReturn("");
         pw.flush();
@@ -122,8 +162,7 @@ public class TestRouteServlet {
         assertTrue(result.equals("Type darf nicht null sein!"));
 	}
 	
-	@Test
-	public void testUpdate() throws IOException, ServletException {
+	public void t3Update() throws IOException, ServletException {
 		System.out.println("\n\nRoute Test Update");
 		
 		String testData = Reader.readFile("resources/test/data/routeUpdate.json", StandardCharsets.UTF_8);
@@ -156,10 +195,19 @@ public class TestRouteServlet {
         //verify that parameters were called
         System.out.println(result);
         assertTrue(result.equals("Route \"rama lama ding dong\" existiert net."));
+        
+        when(request.getParameter("data")).thenReturn("[]");
+        pw.flush();
+ 	    sw.getBuffer().delete(0, sw.getBuffer().length());
+        routeServlet.doPost(request, response);
+        result = sw.getBuffer().toString();
+        
+        //verify that parameters were called
+        System.out.println(result);
+        assertTrue(result.equals("Success"));
 	}
 	
-	@Test
-	public void testDelete() throws IOException, ServletException {
+	public void t4Delete() throws IOException, ServletException {
 		System.out.println("\n\nRoute Test Delete");
 		
 		String testData = Reader.readFile("resources/test/data/routeUpdate.json", StandardCharsets.UTF_8);
@@ -197,12 +245,11 @@ public class TestRouteServlet {
         
 	}
 	
-	@Test
-	public void testLoggedOut() throws IOException, ServletException {
+	public void t5LoggedOut() throws IOException, ServletException {
 		System.out.println("\n\nRoute Test 'Not Logged In'");
 		
 		when(request.getParameter("data")).thenReturn("[]");
-		when(session.getAttribute("loggedin")).thenReturn("false");
+		when(session.getAttribute("loggedin")).thenReturn(false);
 
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);

@@ -30,44 +30,52 @@ public class Route {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
+	@Expose
 	private int id;
+	
+	@Expose
 	private String name;
+	
+	@Expose
 	private String type;
 
-	@Expose(serialize = false)
 	private String timeString;
 
 	@Transient
+	@Expose
 	private Time time;
+	
+	@Expose
 	private String description;
 
-	@Expose(serialize = false)
 	private List<byte[]> pictures;
 
 	@Transient
+	@Expose
 	private List<String> images;
 
 	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FEEDBACK_ID")
+	@Expose
 	private List<Feedback> feedback;
-
+	
+	@Expose
 	private double avgRating;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "ROUTES_LOCATION", joinColumns = @JoinColumn(name = "ROUTE_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "LOCATION_ID", referencedColumnName = "ID"))
+	@Expose
 	private List<Location> stops;
 
-	@Expose(serialize = false)
 	private int numberOfStops;
 
-	@Expose(serialize = false)
 	private double firstLong;
 
-	@Expose(serialize = false)
 	private double firstLat;
 
 	@ManyToOne
 	@JoinColumn(name = "OWNER_ID")
+	@Expose
 	private Users owner;
 
 	// getter

@@ -2,20 +2,23 @@ package util;
 
 import java.io.Serializable;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * This class is an individual util class that represents duration.
  *
  */
+
 public class Time implements Serializable {
 
 	private static final long serialVersionUID = 1156215663793678712L;
-
+	@Expose
 	private String time;
-
+	@Expose
 	private Integer hours;
-
+	@Expose
 	private Integer minutes;
-
+	@Expose
 	private Integer seconds;
 
 	/**
@@ -24,15 +27,25 @@ public class Time implements Serializable {
 	 * @param time Time-String to be converted (format: "HH:MM:SS")
 	 */
 	public Time(String time) {
-		if(time == null) { time = "00:00:00"; }
-		Integer hours = Integer.parseInt(time.substring(0, time.indexOf(":")));
+		try {
+			if (time == null) {
+				time = "00:00:00";
+			}
+			Integer hours = Integer.parseInt(time.substring(0, time.indexOf(":")));
 
-		String sMinutes = time.substring(time.indexOf(":") + 1);
-		Integer minutes = Integer.parseInt(sMinutes.substring(0, time.indexOf(":")));
+			String sMinutes = time.substring(time.indexOf(":") + 1);
+			
+			Integer minutes = Integer.parseInt(sMinutes.substring(0, sMinutes.indexOf(":")));
 
-		Integer seconds = Integer.parseInt(sMinutes.substring(time.indexOf(":") + 1));
+			Integer seconds = Integer.parseInt(sMinutes.substring(sMinutes.indexOf(":") + 1));
 
-		this.setTime(hours, minutes, seconds);
+			this.setTime(hours, minutes, seconds);
+		} catch (Exception e) {
+			this.time = "00:00:00";
+			this.hours = 0;
+			this.minutes = 0;
+			this.seconds = 0;
+		}
 	}
 
 	/**
@@ -96,6 +109,33 @@ public class Time implements Serializable {
 	@Override
 	public String toString() {
 		return getTime();
+	}
+
+	public Boolean IsLessThan(Time t) {
+		if (this.getHours() < t.getHours()) {
+			return true;
+		} else if (this.getHours() > t.getHours()) {
+			return false;
+		} else {
+
+			if (this.getMinutes() < t.getMinutes()) {
+				return true;
+			} else if (this.getMinutes() > t.getMinutes()) {
+				return false;
+			} else {
+
+				if (this.getSeconds() < t.getSeconds()) {
+					return true;
+				} else if (this.getSeconds() > t.getSeconds()) {
+					return false;
+				} else {
+					return true;
+				}
+
+			}
+
+		}
+
 	}
 
 }

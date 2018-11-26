@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,11 +15,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Location;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import model.Feedback;
 import model.Route;
+import model.Users;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 import util.Time;
@@ -59,8 +64,8 @@ public class RouteServlet extends HttpServlet {
 	 * @exception Exception if type is neither "Kultur" nor "Party"
 	 */
 	private static String read(EntityManager em, String type, String maxTime, double minRating, int maxNoStops,
-					double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat,
-					double boundSouthEastLong) throws Exception {
+			double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat, double boundSouthEastLong)
+			throws Exception {
 
 		if (type == null) {
 			throw new Exception("Type darf nicht null sein!");
@@ -68,6 +73,7 @@ public class RouteServlet extends HttpServlet {
 			throw new Exception("Type muss entweder \"Party\" oder \"Kultur\" sein!");
 		}
 		// Build query with given parameters
+<<<<<<< HEAD
 		String selectQuery = "SELECT r FROM Route r"
 						+ " WHERE r.type = '" + type + "'"
 						+ " AND r.avgRating >= " + minRating
@@ -75,6 +81,12 @@ public class RouteServlet extends HttpServlet {
 						+ " AND r.firstLat BETWEEN " + boundSouthEastLat + " AND " + boundNorthWestLat
 						+ " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
 
+=======
+		String selectQuery = "SELECT r FROM Route r" + " WHERE r.type = '" + type + "'" + " AND r.avgRating >= "
+				+ minRating + " AND r.numberOfStops <= " + maxNoStops + " AND r.firstLat BETWEEN " + boundSouthEastLat
+				+ " AND " + boundNorthWestLat + " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND "
+				+ boundSouthEastLong;
+>>>>>>> master
 		// Select Route from database table
 		Query query = em.createQuery(selectQuery);
 		List<Route> result = query.getResultList();
@@ -83,21 +95,40 @@ public class RouteServlet extends HttpServlet {
 
 		// check for empty resultList
 		if (result.size() > 0) {
-			for (Route route : result) {
+			for (Iterator<Route> iter = result.iterator(); iter.hasNext();) {
+				Route route = iter.next();
+				Time t = new Time(maxTime);
 				route.setTime(new Time(route.getTimeString()));
-				List<String> images = new ArrayList<String>();
-				// convert pictures and data to JSON
-				if (route.getPictures() != null) {
-					for (byte[] picture : route.getPictures()) {
-						String image64 = new BASE64Encoder().encode(picture);
-						images.add(image64);
+
+				if (route.getTime().IsLessThan(t)) {
+					List<String> images = new ArrayList<String>();
+					// convert pictures and data to JSON
+					if (route.getPictures() != null) {
+						for (byte[] picture : route.getPictures()) {
+							String image64 = new BASE64Encoder().encode(picture);
+							images.add(image64);
+						}
+						route.setImages(images);
 					}
-					route.setImages(images);
+					if (route.getStops() != null) {
+						for (Location stop : route.getStops()) {
+							if (stop.getPictures() != null) {
+								images = new ArrayList<String>();
+								for (byte[] picture : stop.getPictures()) {
+									String image64 = new BASE64Encoder().encode(picture);
+									images.add(image64);
+								}
+								stop.setImages(images);
+							}
+						}
+					}
 				} else {
-					route.setImages(null);
+					iter.remove();
 				}
 			}
-			Gson gson = new Gson();
+			GsonBuilder builder = new GsonBuilder();
+			builder.excludeFieldsWithoutExposeAnnotation();
+			Gson gson = builder.create();
 			JSONData = gson.toJson(result);
 		} else {
 			JSONData = "[]";
@@ -116,25 +147,26 @@ public class RouteServlet extends HttpServlet {
 	 */
 	private static String create(List<Route> routes, EntityManager em, HttpSession session) throws Exception {
 		// Loop over Routes that should be created
-		em.getTransaction().begin();
 		for (Route route : routes) {
 			Route newRoute = new Route();
 			newRoute.setName(route.getName());
 			newRoute.setType(route.getType());
 			newRoute.setTimeString(route.getTime().getTime());
-			newRoute.setStops(route.getStops());
-			newRoute.setNumberOfStops(route.getStops().size());
-			newRoute.setFirstLong(route.getStop(0).getLongitude());
-			newRoute.setFirstLat(route.getStop(0).getLatitude());
-			newRoute.setFeedback(null);
+			newRoute.setFeedback((List<Feedback>) new ArrayList<Feedback>());
 			newRoute.setAvgRating(0);
 			newRoute.setDescription(route.getDescription());
 
 			// Select Route from database table
-			Query query = em.createQuery(
-							"SELECT u FROM Users u WHERE u.username = '" + session.getAttribute("username") + "'");
-			List<Route> result = query.getResultList();
-			newRoute.setOwner(route.getOwner());
+			Query query = em
+					.createQuery("SELECT u FROM Users u WHERE u.username = '" + session.getAttribute("username") + "'");
+			List<Users> result = query.getResultList();
+			if (result.size() > 0) {
+				Users owner = result.get(0);
+				newRoute.setOwner(result.get(0));
+				owner.addRoute(newRoute);
+			} else {
+				newRoute.setOwner(null);
+			}
 
 			List<byte[]> images = new ArrayList<byte[]>();
 			if (route.getImages() != null) {
@@ -146,10 +178,23 @@ public class RouteServlet extends HttpServlet {
 			} else {
 				newRoute.setPictures(null);
 			}
-
 			em.persist(newRoute);
+
+			List<Location> locations = new ArrayList<Location>();
+			if (route.getStops() != null && route.getStops().size() > 0) {
+				for (Location location : route.getStops()) {
+					Location l = em.find(Location.class, location.getId());
+					if (l != null) {
+						locations.add(l);
+					}
+				}
+				newRoute.setFirstLong(locations.get(0).getLongitude());
+				newRoute.setFirstLat(locations.get(0).getLatitude());
+			}
+			newRoute.setStops(locations);
+			newRoute.setNumberOfStops(locations.size());
+
 		}
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -163,17 +208,15 @@ public class RouteServlet extends HttpServlet {
 	 */
 	private static String delete(List<Route> routes, EntityManager em) throws Exception {
 		// Loop over Routes that should be deleted
-		em.getTransaction().begin();
 		for (Route route : routes) {
 			Route result = em.find(Route.class, route.getId());
 			if (result != null) {
 				em.remove(result);
 			} else {
-				throw new Exception("Route \"" + route.getName()
-								+ "\"existiert nicht und kann daher nicht gelöscht werden");
+				throw new Exception(
+						"Route \"" + route.getName() + "\"existiert nicht und kann daher nicht gelöscht werden");
 			}
 		}
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -187,7 +230,6 @@ public class RouteServlet extends HttpServlet {
 	 */
 	private static String update(List<Route> routes, EntityManager em) throws Exception {
 
-		em.getTransaction().begin();
 		// Loop over Routes that should be updated
 		for (Route route : routes) {
 			Route result = em.find(Route.class, route.getId());
@@ -197,17 +239,28 @@ public class RouteServlet extends HttpServlet {
 				result.setTimeString(route.getTime().getTime());
 				result.setType(route.getType());
 				result.setFeedback(route.getFeedback());
-
-				result.setStops(route.getStops());
-				result.setNumberOfStops(route.getStops().size());
-				result.setFirstLong(route.getStop(0).getLongitude());
-				result.setFirstLat(route.getStop(0).getLatitude());
 				result.setOwner(route.getOwner());
 
+				List<Location> locations = new ArrayList<Location>();
+				if (route.getStops() != null && route.getStops().size() > 0) {
+					for (Location location : route.getStops()) {
+						Location l = em.find(Location.class, location.getId());
+						if (l != null) {
+							locations.add(l);
+						}
+					}
+					result.setFirstLong(locations.get(0).getLongitude());
+					result.setFirstLat(locations.get(0).getLatitude());
+				}
+				result.setStops(locations);
+				result.setNumberOfStops(locations.size());
+
 				List<byte[]> images = new ArrayList<byte[]>();
-				for (String sBase64 : route.getImages()) {
-					byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
-					images.add(image);
+				if (route.getImages() != null) {
+					for (String sBase64 : route.getImages()) {
+						byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+						images.add(image);
+					}
 				}
 				result.setPictures(images);
 
@@ -216,7 +269,6 @@ public class RouteServlet extends HttpServlet {
 			}
 
 		}
-		em.getTransaction().commit();
 		return "Success";
 	}
 
@@ -225,8 +277,7 @@ public class RouteServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory and create EntityManager
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
@@ -248,13 +299,12 @@ public class RouteServlet extends HttpServlet {
 			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
 
 			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWestLat,
-							paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong);
+					paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong);
 			response.setStatus(200);
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
 			res = e.getMessage();
-			e.printStackTrace();
 		}
 		// Send Response
 		PrintWriter writer = response.getWriter();
@@ -279,8 +329,9 @@ public class RouteServlet extends HttpServlet {
 		}.getType());
 		String res = "";
 
+		em.getTransaction().begin();
 		try {
-			if (!session.getAttribute("loggedin").equals("true")) {
+			if ((boolean) session.getAttribute("loggedin") != true) {
 				throw new Exception("You are not logged in.");
 			}
 			switch (request.getParameter("operation")) {
@@ -295,11 +346,12 @@ public class RouteServlet extends HttpServlet {
 				break;
 			}
 			response.setStatus(200);
+			em.getTransaction().commit();
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			e.printStackTrace();
 			res = e.getMessage();
+			em.getTransaction().rollback();
 		}
 		PrintWriter writer = response.getWriter();
 		writer.print(res);
