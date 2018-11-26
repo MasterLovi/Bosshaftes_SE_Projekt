@@ -86,5 +86,10 @@ function getDatastructureRoute() {
 }
 
 function getDatastructureFeedback() {
+	var json = {
+		comment: "",
+		rating: "",
+	}
 	
+	return json;
 }

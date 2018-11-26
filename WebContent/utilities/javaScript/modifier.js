@@ -274,10 +274,8 @@ function feedbackLocation(markerId) {
 	
 	loadPopupContent("feedback");
 	
-	$("#ratingForm input[name=type]").val("location");
-	$("#ratingForm input[name=id").val(location.info.id);
-	
-	$("#myRatingModal").show();
+	$("#feedbackForm input[name=type]").val("Location");
+	$("#feedbackForm input[name=id]").val(location.info.id);
 	
 }
 
@@ -310,7 +308,7 @@ function loadFeedbackToPopup(type, id) {
 	
 	$("#feedbackList").empty();
 	
-	if(type == "location") {
+	if(type == "Location") {
 		data == JSON.parse(globalLayer);
 
 		$.each(data, function(i,v) {	

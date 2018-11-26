@@ -87,7 +87,14 @@ function getLocationFromDatabase(sType) {
 							.addTo(getMap()));
 				marker.info = json[i];
 				
-				marker.bindPopup(json[i].name + "<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
+				marker.bindPopup(json[i].name + "<div class=\"ratingWrapper\">" +
+							"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
+							"<i class='material-icons " + (json[i].avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
+							"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
+							"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
+							"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
+						"</div>" +
+						"<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
 						"<button onClick=reportLocation("+marker._leaflet_id+")>Melden</button>" +
 						"<button onClick=feedbackLocation("+marker._leaflet_id+")>Bewerten</button>");
 				marker._icon.style.zIndex = 50; // Makes sure everything is in front of the default marker 
@@ -265,8 +272,36 @@ function getRoute(sType){
 }
 
 function sendFeedback(type, id) {
-	console.log(type + " " + id);
-	//TODO Send the feedback to the backend
+	var json = getDatastructureFeedback();
+	var id;
+	var type;
+	
+	this.id = id;
+	this.type = type;
+	
+	json.rating = $("#feedbackForm input[name=rating]").val();
+	json.comment = $("#feedbackForm textarea[name=comment]").val();
+	
+	var jsonArray = [json];
+	
+	$.ajax({
+		url: "FeedbackServlet",
+		type: "POST",
+		data: {
+			type: type,
+			id: id,
+			operation: "create",
+			json: JSON.stringify(jsonArray)
+		}, 
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+		
+	})
+	
 }
 
 function deleteFeedback(type, id) {

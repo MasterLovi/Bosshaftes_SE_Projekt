@@ -169,7 +169,7 @@ function loadPopupContent(popupType) {
 	switch (popupType) {
 	case "feedback": {
 		$('#feedbackForm').submit(function () {
-			sendFeedback($("#ratingForm input[name=type]").val(), $("#ratingForm input[name=id]").val()); //TODO Load right category
+			sendFeedback($("#feedbackForm input[name=type]").val(), $("#feedbackForm input[name=id]").val());
 			return false;
 		});
 		

@@ -109,12 +109,12 @@ public class FeedbackServlet extends HttpServlet {
 
 		// get corresponding user
 		String username = (String) session.getAttribute("username");
-		Query query = em.createQuery("SELECT u from Users u WHERE u.username = " + username);
+		Query query = em.createQuery("SELECT u from Users u WHERE u.username = '" + username +"'");
 		List<Users> result = query.getResultList();
 		Users user = result.get(0);
 
 		// check if user has already given feedback for this location
-		query = em.createQuery("SELECT f from Feedback f WHERE f.author.username = " + username);
+		query = em.createQuery("SELECT f from Feedback f WHERE f.author.username = '" + username +"'");
 		result = query.getResultList();
 		if (result.size() > 0) {
 			throw new Exception("Dieser User hat schon ein Feedback für diese Location abgegeben");
@@ -359,9 +359,9 @@ public class FeedbackServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
-		String JSONData = request.getParameter("data");
+		String JSONData = request.getParameter("json");
 		Gson gson = new Gson();
-		List<Feedback> feedbackList = gson.fromJson(request.getParameter("data"), new TypeToken<List<Feedback>>() {
+		List<Feedback> feedbackList = gson.fromJson(JSONData, new TypeToken<List<Feedback>>() {
 		}.getType());
 		String res = "";
 
