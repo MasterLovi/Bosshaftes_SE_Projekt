@@ -73,7 +73,6 @@ public class RouteServlet extends HttpServlet {
 			throw new Exception("Type muss entweder \"Party\" oder \"Kultur\" sein!");
 		}
 		// Build query with given parameters
-<<<<<<< HEAD
 		String selectQuery = "SELECT r FROM Route r"
 						+ " WHERE r.type = '" + type + "'"
 						+ " AND r.avgRating >= " + minRating
@@ -81,12 +80,6 @@ public class RouteServlet extends HttpServlet {
 						+ " AND r.firstLat BETWEEN " + boundSouthEastLat + " AND " + boundNorthWestLat
 						+ " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
 
-=======
-		String selectQuery = "SELECT r FROM Route r" + " WHERE r.type = '" + type + "'" + " AND r.avgRating >= "
-				+ minRating + " AND r.numberOfStops <= " + maxNoStops + " AND r.firstLat BETWEEN " + boundSouthEastLat
-				+ " AND " + boundNorthWestLat + " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND "
-				+ boundSouthEastLong;
->>>>>>> master
 		// Select Route from database table
 		Query query = em.createQuery(selectQuery);
 		List<Route> result = query.getResultList();
