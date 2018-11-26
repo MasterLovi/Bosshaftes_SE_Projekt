@@ -66,11 +66,14 @@ public class Route {
 	@JoinTable(name = "ROUTES_LOCATION", joinColumns = @JoinColumn(name = "ROUTE_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "LOCATION_ID", referencedColumnName = "ID"))
 	@Expose
 	private List<Location> stops;
-
+	
+	@Expose
 	private int numberOfStops;
 
+	@Expose
 	private double firstLong;
 
+	@Expose
 	private double firstLat;
 
 	@ManyToOne

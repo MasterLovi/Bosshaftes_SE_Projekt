@@ -243,7 +243,7 @@ var globalRoutes;
 function getRoute(sType){
 	var stops = $("#routeForm input[name=spots]").val();
 	var rating = $("#routeForm input[name=rating]").val();
-	var time = $("#routeForm input[name=time]").val()+":00";
+	var time = $("#routeForm input[name=time]").val()+":00:00";
 	
 	$.ajax({
 		url: "RouteServlet",
@@ -273,11 +273,6 @@ function getRoute(sType){
 
 function sendFeedback(type, id) {
 	var json = getDatastructureFeedback();
-	var id;
-	var type;
-	
-	this.id = id;
-	this.type = type;
 	
 	json.rating = $("#feedbackForm input[name=rating]").val();
 	json.comment = $("#feedbackForm textarea[name=comment]").val();
@@ -300,22 +295,124 @@ function sendFeedback(type, id) {
 			console.log(error);
 		}
 		
+	});
+	
+}
+
+function deleteFeedback(type, id, feedbackId) {
+	var json;
+	var feedback;
+	
+	if (type == "Location") {
+		$.each(globalLayer._layer, function(i,v){
+			if (v.info.id == id) {
+				json = v.info;
+				return;
+			}
+		});
+	} else {
+		$.each(globalRoutes, function(i,v){
+			if (v.id == id) {
+				json = v;
+				return;
+			}
+		});
+	}
+	
+	$.each(json.feedback, function(i,v) {
+		if(v.id == feedbackId){
+			feedback = v;
+		}
 	})
 	
-}
-
-function deleteFeedback(type, id) {
-	console.log(type + " " + id);
-}
-
-function createNewRoute() {
+	var jsonArray = [feedback];
+	
+	$.ajax({
+		url: "FeedbackServlet",
+		type: "POST",
+		data: {
+			type: type,
+			id: id,
+			operation: "delete",
+			json: JSON.stringify(jsonArray)
+		}, 
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+		
+	});
 	
 }
 
+function changeFeedback(type, id, feedbackId) {
+	var json;
+	var feedback;
+	
+	if (type == "Location") {
+		$.each(globalLayer._layer, function(i,v){
+			if (v.info.id == id) {
+				json = v.info;
+				return;
+			}
+		});
+	} else {
+		$.each(globalRoutes, function(i,v){
+			if (v.id == id) {
+				json = v;
+				return;
+			}
+		});
+	}
+	
+	$.each(json.feedback, function(i,v) {
+		if(v.id == feedbackId){
+			feedback = v;
+		}
+	})
+	
+	feedback.comment = $("#feedbackForm textarea[name=comment]").val();
+	feedback.rating = $("#feedbackForm input[name=rating]").val();
+	
+	var jsonArray = [feedback];
+	
+	$.ajax({
+		url: "FeedbackServlet",
+		type: "POST",
+		data: {
+			type: type,
+			id: id,
+			operation: "update",
+			json: JSON.stringify(jsonArray)
+		}, 
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+		
+	});
+	
+}
+
+function createNewRoute(type) {
+	// Operation 'create'
+	// Route as Array --> komplettes Route Object
+}
+// WICHTIG KEINE LEEREN ROUTEN
 function addPointToRoute() {
-	
+	// Operation 'update'
+	// Komplettes Route Object 
 }
 
 function removeFromRoute() {
-	
+	// Operation 'update'
+	// Komplettes Route Object 
+}
+
+function deleteRoute() {
+	// Operation 'delete'
 }
