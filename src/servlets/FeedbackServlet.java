@@ -408,7 +408,6 @@ public class FeedbackServlet extends HttpServlet {
 			// send back error
 			response.setStatus(500);
 			res = e.getMessage();
-			e.printStackTrace();
 			em.getTransaction().rollback();
 		}
 		PrintWriter writer = response.getWriter();

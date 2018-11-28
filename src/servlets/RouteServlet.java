@@ -318,7 +318,7 @@ public class RouteServlet extends HttpServlet {
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
 		Gson gson = new Gson();
-		List<Route> routes = gson.fromJson(request.getParameter("data"), new TypeToken<List<Route>>() {
+		List<Route> routes = gson.fromJson(request.getParameter("json"), new TypeToken<List<Route>>() {
 		}.getType());
 		String res = "";
 
