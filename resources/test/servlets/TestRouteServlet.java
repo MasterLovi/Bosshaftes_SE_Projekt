@@ -82,7 +82,7 @@ public class TestRouteServlet {
 		System.out.println("\n\nRoute Test Create");
 		
 		String testData = Reader.readFile("resources/test/data/routeCreate.json", StandardCharsets.UTF_8);
-		when(request.getParameter("data")).thenReturn(testData);
+		when(request.getParameter("json")).thenReturn(testData);
 		when(request.getParameter("operation")).thenReturn("create");
 
 		StringWriter sw = new StringWriter();
@@ -166,7 +166,7 @@ public class TestRouteServlet {
 		System.out.println("\n\nRoute Test Update");
 		
 		String testData = Reader.readFile("resources/test/data/routeUpdate.json", StandardCharsets.UTF_8);
-		when(request.getParameter("data")).thenReturn(testData);
+		when(request.getParameter("json")).thenReturn(testData);
 		when(request.getParameter("operation")).thenReturn("update");
 
 		StringWriter sw = new StringWriter();
@@ -186,7 +186,7 @@ public class TestRouteServlet {
         routes.add(r);
         Gson gson = new Gson();
         String delete = gson.toJson(routes);
-        when(request.getParameter("data")).thenReturn(delete);
+        when(request.getParameter("json")).thenReturn(delete);
         pw.flush();
  	    sw.getBuffer().delete(0, sw.getBuffer().length());
         routeServlet.doPost(request, response);
@@ -196,7 +196,7 @@ public class TestRouteServlet {
         System.out.println(result);
         assertTrue(result.equals("Route \"rama lama ding dong\" existiert net."));
         
-        when(request.getParameter("data")).thenReturn("[]");
+        when(request.getParameter("json")).thenReturn("[]");
         pw.flush();
  	    sw.getBuffer().delete(0, sw.getBuffer().length());
         routeServlet.doPost(request, response);
@@ -210,7 +210,7 @@ public class TestRouteServlet {
 	public void t4Delete() throws IOException, ServletException {
 		System.out.println("\n\nRoute Test Delete");
 		
-		when(request.getParameter("data")).thenReturn("[{\"id\":1}]");
+		when(request.getParameter("json")).thenReturn("[{\"id\":1}]");
 		when(request.getSession()).thenReturn(session);
 		when(request.getParameter("operation")).thenReturn("delete");
 
@@ -232,7 +232,7 @@ public class TestRouteServlet {
         routes.add(r);
         Gson gson = new Gson();
         String delete = gson.toJson(routes);
-        when(request.getParameter("data")).thenReturn(delete);
+        when(request.getParameter("json")).thenReturn(delete);
         pw.flush();
  	    sw.getBuffer().delete(0, sw.getBuffer().length());
         routeServlet.doPost(request, response);
@@ -247,7 +247,7 @@ public class TestRouteServlet {
 	public void t5LoggedOut() throws IOException, ServletException {
 		System.out.println("\n\nRoute Test 'Not Logged In'");
 		
-		when(request.getParameter("data")).thenReturn("[]");
+		when(request.getParameter("json")).thenReturn("[]");
 		when(session.getAttribute("loggedin")).thenReturn(false);
 
 		StringWriter sw = new StringWriter();

@@ -127,26 +127,26 @@ function loadPopupContent(popupType) {
 	    "</form>";
 	};
 	break;
-	case "addToRoute": {
-		content = content + "<form id=\"addToRouteForm\" method=\"POST\" action=\"\">" +
-		"<input type=\"hidden\" name=\"id\" value=\"\"/>" +
-		"<h4 class=\"centered\">Zu Route hinzufügen</h4>" +
+	case "updateFromRoute": {
+		content = content + "<form id=\"updateRouteForm\" method=\"POST\" action=\"\">" +
+		"<input type=\"hidden\" name=\"locationId\" value=\"\"/>" +		"<h4 class=\"centered\">Zu Route hinzufügen</h4>" +
 		"<p class=\"centered infoHeader\">Route auswählen</p>" +
 		"<select name=\"routes\">" +
 		"</select>" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
-		"<ul id=\"tourStops\"></ul>" +
+		"<ul id=\"tourStopsPopup\"></ul>" +
 		"<input type=\"submit\" value=\"Hinzufügen\">" +
 		"</form>";
 	};
 	break;
 	case "createRoute": {
 		content = content + "<form id=\"newRouteForm\" method=\"POST\" action=\"\">" +
+		"<input type=\"hidden\" name=\"locationId\" value=\"\">" +
 		"<h4 class=\"centered\">Neue Route erstellen</h4>" +
 		"<p class=\"centered infoHeader\">Routenname</p>" +
 		"<input type=\"text\" name=\"name\" placeholder=\"Routenname\">" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
-		"<textarea rows=\"4\" form=\"feedbackForm\" name=\"description\"></textarea>" +
+		"<textarea rows=\"4\" form=\"newRouteForm\" name=\"description\"></textarea>" +
 		"<input type=\"submit\" value=\"Erstellen\">" +
 		"</form>";
 	};
@@ -161,9 +161,7 @@ function loadPopupContent(popupType) {
 	
 	$(".modal-content").html("");
 	$(".modal-content").html(content);
-	
-	
-	
+		
 	// ############ LOADING POPUP FUNCTIONALITY ###########
 	// Load button functionality
 	switch (popupType) {
@@ -214,22 +212,29 @@ function loadPopupContent(popupType) {
 		});
 	};
 	break;
-	case "addToRoute": {
-		$('#newRouteForm').submit(function () {
-			addToRoute($("#updateLocationForm input[name=id]").val()); //TODO Create Function (markerId)
+	case "updateFromRoute": {
+		
+		//This in only the add event. The remove event will be put in each removeable element.
+		$('#updateRouteForm').submit(function () {
+			addPointToRoute($("#updateRouteForm input[name=id]").val()); //TODO Create Function (markerId)
 			return false;
 		});
+		
+		$("#updateRouteForm select[name=routes]").change(function() {
+			changeRouteInformation($("#updateRouteForm select[name=routes] option:selected").val());
+		});
+		
 	};
 	break;
 	case "createRoute": {
 		$('#newRouteForm').submit(function () {
-			createRoute(); //TODO Create Function
+			createNewRoute($("#newRouteForm input[name=locationId]").val());
 			return false;
 		});
 	};
 	break;
 	case "showFeedback": {
-		loadFeedbackToPopup();
+		
 		//TODO Add Function to the delete button
 	}
 	break;

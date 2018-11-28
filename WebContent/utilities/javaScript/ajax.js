@@ -1,3 +1,7 @@
+var globalRoutes;
+var globalLayer; //Will be used to delete and reload marker that are out of the viewport
+var userRoutes;
+
 function getLocation(searchString, map){
 
 	// This function takes the input from the search field and sends it
@@ -49,8 +53,7 @@ function searchLocation(sType) {
 	});
 }
 
-//Will be used to delete and reload marker that are out of the viewport
-var globalLayer;
+
 
 function getLocationFromDatabase(sType) {
 	$.ajax({
@@ -96,7 +99,9 @@ function getLocationFromDatabase(sType) {
 						"</div>" +
 						"<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
 						"<button onClick=reportLocation("+marker._leaflet_id+")>Melden</button>" +
-						"<button onClick=feedbackLocation("+marker._leaflet_id+")>Bewerten</button>");
+						"<button onClick=feedbackLocation("+marker._leaflet_id+")>Bewerten</button><br>" +
+						"<button onClick=showNewRoutePopup("+marker._leaflet_id+")>Zu neuer Route</button>" +
+						"<button onClick=showUpdateRoutePopup("+marker._leaftlet_id+")>Zu bestehender Route</button>");
 				marker._icon.style.zIndex = 50; // Makes sure everything is in front of the default marker 
 				markerLayer.addLayer(marker);
 				
@@ -238,7 +243,7 @@ function reportLocation(markerId){
 	});
 }
 
-var globalRoutes;
+
 
 function getRoute(sType){
 	var stops = $("#routeForm input[name=spots]").val();
@@ -398,21 +403,149 @@ function changeFeedback(type, id, feedbackId) {
 	
 }
 
-function createNewRoute(type) {
-	// Operation 'create'
-	// Route as Array --> komplettes Route Object
+function createNewRoute(id) {
+
+	var data = JSON.parse(globalLayer);
+	var location;
+	var json = getDatastructureRoute();
+		
+	$.each(data._layers, function(i,v) {
+		if (v.info.id == id) {
+			location = v.info;
+		}
+	});
+	
+	json.stops.push(location); //Adding the first location to the new tour
+	json.firstLong = location.longitude;
+	json.firstLat = location.latitude;
+	json.numberOfStops = 1;
+	json.name = $("#newRouteForm input[name=name]").val();
+	json.description = $("#newRouteForm textarea[name=description]").val();
+	json.type = $("#currentAction").val();
+	
+	var jsonArray = [json];
+	
+	$.ajax({
+		url: "RouteServlet",
+		type: "POST",
+		data: {
+			operation: "create",
+			json: JSON.stringify(jsonArray)
+		},
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+	
 }
 // WICHTIG KEINE LEEREN ROUTEN
-function addPointToRoute() {
+function addPointToRoute(locationId, routeId) {
 	// Operation 'update'
 	// Komplettes Route Object 
+	var route;
+	var location;
+	
+	$.each(userRoutes, function(i,v) {
+		if(v.id == routeId) {
+			route = v;
+			return;
+		}
+	});
+	
+	$.each(globalLayer._layers, function(i, v) {
+		if(v.info.id == locationId) {
+			location = v.info;
+			return;
+		}
+	})
+	
+	route.stops.push(location);
+	route.numberOfStops = route.numberOfStops + 1;
+	
+	var jsonArray = [route];
+	
+	$.ajax({
+		url: "RouteServlet",
+		type: "POST",
+		data: {
+			operation: "update",
+			json: JSON.stringify(jsonArray)
+		},
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
 }
 
-function removeFromRoute() {
+function removeFromRoute(locationId, routeId) {
 	// Operation 'update'
 	// Komplettes Route Object 
+	var removeIndex;
+	var route;
+	
+	$.each(userRoutes, function(i,v) {
+		if(v.id == routeId) {
+			route = v;
+			return;
+		}
+	});
+	
+	$.each(route.stops, function(i,v) {
+		if (v.id == locationId) {
+			removeIndex = i;
+		}
+	});
+	
+	route.stops.splice(removeIndex,1); //Removes the element on index 'removeIndex' in the Array
+	
+	var jsonArray = [route];
+	
+	$.ajax({
+		url: "RouteServlet",
+		type: "POST",
+		data: {
+			operation: "update",
+			json: JSON.stringify(jsonArray)
+		},
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
 }
 
-function deleteRoute() {
-	// Operation 'delete'
+function deleteRoute(routeId) {
+	var route;
+	
+	$.each(userRoutes, function(i,v) {
+		if(v.id == routeId) {
+			route = v;
+			return;
+		}
+	});
+	
+	var jsonArray = [route];
+	
+	$.ajax({
+		url: "RouteServlet",
+		type: "POST",
+		data: {
+			operation: "delete",
+			json: JSON.stringify(jsonArray)
+		},
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
 }
