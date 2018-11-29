@@ -185,7 +185,7 @@
 				</ul>
 			</div>
 			<button class="absolute" id="buttonLoad">Laden</button>
-			<button class="absolute" id="buttonRate">Bewerten</button>
+			<% if (session.getAttribute("loggedin") != null && (boolean)session.getAttribute("loggedin")) out.println("<button class=\"absolute\" id=\"buttonRate\">Bewerten</button>"); %>
 		</div>
 		<div id="map"></div>
 		<div class="absolute" id="tours" style="display: none;">

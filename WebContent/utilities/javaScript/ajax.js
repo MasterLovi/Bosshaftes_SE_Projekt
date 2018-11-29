@@ -90,18 +90,37 @@ function getLocationFromDatabase(sType) {
 							.addTo(getMap()));
 				marker.info = json[i];
 				
-				marker.bindPopup(json[i].name + "<div class=\"ratingWrapper\">" +
+				if ($("#userId").val() != null) {
+				marker.bindPopup("<h4>"+json[i].name+"<h4>" +
+						"<p>Bewertung</p>" +
+						"<div class=\"ratingWrapper\">" +
 							"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
 						"</div>" +
+						"<p>Beschreibung</p>" +
+						"<p>"+json[i].description+"</p>" +
 						"<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
 						"<button onClick=reportLocation("+marker._leaflet_id+")>Melden</button>" +
 						"<button onClick=feedbackLocation("+marker._leaflet_id+")>Bewerten</button><br>" +
 						"<button onClick=showNewRoutePopup("+marker._leaflet_id+")>Zu neuer Route</button>" +
 						"<button onClick=showUpdateRoutePopup("+marker._leaftlet_id+")>Zu bestehender Route</button>");
+				} else {
+					marker.bindPopup("<h4>"+json[i].name+"<h4>" +
+							"<p>Bewertung</p>" +
+							"<div class=\"ratingWrapper\">" +
+								"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
+								"<i class='material-icons " + (json[i].avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
+								"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
+								"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
+								"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
+							"</div>" +
+							"<p>Beschreibung</p>" +
+							"<p>"+json[i].description+"</p>");
+				}
+				
 				marker._icon.style.zIndex = 50; // Makes sure everything is in front of the default marker 
 				markerLayer.addLayer(marker);
 				
