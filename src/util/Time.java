@@ -47,6 +47,13 @@ public class Time implements Serializable {
 			this.seconds = 0;
 		}
 	}
+	
+	public Time() {
+		this.time = "00:00:00";
+		this.hours = 0;
+		this.minutes = 0;
+		this.seconds = 0;
+	}
 
 	/**
 	 * Individual constructor to save time object with given hours, minutes and
@@ -62,12 +69,12 @@ public class Time implements Serializable {
 
 	private void setTime(Integer hours, Integer minutes, Integer seconds) {
 		// if seconds are > 60 --> change 60 seconds to 1 minute
-		if (seconds > 60) {
+		if (seconds >= 60) {
 			minutes = minutes + (seconds / 60);
 			seconds = seconds % 60;
 		}
 		// if minutes are > 60 --> change 60 minutes to 1 hour
-		if (minutes > 60) {
+		if (minutes >= 60) {
 			hours = hours + (minutes / 60);
 			minutes = minutes % 60;
 		}
