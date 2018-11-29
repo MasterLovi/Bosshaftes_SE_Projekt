@@ -48,7 +48,7 @@ function loadPopupContent(popupType) {
 		    		"<p>Bild:</p>" +
 		    	"</td>" +
 	    		"<td>" +
-	    			"<input type=\"file\" name=\"picture\" value=\"\"/>" +
+	    			"<input type=\"file\" accept=\"image/jpeg, image/png, image/jpg\" name=\"picture\" value=\"\"/>" +
 	    		"</td>" +
 	    	"</tr>" +
 	    	"<tr>" +
@@ -99,7 +99,7 @@ function loadPopupContent(popupType) {
 		    		"<p>Bild:</p>" +
 		    	"</td>" +
 	    		"<td>" +
-	    			"<input type=\"file\" name=\"picture\" value=\"\"/>" +
+	    			"<input type=\"file\" accept=\"image/jpeg, image/png, image/jpg\" name=\"picture\" value=\"\"/>" +
 	    		"</td>" +
 	    	"</tr>" +
 	    	"<tr>" +
@@ -213,11 +213,17 @@ function loadPopupContent(popupType) {
 	};
 	break;
 	case "update": {
+		if ($("#currentAction").val() == "Party") {
+			$("#updateLocationForm input[name=time]").prop("disabled", true);
+		}
+		
 		$('#updateLocationForm').submit(function () {
 			var error = locationValidation($("#currentAction").val(),"update");
 			
+			var pImageLoaded = convertImageToBase64($("#updateLocationForm input[name=picture]"));
+			
 			if (!error){
-				updateMarker($("#updateLocationForm input[name=id]").val());
+				updateMarker($("#updateLocationForm input[name=id]").val(), pImageLoaded);
 				return false;
 			} else {
 				$("#popupError").html(error);
@@ -227,11 +233,17 @@ function loadPopupContent(popupType) {
 	};
 	break;
 	case "createNew": {
+		if ($("#currentAction").val() == "Party") {
+			$("#createLocationForm input[name=time]").prop("disabled", true);
+		}
+		
 		$('#createLocationForm').submit(function () {
 			var error = locationValidation($("#currentAction").val(),"createNew");
 			
+			var pImageLoaded = convertImageToBase64($("#createLocationForm input[name=picture]"));
+			
 			if (!error){
-				createNewMarker($("#currentAction").val());
+				createNewMarker($("#currentAction").val(), pImageLoaded);
 				return false;
 			} else {
 				$("#popupError").html(error);

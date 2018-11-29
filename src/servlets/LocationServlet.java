@@ -93,6 +93,7 @@ public class LocationServlet extends HttpServlet {
 						images.add(image64);
 					}
 					location.setImages(images);
+//					System.out.println(images);
 				} else {
 					location.setImages(null);
 				}
@@ -145,6 +146,7 @@ public class LocationServlet extends HttpServlet {
 				if (location.getImages() != null) {
 					for (String sBase64 : location.getImages()) {
 						if(sBase64 != null) {
+							System.out.println(sBase64);
 							byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
 							images.add(image);
 						}
@@ -373,6 +375,7 @@ public class LocationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
+			e.printStackTrace();
 			res = e.getMessage();
 			em.getTransaction().rollback();
 		}

@@ -422,3 +422,8 @@ p{
 .clickable:hover{
 	cursor: pointer !important;
 }
+
+.popupImage{
+	height: 50px;
+	width: 50px;
+}

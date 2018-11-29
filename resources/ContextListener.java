@@ -88,6 +88,7 @@ public class ContextListener implements ServletContextListener {
 			location.setTime(time);
 			location.setLatitude(49.4775206);
 			location.setLongitude(8.4219807);
+			location.setTimesReported(0);
 			location.setPictures((List<byte[]>) new ArrayList<byte[]>());
 			em.persist(location);
 			Location location2 = new Location();
@@ -97,7 +98,8 @@ public class ContextListener implements ServletContextListener {
 			location2.setTime(time);
 			location2.setLatitude(49.47303236240146);
 			location2.setLongitude(8.394641872728245);
-			location.setPictures((List<byte[]>) new ArrayList<byte[]>());
+			location2.setTimesReported(0);
+			location2.setPictures((List<byte[]>) new ArrayList<byte[]>());
 			em.persist(location2);
 			Location location3 = new Location();
 			location3.setName("Hochschule Ludwigshafen 3");
@@ -106,16 +108,18 @@ public class ContextListener implements ServletContextListener {
 			location3.setTime(time);
 			location3.setLatitude(49.45674385539652);
 			location3.setLongitude(8.41655731201172);
-			location.setPictures((List<byte[]>) new ArrayList<byte[]>());
+			location3.setTimesReported(0);
+			location3.setPictures((List<byte[]>) new ArrayList<byte[]>());
 			em.persist(location3);
 			Location location4 = new Location();
 			location4.setName("Hochschule Ludwigshafen 4");
 			location4.setType("Party");
-			location.setTimeString("03:30:00");
+			location4.setTimeString("03:30:00");
 			location4.setTime(time);
 			location4.setLatitude(49.47035517151213);
 			location4.setLongitude(8.44139098422602);
-			location.setPictures((List<byte[]>) new ArrayList<byte[]>());
+			location4.setTimesReported(0);
+			location4.setPictures((List<byte[]>) new ArrayList<byte[]>());
 			em.persist(location4);
 			
 			Route route = new Route();

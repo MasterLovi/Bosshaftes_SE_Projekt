@@ -90,8 +90,16 @@ function getLocationFromDatabase(sType) {
 							.addTo(getMap()));
 				marker.info = json[i];
 				
+//				["jpeg", "png", "jpg"].forEach(function(sFileType) {
+//					if (json[i].images[0] && json[i].images[0].includes("data/image/" + sFileType)) {
+//						json[i].images[0] = json[i].images[0].replace("data/image/" + sFileType + "/base64/", "data:image/"+sFileType+";base64,");
+//					}
+//					
+//				});
+				
 				if ($("#userId").val() != null) {
-				marker.bindPopup("<h4>"+json[i].name+"<h4>" +
+				marker.bindPopup("<h4>"+json[i].name+"</h4>" +
+						"<img class=\"popupImage\" src=\""+ (json[i].images[0] ? json[i].images[0] : "") +"\" />" + 
 						"<p>Bewertung</p>" +
 						"<div class=\"ratingWrapper\">" +
 							"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
@@ -108,7 +116,8 @@ function getLocationFromDatabase(sType) {
 						"<button onClick=showNewRoutePopup("+marker._leaflet_id+")>Zu neuer Route</button>" +
 						"<button onClick=showUpdateRoutePopup("+marker._leaftlet_id+")>Zu bestehender Route</button>");
 				} else {
-					marker.bindPopup("<h4>"+json[i].name+"<h4>" +
+					marker.bindPopup("<h4>"+json[i].name+"</h4>" +
+							"<img class=\"popupImage\" src=\""+json[i].images[0]+"\">" + 
 							"<p>Bewertung</p>" +
 							"<div class=\"ratingWrapper\">" +
 								"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
@@ -135,7 +144,7 @@ function getLocationFromDatabase(sType) {
 }
 
 
-function createNewMarker(sType) {
+function createNewMarker(sType, pImageLoaded) {
 	var json = getJsonDatastrucutreLocation("create");
 	var addressData = getAddress($("#createLocationForm input[name=lat]").val(), $("#createLocationForm input[name=lng]").val());
 
@@ -159,8 +168,12 @@ function createNewMarker(sType) {
 
 	json.description = $("#createLocationForm textarea[name=description]").val();
 	
-	var jsonArray = [json];
 
+	pImageLoaded.then(function(image) {
+	
+	json.images = [image];
+	var jsonArray = [json];
+		
 	$.ajax({
 		url: "LocationServlet",
 		type: "POST",
@@ -184,9 +197,10 @@ function createNewMarker(sType) {
 			console.log(error);
 		}
 	});
+});
 }
 
-function updateMarker(markerId){
+function updateMarker(markerId, pImageLoaded){
 	var marker = globalLayer.getLayer(markerId);
 	var json = getJsonDatastrucutreLocation("update");
 	
@@ -198,32 +212,33 @@ function updateMarker(markerId){
 	json.type = marker.info.type;
 	json.timesReported = marker.info.timesReported;
 	json.address = marker.info.address;
+
 	json.latitude = marker.info.latitude;
 	json.longitude = marker.info.longitude;
 	json.feedback = marker.info.feedback;
 	
 	// TODO Set images and tranform it
+	pImageLoaded.then(function(image) {
+		json.images = [image];
+		var jsonArray = [json];
+		debugger;
+		$.ajax({
+			url: "LocationServlet",
+			type: "POST",
+			data: {
+				operation: "update",
+				json: JSON.stringify(jsonArray) //Json file
 
-	
-	var jsonArray = [json];
-	
-
-	
-	$.ajax({
-		url: "LocationServlet",
-		type: "POST",
-		data: {
-			operation: "update",
-			json: JSON.stringify(jsonArray) //Json file
-
-		},
-		success: function(response) {
-			unloadPopup();
-		},
-		error: function(error) {
-			console.log(error);
-		}
+			},
+			success: function(response) {
+				unloadPopup();
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
 	});
+	
 }
 
 function reportLocation(markerId){
