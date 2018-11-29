@@ -290,6 +290,10 @@ p{
 	
 }
 
+#popupError{
+	color: red;
+}
+
 .absolute{
 	position: absolute;
 }
