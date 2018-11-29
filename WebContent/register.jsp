@@ -24,10 +24,10 @@
     	<div class='optionPanel'>
     		<h2>Pleas enter the following information</h2>
     		<form id='regForm' action='RegistrationServlet' method='post'>
-    			<input type='text' name='username' class='regText' placeholder='Username' /><br/>
-    			<input type='email' name='email' class='regText' placeholder='E-Mail-Address' /><br/>
-    			<input type='password' name='password' class='regText' placeholder='Password' /><br/>
-    			<input type='password' name='passwordRep' class='regText' placeholder='Repeat Password' /><br/>
+    			<input type='text' name='username' class='regText' placeholder='Username' required /><br/>
+    			<input type='email' name='email' class='regText' placeholder='E-Mail-Address' required /><br/>
+    			<input type='password' name='password' class='regText' placeholder='Password' required /><br/>
+    			<input type='password' name='passwordRep' class='regText' placeholder='Repeat Password' required /><br/>
     			<input type='submit' name='submit' class='regButton' value='Register' />
     		</form>
     	</div>
