@@ -439,12 +439,12 @@ function changeFeedback(type, id, feedbackId) {
 
 function createNewRoute(id) {
 
-	var data = JSON.parse(globalLayer);
+	var data = globalLayer;
 	var location;
 	var json = getDatastructureRoute();
 		
 	$.each(data._layers, function(i,v) {
-		if (v.info.id == id) {
+		if (v._leaflet_id == id) {
 			location = v.info;
 		}
 	});

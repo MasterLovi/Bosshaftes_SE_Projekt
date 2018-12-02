@@ -479,7 +479,7 @@ function convertImageToBase64(input) {
 	} else if (!input.prop("files")[0]) {
 		
 		return new Promise(function(resolve, reject) {
-			var file = "file:///./WebContent/utilities/pic/Bild1.jpg";
+			var file = new File([""], "./WebContent/utilities/pic/Bild1.jpg", {type: "image/jpeg"});
 
 			var fr = new FileReader();
 			var base64;
@@ -510,3 +510,4 @@ function convertImageToBase64(input) {
 		});
 	}
 }
+
