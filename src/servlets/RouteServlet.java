@@ -108,7 +108,7 @@ public class RouteServlet extends HttpServlet {
 							if (stop.getPictures() != null) {
 								images = new ArrayList<String>();
 								for (byte[] picture : stop.getPictures()) {
-									String image64 = new BASE64Encoder().encode(picture);
+									String image64 = new String(picture, "UTF-8");
 									images.add(image64);
 								}
 								stop.setImages(images);
