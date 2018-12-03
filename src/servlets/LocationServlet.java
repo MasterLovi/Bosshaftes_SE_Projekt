@@ -89,7 +89,7 @@ public class LocationServlet extends HttpServlet {
 				// convert pictures and data to JSON
 				if (location.getPictures() != null) {
 					for (byte[] picture : location.getPictures()) {
-						String image64 = new BASE64Encoder().encode(picture);
+						String image64 = new String(picture, "UTF-8");
 						images.add(image64);
 					}
 					location.setImages(images);
@@ -147,7 +147,7 @@ public class LocationServlet extends HttpServlet {
 					for (String sBase64 : location.getImages()) {
 						if(sBase64 != null) {
 							System.out.println(sBase64);
-							byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+							byte[] image = sBase64.getBytes("UTF-8");
 							images.add(image);
 						}
 					}
@@ -221,7 +221,7 @@ public class LocationServlet extends HttpServlet {
 				if (location.getImages() != null) {
 					for (String sBase64 : location.getImages()) {
 						if(sBase64 != null) {
-							byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+							byte[] image = sBase64.getBytes("UTF-8");
 							images.add(image);
 						}
 					}
