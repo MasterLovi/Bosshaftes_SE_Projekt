@@ -77,7 +77,7 @@ function getLocationFromDatabase(sType) {
 				globalLayer = null;
 			}
 			
-			if(getMap()._zoom < 12) { return; }
+			if(getMap()._zoom < 11) { return; }
 			
 			var json = JSON.parse(response);
 			var markerLayer = L.layerGroup();
@@ -98,10 +98,10 @@ function getLocationFromDatabase(sType) {
 //				});
 				
 				if ($("#userId").val() != null) {
-				marker.bindPopup("<h4>"+json[i].name+"</h4>" +
+				marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
 						"<img class=\"popupImage\" src=\""+ (json[i].images[0] ? json[i].images[0] : "") +"\" />" + 
 						"<p>Bewertung</p>" +
-						"<div class=\"ratingWrapper\">" +
+						"<div class=\"ratingWrapper centered\">" +
 							"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
@@ -110,16 +110,19 @@ function getLocationFromDatabase(sType) {
 						"</div>" +
 						"<p>Beschreibung</p>" +
 						"<p>"+json[i].description+"</p>" +
-						"<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
-						"<button onClick=reportLocation("+marker._leaflet_id+")>Melden</button>" +
-						"<button onClick=feedbackLocation("+marker._leaflet_id+")>Bewerten</button><br>" +
-						"<button onClick=showNewRoutePopup("+marker._leaflet_id+")>Zu neuer Route</button>" +
-						"<button onClick=showUpdateRoutePopup("+marker._leaftlet_id+")>Zu bestehender Route</button>");
+						"<div class=\"buttonWrapper\">" +
+							"<br><button class=\"button thirdSpace\" onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
+							"<button class=\"button thirdSpace\" onClick=reportLocation("+marker._leaflet_id+")>Melden</button>" +
+							"<button class=\"button thirdSpace\" onClick=feedbackLocation("+marker._leaflet_id+")>Bewerten</button><br>" +
+							"<button class=\"button halfSpace\" onClick=showNewRoutePopup("+marker._leaflet_id+")>Zu neuer Route</button>" +
+							"<button class=\"button halfSpace\" onClick=showUpdateRoutePopup("+marker._leaflet_id+")>Hinzufügen zu</button>" +
+						"</div>");
+						
 				} else {
-					marker.bindPopup("<h4>"+json[i].name+"</h4>" +
+					marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
 							"<img class=\"popupImage\" src=\""+json[i].images[0]+"\">" + 
 							"<p>Bewertung</p>" +
-							"<div class=\"ratingWrapper\">" +
+							"<div class=\"ratingWrapper centered\">" +
 								"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
 								"<i class='material-icons " + (json[i].avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
 								"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +

@@ -23,7 +23,7 @@ $(document).ready(function() {
 	
 			// Creates a new marker and gives it a popup
 			newMarker = new L.marker(e.latlng, {icon: L.mapquest.icons.marker({primaryColor: '#111111', secondaryColor: '#00cc00'})}).addTo(mymap)
-			.bindPopup("<p>Kennen Sie diesen Ort?</p><button class=\"centered\" onClick='showNewPointPopup(newMarker)'>Hinzufügen</button>").openPopup()
+			.bindPopup("<p>Kennen Sie diesen Ort?</p><button class=\"fullSize button\" onClick='showNewPointPopup(newMarker)'>Hinzufügen</button>").openPopup()
 			.on('click', function(e){
 				// This has to be checked since the marker will be set to null if it is added to the map.
 				if(newMarker != null){

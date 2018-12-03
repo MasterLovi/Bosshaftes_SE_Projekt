@@ -21,7 +21,31 @@ p{
  	text-align: center;	
 }
 
+a{
+	text-decoration: none;
+	color: black;	
+}
+
+a:visited{
+	text-decoration: none;
+	color: black;
+}
+
+td .inputText{
+	border: 0;
+	border-bottom: 1px solid grey;
+}
+
+td a{
+	width: 100%;
+}
+
+td .inputSubmit{
+	width: 100%;
+}
+
 #popupTable{
+	width: 90%;
 	margin-top: 15px;
 }
 
@@ -87,6 +111,7 @@ p{
 
 #header{
 	display: inline-block;
+	height: 50.859px;
 	top: 10px;
 	left: 50px;
 	right: 20px;
@@ -110,9 +135,19 @@ p{
 	text-align: -webkit-center;
 	box-sizing: inherit;
  	text-align: center;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	width: 65%;
+ 	height: 100%;
+	width: 100%;
+	display: inline-block;
+}
+
+#otherMapHeader{
+	width: 72%;
+	display: inline-block;
+}
+
+#loginArea{
+	position: absolute;
+	right: 10px;
 	display: inline-block;
 }
 
@@ -133,7 +168,7 @@ p{
 
 #otherHeader {
 	width: 30%;
-	float: left;
+	display: inline-block;
 }
 
 #spotRange{
@@ -220,8 +255,8 @@ p{
 	background-color: #ffffff;
 	z-index: 801;
 	border-radius: 4px;
-	border: 1px solid #bbb;
 	padding: 10px 10px 10px 10px;
+	border: 1px solid #bbb;
 	box-shadow: 2px 2px 2px #bbb;
 }
 
@@ -235,26 +270,40 @@ p{
 }
 
 #logoWrapper{
-	float: left;
+	display: inline-block;
 }
 
 #partyText{
-	font-size: 24px;
+	font-size: 33px;
 	width: 40%;
 	display: inline-block;
 	vertical-align: middle;
+	border-radius: 4px;
 }
 
+#partyText:hover {
+	background-color: #555555;
+	color: white;
+	
+}
+
+
 #cultureText{
-	font-size: 24px;
+	font-size: 33px;
 	width: 40%;
 	display: inline-block;
 	vertical-align: middle;
+	border-radius: 4px;
+}
+
+#cultureText:hover {
+	background-color: #555555;
+	color: white;
 }
 
 #headerIconMiddle{
 	vertical-align: middle;
-	font-size: 33.33px !important;
+	font-size: 33px !important;
 }
 
 #tourStopsWrapper{
@@ -293,6 +342,12 @@ p{
 #popupError{
 	color: red;
 }
+
+#rightIcon{
+	display: inline-block;
+}
+
+
 
 .absolute{
 	position: absolute;
@@ -362,7 +417,8 @@ p{
 }
 
 .bigIcon{
-	font-size: 30px !important;
+	font-size: 50px !important;
+	vertical-align: middle;
 }
 
 /* The Modal (background) */
@@ -382,7 +438,9 @@ p{
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid #bbb;
+	box-shadow: 2px 2px 2px #bbb;
+	border-radius: 4px;
     width: 30%; /* Could be more or less, depending on screen size */
 }
 
@@ -426,4 +484,44 @@ p{
 .popupImage{
 	height: 50px;
 	width: 50px;
+}
+
+.button {
+    background-color: #555555; 
+    border: none;
+    color: white !important;
+	cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 2px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.button:hover {
+	background-color: #333333;
+}
+
+.halfSpace{
+	width: 48%;
+	margin-left: 1%;
+	margin-right: 1%;
+	margin-top: 5px;
+}
+
+.thirdSpace{
+	width: 31.33%;
+	margin-left: 1%;
+	margin-right: 1%;
+	
+}
+
+.buttonWrapper{
+	width: 300px;
+}
+
+.fullSize {
+	width: 100%;
 }

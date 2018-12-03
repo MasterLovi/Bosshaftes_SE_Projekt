@@ -74,7 +74,16 @@
 			<div id='logoWrapper'>
 	        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\Title.png'></a>
 	        </div>
-	        <div class="floatRight" id='loginArea'>
+	        
+	        <div id='otherMapHeader'>
+	    		<div id='mapHeader'>
+	    			<input type="hidden" id="currentAction" value="">
+    				<i id="partyText" class="clickable">Party</i>
+    				<i id="headerIconMiddle" class="material-icons clickable">chevron_left</i>
+    				<i id="cultureText" class="clickable">Kultur</i>
+   				</div>
+	    	</div>
+	    	<div  id='loginArea'>
 	        <% 		
 					if (session.getAttribute("loggedin") != null && (boolean)session.getAttribute("loggedin")){
 		   				%>
@@ -90,14 +99,6 @@
 				
 			%>	
 			</div>
-	        <div id='otherMapHeader'>
-	    		<div id='mapHeader'>
-	    			<input type="hidden" id="currentAction" value="">
-    				<i id="partyText" class="clickable">Party</i>
-    				<i id="headerIconMiddle" class="material-icons clickable">chevron_left</i>
-    				<i id="cultureText" class="clickable">Kultur</i>
-   				</div>
-	    	</div>
 		</div>
 		<div class="absolute" id="searchbar">
 			<span class="mq-place-search" >
@@ -127,7 +128,7 @@
 				<input type="hidden" value="3" name="rating" id="ratingValue">
 				<hr>
 
-				<input type="submit" value="Tour suchen" id="searchTour" class="centered">
+				<input type="submit" value="Tour suchen" id="searchTour" class="centered button">
 			</form>
 		</div>
 		<div id="tourInfoPanel">
@@ -185,8 +186,8 @@
 					
 				</ul>
 			</div>
-			<button class="absolute" id="buttonLoad">Laden</button>
-			<% if (session.getAttribute("loggedin") != null && (boolean)session.getAttribute("loggedin")) out.println("<button class=\"absolute\" id=\"buttonRate\">Bewerten</button>"); %>
+			<button class="absolute button" id="buttonLoad">Laden</button>
+			<% if (session.getAttribute("loggedin") != null && (boolean)session.getAttribute("loggedin")) out.println("<button class=\"absolute button\" id=\"buttonRate\">Bewerten</button>"); %>
 		</div>
 		<div id="map"></div>
 		<div class="absolute" id="tours" style="display: none;">

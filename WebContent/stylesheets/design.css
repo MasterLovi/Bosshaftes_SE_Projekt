@@ -1,5 +1,5 @@
 * {
-	font-family: cursive;
+	font-family: arial;
 	color: #000000;
 }
 
@@ -96,4 +96,26 @@ body {
 
 .optionHeader{
 	font-size: 24px;
+}
+
+.button {
+    background-color: #555555; 
+    border: none;
+    color: white !important;
+	cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 2px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.button:hover {
+	background-color: #333333;
+}
+
+.fullSize {
+	width: 100%;
 }

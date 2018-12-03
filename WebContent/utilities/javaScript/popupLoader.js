@@ -25,13 +25,14 @@ function loadPopupContent(popupType) {
 			"<input type=\"hidden\" value=\"3\" name=\"rating\" id=\"ratingValueR\">" +
 	    	"<textarea rows=\"4\" form=\"feedbackForm\" name=\"comment\"></textarea>" +
 	    	"<div class=\"right\">" +
-	    		"<input type=\"submit\" id=\"sendFeedback\" name=\"confirm\" value=\"Senden\"/>" +
+	    		"<input type=\"submit\" id=\"sendFeedback\" class=\"button\" name=\"confirm\" value=\"Senden\"/>" +
 	    	"</div>" +
 	    "</form>";
 	};
 	break;
 	case "update": {
-		content = content +"<form id=\"updateLocationForm\" method=\"POST\" action=\"\">" +
+		content = content + "<h4 class=\"centered\">Ort ändern</h4>" +
+		"<form id=\"updateLocationForm\" method=\"POST\" action=\"\">" +
     	"<input type=\"hidden\" name=\"id\" value=\"\"/>" +
     	"<p id=\"popupError\"></p>" +
 	    	"<table id=\"popupTable\">" +
@@ -72,7 +73,7 @@ function loadPopupContent(popupType) {
 	    			"<!-- Some button -->" +
 	    		"</td>" +
 	    		"<td>" +
-	    			"<input type=\"submit\" name=\"confirm\" value=\"Ändern\"/>" +
+	    			"<input type=\"submit\" name=\"confirm\" class=\"button\" value=\"Ändern\"/>" +
 	    		"</td>" +
 	    	"</tr>" +
 	    	"</table>" +
@@ -80,7 +81,8 @@ function loadPopupContent(popupType) {
 	};
 	break;
 	case "createNew": {
-		content = content + "<form id=\"createLocationForm\" method=\"POST\" action=\"\">" +
+		content = content + "<h4 class=\"centered\">Neuen Ort anlegen</h4>" +
+		"<form id=\"createLocationForm\" method=\"POST\" action=\"\">" +
     	"<input type=\"hidden\" name=\"lat\" id=\"newLat\" value=\"\"/>" +
 	    	"<input type=\"hidden\" name=\"lng\" id=\"newLng\" value=\"\"/>" +
 	    	"<input type=\"hidden\" name=\"userId\" id=\"userId\" value=\"\"/>" +
@@ -123,7 +125,7 @@ function loadPopupContent(popupType) {
 	    			"<!-- Some button -->" +
 	    		"</td>" +
 	    		"<td>" +
-	    			"<input type=\"submit\" name=\"confirm\" value=\"Anlegen\"/>" +
+	    			"<input type=\"submit\" name=\"confirm\" class=\"button\" value=\"Anlegen\"/>" +
 	    		"</td>" +
 	    	"</tr>" +
 	    	"</table>" +
@@ -140,7 +142,7 @@ function loadPopupContent(popupType) {
 		"</select>" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
 		"<ul id=\"tourStopsPopup\"></ul>" +
-		"<input type=\"submit\" value=\"Hinzufügen\">" +
+		"<input type=\"submit\" class=\"button\" value=\"Hinzufügen\">" +
 		"</form>";
 	};
 	break;
@@ -153,7 +155,7 @@ function loadPopupContent(popupType) {
 		"<input type=\"text\" name=\"name\" placeholder=\"Routenname\">" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
 		"<textarea rows=\"4\" form=\"newRouteForm\" name=\"description\"></textarea>" +
-		"<input type=\"submit\" value=\"Erstellen\">" +
+		"<input type=\"submit\" class=\"button\" value=\"Erstellen\">" +
 		"</form>";
 	};
 	break;
