@@ -98,7 +98,7 @@ public class RouteServlet extends HttpServlet {
 					// convert pictures and data to JSON
 					if (route.getPictures() != null) {
 						for (byte[] picture : route.getPictures()) {
-							String image64 = new BASE64Encoder().encode(picture);
+							String image64 = new String(picture, "UTF-8");
 							images.add(image64);
 						}
 						route.setImages(images);
@@ -108,7 +108,7 @@ public class RouteServlet extends HttpServlet {
 							if (stop.getPictures() != null) {
 								images = new ArrayList<String>();
 								for (byte[] picture : stop.getPictures()) {
-									String image64 = new BASE64Encoder().encode(picture);
+									String image64 = new String(picture, "UTF-8");
 									images.add(image64);
 								}
 								stop.setImages(images);
@@ -164,7 +164,7 @@ public class RouteServlet extends HttpServlet {
 			List<byte[]> images = new ArrayList<byte[]>();
 			if (route.getImages() != null) {
 				for (String sBase64 : route.getImages()) {
-					byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+					byte[] image = sBase64.getBytes("UTF-8");
 					images.add(image);
 				}
 				newRoute.setPictures(images);
@@ -251,7 +251,7 @@ public class RouteServlet extends HttpServlet {
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (route.getImages() != null) {
 					for (String sBase64 : route.getImages()) {
-						byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+						byte[] image = sBase64.getBytes("UTF-8");
 						images.add(image);
 					}
 				}
