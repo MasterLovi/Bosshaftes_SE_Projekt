@@ -2,39 +2,6 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
-<%! 
-	// All variables that we need to use all over the page have to be declared in this section so they have a global scope.
-	public String title;
-	public String partyTag;
-	public String cultureTag;
-%>
-
-<%
-	// Checking if the get parameter 'type' was set
-	if (request.getParameter("type") != null){
-		
-		// Checking if the get parameter is set to 'party'. If so set all variables to party
-		if(request.getParameter("type").equals("party")){
-			title = "Party";
-			partyTag = "checked";
-			cultureTag = "";
-			
-		// Checking if the get parmater is set to 'culture' If so  set all variables to culture
-		} else if (request.getParameter("type").equals("culture")){
-			title = "Kultur";
-			partyTag = "";
-			cultureTag =  "checked";
-		
-		// If the get parameter is neither 'party' nor 'culture' set all the variables to default (party)
-		} else {
-			title = "Party";
-			partyTag = "checked";
-			cultureTag = "";
-		}
-		
-	}
-%>
-
 <html lang="de">
 	<head>
 		<title>NewMap Design</title>
@@ -137,7 +104,7 @@
 			<table>
 				<tr>
 					<td class="infoHeader">
-						Name:
+						Name
 					</td>
 				</tr>
 				<tr>
@@ -148,7 +115,7 @@
 			
 				<tr>
 					<td class="infoHeader">
-						Beschreibung:
+						Beschreibung
 					</td>
 				</tr>
 				<tr>
@@ -159,18 +126,18 @@
 	
 				<tr>
 					<td class="infoHeader">
-						Bewertung:
+						Bewertung
 					</td>
 				</tr>
 				<tr>
-					<td id="infoTourRating" class="infotext">
+					<td id="infoTourRating" class="infotext centered">
 					
 					</td>
 				</tr>
 
 				<tr>
 					<td class="infoHeader">
-						Bilder:
+						Bilder
 					</td>
 				</tr>
 				<tr>

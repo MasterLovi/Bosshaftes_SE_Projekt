@@ -79,6 +79,7 @@ function getLocationFromDatabase(sType) {
 			
 			if(getMap()._zoom < 11) { return; }
 			
+			
 			var json = JSON.parse(response);
 			var markerLayer = L.layerGroup();
 			
@@ -90,12 +91,6 @@ function getLocationFromDatabase(sType) {
 							.addTo(getMap()));
 				marker.info = json[i];
 				
-//				["jpeg", "png", "jpg"].forEach(function(sFileType) {
-//					if (json[i].images[0] && json[i].images[0].includes("data/image/" + sFileType)) {
-//						json[i].images[0] = json[i].images[0].replace("data/image/" + sFileType + "/base64/", "data:image/"+sFileType+";base64,");
-//					}
-//					
-//				});
 				
 				if ($("#userId").val() != null) {
 				marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +

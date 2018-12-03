@@ -261,8 +261,9 @@ td .inputSubmit{
 }
 
 #closeTourInfo{
-	right: 10px;
-	top: 10px;
+	color: white !important;
+	right: 11.5px;
+	top: 11.5px;
 }
 
 #closeTourInfo:hover{
@@ -469,12 +470,14 @@ td .inputSubmit{
 
 .infoHeader{
 	padding-right: 5%;
+	padding-top: 3px;
+	padding-bottom: 3px;
 	margin-bottom: 3px;
-	background-color: #a6a6a6;
+	background-color: #555555;
+	color: white;
 	text-align: -moz-center;
 	text-align: -webkit-center;
  	text-align: center;
- 	border-radius: 3px;
 }
 
 .clickable:hover{
