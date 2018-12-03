@@ -36,7 +36,7 @@ td .inputText{
 	border-bottom: 1px solid grey;
 }
 
-td a{
+#loginArea td a{
 	width: 100%;
 }
 
@@ -527,4 +527,16 @@ td .inputSubmit{
 
 .fullSize {
 	width: 100%;
+}
+
+.feedbackInfo {
+	position: absolute;
+	right: 10%;
+	cursor: pointer;
+}
+
+.feedbackInfoOnPanle{
+	position: absolute;
+	right: 10px;
+	cursor: pointer;
 }

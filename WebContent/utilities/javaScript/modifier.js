@@ -239,7 +239,7 @@ function toursHoverEvent() {
 				$("#infoTourDescription").html(tourObj.description);
 				$("#tourIdOnPanle").val(tourObj.id);
 
-				ratingElement = "<i class='material-icons "
+				ratingElement = "<div class=\"ratingWrapper centered\"><i class='material-icons "
 						+ (tourObj.avgRating >= 1 ? "activeStar" : "")
 						+ "'>grade</i>" + "<i class='material-icons "
 						+ (tourObj.avgRating >= 2 ? "activeStar" : "")
@@ -249,7 +249,9 @@ function toursHoverEvent() {
 						+ (tourObj.avgRating >= 4 ? "activeStar" : "")
 						+ "'>grade</i>" + "<i class='material-icons "
 						+ (tourObj.avgRating >= 5 ? "activeStar" : "")
-						+ "'>grade</i>";
+						+ "'>grade</i>" 
+						+ "<a class=\"feedbackInfoOnPanle\" onClick=\"showFeedbackPopup("+tourObj.id+", 'Route')\"><i class='material-icons'>info_outline</i></a>"
+						+ "</div>";
 
 				$("#infoTourRating").html(ratingElement);
 
@@ -367,7 +369,7 @@ $(document).ready(function() {
 	}
 })
 
-function loadFeedbackToPopup(type, id) {
+function loadFeedbackToPopup(id, type) {
 	var data;
 	var dataElement;
 	var htmlElement;
