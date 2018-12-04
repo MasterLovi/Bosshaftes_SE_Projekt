@@ -95,7 +95,6 @@ public class UserSessionServlet extends HttpServlet {
 				session.setAttribute("userid", resUser.getId());
 				session.setAttribute("username", resUser.getUsername());
 				session.setAttribute("loggedin", true);
-
 			}
 			// otherwise set session false
 			else {
