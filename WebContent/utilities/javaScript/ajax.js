@@ -472,7 +472,7 @@ function createNewRoute(id) {
 			json: JSON.stringify(jsonArray)
 		},
 		success: function(response) {
-			userRoutes.push(json);
+			getUserRoutes($("#currentAction").val(), $("#userId").val());
 		},
 		error: function(error) {
 			console.log(error);
@@ -585,6 +585,25 @@ function deleteRoute(routeId) {
 		},
 		success: function(response) {
 			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+}
+
+function getUserRoutes(sType, userId) {
+	$.ajax({
+		url: "RouteServlet",
+		type: "GET",
+		data: {
+			type: sType,
+			owner: userId,
+			time: "200:00:00" //Threshhold for all Routes
+
+		},
+		success: function(response) {
+			userRoutes = JSON.parse(response);
 		},
 		error: function(error) {
 			console.log(error);

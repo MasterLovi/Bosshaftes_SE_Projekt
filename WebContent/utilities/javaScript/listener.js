@@ -208,3 +208,11 @@ $(document).ready(function() {
 		feedbackRoute();
 	})
 })
+
+$(document).ready(function() {
+	if($("#userId").val() == "undefined") {
+		return;
+	} else {
+		getUserRoutes($("#currentAction").val(), $("#userId").val());
+	}
+})
