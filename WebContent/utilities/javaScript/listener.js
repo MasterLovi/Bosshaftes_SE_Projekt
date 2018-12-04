@@ -206,7 +206,7 @@ $(document).ready(function() {
 	
 	$("#buttonRate").click(function() {
 		feedbackRoute();
-	})
+	});
 })
 
 $(document).ready(function() {

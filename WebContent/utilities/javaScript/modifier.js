@@ -332,8 +332,8 @@ function feedbackRoute() {
 
 	loadPopupContent("feedback");
 
-	$("#ratingForm input[name=type]").val("route");
-	$("#ratingForm input[name=id]").val(tour);
+	$("#feedbackForm input[name=type]").val("Route");
+	$("#feedbackForm input[name=id]").val(tour);
 
 }
 
