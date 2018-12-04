@@ -64,8 +64,8 @@ public class RouteServlet extends HttpServlet {
 	 * @exception Exception if type is neither "Kultur" nor "Party"
 	 */
 	private static String read(EntityManager em, String type, String maxTime, double minRating, int maxNoStops,
-			double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat, double boundSouthEastLong, Integer owner)
-			throws Exception {
+			double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat, double boundSouthEastLong,
+			Integer owner) throws Exception {
 
 		if (type == null) {
 			throw new Exception("Type darf nicht null sein!");
@@ -73,16 +73,14 @@ public class RouteServlet extends HttpServlet {
 			throw new Exception("Type muss entweder \"Party\" oder \"Kultur\" sein!");
 		}
 		// Build query with given parameters
-		String selectQuery = "SELECT r FROM Route r"
-						+ " WHERE r.type = '" + type + "'";
-		
-		String routeParams = " AND r.avgRating >= " + minRating
-				+ " AND r.numberOfStops <= " + maxNoStops
+		String selectQuery = "SELECT r FROM Route r" + " WHERE r.type = '" + type + "'";
+
+		String routeParams = " AND r.avgRating >= " + minRating + " AND r.numberOfStops <= " + maxNoStops
 				+ " AND r.firstLat BETWEEN " + boundSouthEastLat + " AND " + boundNorthWestLat
 				+ " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
-		
+
 		selectQuery = (owner != null) ? (selectQuery + " AND r.owner.id = " + owner) : selectQuery + routeParams;
-		
+
 		// Select Route from database table
 		Query query = em.createQuery(selectQuery);
 		List<Route> result = query.getResultList();
@@ -286,15 +284,23 @@ public class RouteServlet extends HttpServlet {
 			// retrieve all parameters
 			String paramType = request.getParameter("type");
 			String paramTime = request.getParameter("time");
-			double paramRating = Double.valueOf(request.getParameter("rating"));
-			int paramStops = Integer.valueOf(request.getParameter("stops"));
+			Integer owner = null;
+			Integer paramStops = null;
+			Double paramRating = null, paramBoundNorthWestLat = null, paramBoundNorthWestLong = null,
+					paramBoundSouthEastLat = null, paramBoundSouthEastLong = null;
 
-			double paramBoundNorthWestLat = Double.valueOf(request.getParameter("boundNorthWestLat"));
-			double paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLng"));
-			double paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
-			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
-			
-			Integer owner = Integer.valueOf(request.getParameter("owner"));
+			if (request.getParameter("rating") != null) {
+				paramRating = Double.valueOf(request.getParameter("rating"));
+				paramStops = Integer.valueOf(request.getParameter("stops"));
+
+				paramBoundNorthWestLat = Double.valueOf(request.getParameter("boundNorthWestLat"));
+				paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLng"));
+				paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
+				paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
+
+			} else {
+				owner = Integer.valueOf(request.getParameter("owner"));
+			}
 
 			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWestLat,
 					paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong, owner);
@@ -302,6 +308,7 @@ public class RouteServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
+			e.printStackTrace();
 			res = e.getMessage();
 		}
 		// Send Response
