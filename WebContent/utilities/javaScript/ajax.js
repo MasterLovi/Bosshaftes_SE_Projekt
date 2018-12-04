@@ -1,6 +1,6 @@
 var globalRoutes;
 var globalLayer; //Will be used to delete and reload marker that are out of the viewport
-var userRoutes;
+var userRoutes = [];
 
 function getLocation(searchString, map){
 
@@ -454,7 +454,14 @@ function createNewRoute(id) {
 	json.name = $("#newRouteForm input[name=name]").val();
 	json.description = $("#newRouteForm textarea[name=description]").val();
 	json.type = $("#currentAction").val();
+	json.time.time = "01:00:00";
+	json.avgRating = "3";
+	json.owner.id = null;
+	json.owner.username = null;
+	json.owner.email = null;
+	json.id = null;
 	
+
 	var jsonArray = [json];
 	
 	$.ajax({
@@ -465,13 +472,12 @@ function createNewRoute(id) {
 			json: JSON.stringify(jsonArray)
 		},
 		success: function(response) {
-			console.log(response);
+			userRoutes.push(json);
 		},
 		error: function(error) {
 			console.log(error);
 		}
 	});
-	
 }
 // WICHTIG KEINE LEEREN ROUTEN
 function addPointToRoute(locationId, routeId) {
@@ -496,22 +502,26 @@ function addPointToRoute(locationId, routeId) {
 	
 	route.stops.push(location);
 	route.numberOfStops = route.numberOfStops + 1;
+	pTimeReturned = calculateTraveltime(json);
 	
-	var jsonArray = [route];
-	
-	$.ajax({
-		url: "RouteServlet",
-		type: "POST",
-		data: {
-			operation: "update",
-			json: JSON.stringify(jsonArray)
-		},
-		success: function(response) {
-			console.log(response);
-		},
-		error: function(error) {
-			console.log(error);
-		}
+	pTimeReturned.then(function(time) {
+		json.time.time = time;
+		var jsonArray = [route];
+		
+		$.ajax({
+			url: "RouteServlet",
+			type: "POST",
+			data: {
+				operation: "update",
+				json: JSON.stringify(jsonArray)
+			},
+			success: function(response) {
+				console.log(response);
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
 	});
 }
 

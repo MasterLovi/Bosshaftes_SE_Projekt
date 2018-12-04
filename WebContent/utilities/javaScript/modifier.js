@@ -315,7 +315,7 @@ function calculateRoute() {
 	};
 
 	L.mapquest.directions().route(routeObj);
-
+	
 }
 
 function removeCurrentRoute() {
@@ -392,8 +392,16 @@ function loadFeedbackToPopup(param) {
 		});
 	}
 
+	$("#feedbackHeaderTitle").html(dataElement.name);
 	// TODO add delete Button if user is logged in and is
 	$.each(dataElement.feedback, function(i, v) {
+		
+		var userDelete = "";
+		
+		if (v.author.id == $("#userId").val()) {
+			userDelete = "<div class=\"userDelete\"><i class=\"material-icons editIcon\">create</i><i class=\"material-icons deleteIcon\">delete_forever</i></div>";
+		}
+		
 		htmlElement = "<li class=\"popupFeedback\">"
 				+ "<div class=\"feebackRatingWrapper\">"
 				+ "<i class='material-icons "
@@ -406,7 +414,8 @@ function loadFeedbackToPopup(param) {
 				+ (v.rating >= 4 ? "activeStar" : "")
 				+ "'>grade</i>" + "<i class='material-icons "
 				+ (v.rating >= 5 ? "activeStar" : "")
-				+ "'>grade</i>" + "</div>"
+				+ "'>grade</i>" + "</div>" 
+				+ userDelete 
 				+ "<div class=\"feebackCommentWrapper\">"
 				+ "<p class=\"feedbackComment\">" + v.comment + "</p>"
 				+ "</div>" + "</li>";

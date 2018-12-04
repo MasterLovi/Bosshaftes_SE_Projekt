@@ -352,6 +352,9 @@ td .inputSubmit{
 	width: 100%;
 }
 
+#feedbackList{
+	list-style-type: none;
+}
 
 .absolute{
 	position: absolute;
@@ -542,4 +545,26 @@ td .inputSubmit{
 	position: absolute;
 	right: 10px;
 	cursor: pointer;
+}
+
+.feebackRatingWrapper{
+	display: inline-block;
+	cursor: pointer;
+}
+
+.userDelete{
+	display: inline-block;
+	float: right;
+	cursor: pointer;
+}
+
+.popupFeedback{
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.feedbackComment{
+	text-align: -moz-left;
+	text-align: -webkit-left;
+ 	text-align: left;
 }

@@ -160,8 +160,8 @@ function loadPopupContent(popupType) {
 	};
 	break;
 	case "showFeedback": {
-		content = content + "<h4 class=\"centered\">Feedbacks</h4>" +
-		"<p class=\"centered infoHeader\">Route-Title</p>" +
+		content = content + "<h4 class=\"centered\">Bewertungen</h4>" +
+		"<p class=\"centered infoHeader\" id=\"feedbackHeaderTitle\"></p>" +
 		"<ul id=\"feedbackList\"></ul>";
 	};
 	break;
