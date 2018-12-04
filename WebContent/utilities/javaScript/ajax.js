@@ -85,12 +85,12 @@ function getLocationFromDatabase(sType) {
 			
 			// Loads the new marker to the map
 			for(var i = 0; i < json.length; i++) {
-				var marker
+				var marker;
+				var spot = "Location";
 				
 				marker = (L.marker([json[i].latitude, json[i].longitude])
 							.addTo(getMap()));
 				marker.info = json[i];
-				
 				
 				if ($("#userId").val() != null) {
 				marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
@@ -102,7 +102,7 @@ function getLocationFromDatabase(sType) {
 							"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
-							"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup("+marker._leaflet_id+", 'Location')\"><i class='material-icons'>info_outline</i></a>" +
+							"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup({id: " + marker._leaflet_id + ", type: 'Location'})\"><i class='material-icons'>info_outline</i></a>" +
 						"</div>" +
 						"<p>Beschreibung</p>" +
 						"<p>"+json[i].description+"</p>" +
@@ -124,7 +124,7 @@ function getLocationFromDatabase(sType) {
 								"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
 								"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
 								"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
-								"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup("+marker._leaflet_id+", 'Location')\"><i class='material-icons'>info_outline</i></a>" +
+								"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup({id: " + marker._leaflet_id + ", type: 'Location'})\"><i class='material-icons'>info_outline</i></a>" +
 							"</div>" +
 							"<p>Beschreibung</p>" +
 							"<p>"+json[i].description+"</p>");
@@ -152,7 +152,8 @@ function createNewMarker(sType, pImageLoaded) {
 	json.type = sType;
 
 	// ToDo Split the time
-	if(sType == "Kultur") json.time = $("#createLocationForm input[name=locationName]").val();
+	if(sType == "Kultur") json.time.time = $("#createLocationForm input[name=time]").val()+":00";
+;
 
 	json.address.cityName = addressData.cityName;
 	json.address.country = addressData.country;
@@ -162,9 +163,6 @@ function createNewMarker(sType, pImageLoaded) {
 	// Loading the coordinates from the form
 	json.latitude = $("#createLocationForm input[name=lat]").val();
 	json.longitude = $("#createLocationForm input[name=lng]").val();
-
-	// Loading the time and split into min and hours
-	json.time.time = $("#createLocationForm input[name=time]").val()+":00";
 
 	json.description = $("#createLocationForm textarea[name=description]").val();
 	

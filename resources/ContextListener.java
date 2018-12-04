@@ -123,8 +123,8 @@ public class ContextListener implements ServletContextListener {
 			em.persist(location4);
 			
 			Route route = new Route();
-			route.setName("Tims Duftpfad");
-			route.setDescription("Route über alle Punkte an denen Tim stinkt/gestunken hat/stinken wird.");
+			route.setName("Testroute 1");
+			route.setDescription("Nice Route 1");
 			route.setAvgRating(5);
 			route.setFirstLat(location.getLatitude());
 			route.setFirstLong(location.getLongitude());
@@ -136,11 +136,11 @@ public class ContextListener implements ServletContextListener {
 			route.setType("Party");
 			
 			Route route2 = new Route();
-			route2.setName("Tims Duftpfad Reloaded");
-			route2.setDescription("Route über alle Punkte an denen Tim stinkt/gestunken hat/stinken wird.");
+			route2.setName("Testroute 2");
+			route2.setDescription("Noch nicere Route 4");
 			route2.setAvgRating(5);
-			route2.setFirstLat(location.getLatitude());
-			route2.setFirstLong(location.getLongitude());
+			route2.setFirstLat(location2.getLatitude());
+			route2.setFirstLong(location2.getLongitude());
 			route2.setNumberOfStops(4);
 			route2.setOwner(user);
 			route2.setTimeString("03:30:00");

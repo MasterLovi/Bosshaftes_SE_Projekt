@@ -23,11 +23,11 @@ function loadDataToUpdateForm(markerId) {
 
 	// Load Information to Form
 	// TODO implement picture
-	$("#updateLocationForm input[name=id").val(marker._leaflet_id);
-	$("#updateLocationForm input[name=locationName").val(marker.info.name);
-	$("#updateLocationForm textarea[name=description").val(
+	$("#updateLocationForm input[name=id]").val(marker._leaflet_id);
+	$("#updateLocationForm input[name=locationName]").val(marker.info.name);
+	$("#updateLocationForm textarea[name=description]").val(
 			marker.info.description);
-	$("#updateLocationForm input[name=time").val(marker.info.time.time);
+	$("#updateLocationForm input[name=time]").val(marker.info.time.time);
 
 }
 
@@ -369,28 +369,23 @@ $(document).ready(function() {
 	}
 })
 
-function loadFeedbackToPopup(id, type) {
+function loadFeedbackToPopup(param) {
 	var data;
 	var dataElement;
 	var htmlElement;
 
 	$("#feedbackList").empty();
 
-	if (type == "Location") {
-		data = JSON.parse(globalLayer);
+	if (param.type == "Location") {
+		data = globalLayer;
 
-		$.each(data._layers, function(i, v) {
-			if (v.info.id == id) {
-				dataElement = v.info;
-				return;
-			}
-		});
+		dataElement = data._layers[param.id].info;
 
 	} else {
-		data = JSON.parse(globalRoutes);
+		data = globalRoutes;
 
 		$.each(data, function(i, v) {
-			if (v.id == id) {
+			if (v.id == param.id) {
 				dataElement = v;
 				return;
 			}
@@ -402,15 +397,15 @@ function loadFeedbackToPopup(id, type) {
 		htmlElement = "<li class=\"popupFeedback\">"
 				+ "<div class=\"feebackRatingWrapper\">"
 				+ "<i class='material-icons "
-				+ (dataElement.avgRating >= 1 ? "activeStar" : "")
+				+ (v.rating >= 1 ? "activeStar" : "")
 				+ "'>grade</i>" + "<i class='material-icons "
-				+ (dataElement.avgRating >= 2 ? "activeStar" : "")
+				+ (v.rating >= 2 ? "activeStar" : "")
 				+ "'>grade</i>" + "<i class='material-icons "
-				+ (dataElement.avgRating >= 3 ? "activeStar" : "")
+				+ (v.rating >= 3 ? "activeStar" : "")
 				+ "'>grade</i>" + "<i class='material-icons "
-				+ (dataElement.avgRating >= 4 ? "activeStar" : "")
+				+ (v.rating >= 4 ? "activeStar" : "")
 				+ "'>grade</i>" + "<i class='material-icons "
-				+ (dataElement.avgRating >= 5 ? "activeStar" : "")
+				+ (v.rating >= 5 ? "activeStar" : "")
 				+ "'>grade</i>" + "</div>"
 				+ "<div class=\"feebackCommentWrapper\">"
 				+ "<p class=\"feedbackComment\">" + v.comment + "</p>"

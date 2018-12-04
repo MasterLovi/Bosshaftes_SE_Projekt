@@ -76,11 +76,11 @@
 		</div>
 		<div class="absolute" id="optionpanle">
 			<form action="" method="POST" id="routeForm">
-				<p>Sehenwürdigkeiten</p>
+				<p>Spots</p>
 				<input type="text" id="spotValue" size="1" value="10" min="1" max="20">
 			    <input type="range" id="spotRange" name="spots" min="1" max="20" />
 				<hr>
-				<p>Dauer der Touren</p>
+				<p>Dauer der Touren (h)</p>
 				<input type="text" id="timeValue" size="1" value="2" min="1" max="24">
 				<input type="range" id="timeRange" name="time" value="2" min="1" max="24" />
 				<hr>
@@ -162,20 +162,6 @@
 				<i class="material-icons bigIcon">chevron_left</i>
 			</div>
 			<ul id="tourList">
-				<li class="inline tourdata">
-					<input type="hidden" class="startingPoint" value='{"coordinates": [49.46928, 8.419304]}'>
-					<p>Tour-Title 1</p>
-					<div class="centered">
-						<i class="material-icons activeStar" id="star1">grade</i>
-						<i class="material-icons activeStar" id="star2">grade</i>
-						<i class="material-icons " id="star3">grade</i>
-						<i class="material-icons" id="star4">grade</i>
-						<i class="material-icons" id="star5">grade</i>
-					</div>
-					<div class="iconWrapper">
-						<img class="tourIcon" src="utilities/pic/OP2.jpg">
-					</div>
-				</li>
 			</ul> 
 			<div class="absolute" id="rightArrow">
 				<i class="material-icons bigIcon">chevron_right</i>
