@@ -57,8 +57,7 @@ public class LocationServlet extends HttpServlet {
 	 * @exception Exception if type is neither "Kultur" nor "Party"
 	 */
 	private static String read(EntityManager em, String type, double boundNorthWestLat, double boundNorthWestLong,
-					double boundSouthEastLat, double boundSouthEastLong)
-					throws Exception {
+			double boundSouthEastLat, double boundSouthEastLong) throws Exception {
 
 		// check if required type parameter is set
 		if (type == null) {
@@ -68,10 +67,9 @@ public class LocationServlet extends HttpServlet {
 		}
 
 		// Build query with given parameters
-		String selectQuery = "SELECT l FROM Location l "
-						+ "WHERE l.type = '" + type + "'"
-						+ " AND l.latitude BETWEEN " + boundSouthEastLat + " AND " + boundNorthWestLat
-						+ " AND l.longitude BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
+		String selectQuery = "SELECT l FROM Location l " + "WHERE l.type = '" + type + "'" + " AND l.latitude BETWEEN "
+				+ boundSouthEastLat + " AND " + boundNorthWestLat + " AND l.longitude BETWEEN " + boundNorthWestLong
+				+ " AND " + boundSouthEastLong;
 
 		// Select Location from database table
 		Query query = em.createQuery(selectQuery);
@@ -120,9 +118,8 @@ public class LocationServlet extends HttpServlet {
 		for (Location location : locations) {
 
 			// find out if location already exists
-			String selectQuery = "SELECT l from Location l"
-							+ " WHERE l.latitude = " + location.getLatitude()
-							+ " AND l.longitude = " + location.getLatitude();
+			String selectQuery = "SELECT l from Location l" + " WHERE l.latitude = " + location.getLatitude()
+					+ " AND l.longitude = " + location.getLatitude();
 			Query query = em.createQuery(selectQuery);
 			List<Location> result = query.getResultList();
 
@@ -132,13 +129,13 @@ public class LocationServlet extends HttpServlet {
 				newLocation.setName(location.getName());
 				newLocation.setType(location.getType());
 				newLocation.setTimeString(location.getTime().getTime());
-				newLocation.setFeedback(new ArrayList<Feedback>());
+				newLocation.setFeedback((List<Feedback>) new ArrayList<Feedback>());
 				newLocation.setAddress(location.getAddress());
 				newLocation.setLatitude(location.getLatitude());
 				newLocation.setLongitude(location.getLongitude());
 				newLocation.setTimesReported(0);
 				newLocation.setDescription(location.getDescription());
-				newLocation.setUserReports(new ArrayList<String>());
+				newLocation.setUserReports((List<String>) new ArrayList<String>());
 
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (location.getImages() != null) {
@@ -273,7 +270,7 @@ public class LocationServlet extends HttpServlet {
 
 				if (timesReported == 2) {
 					// delete Location
-					ArrayList<Location> deleteLocations = new ArrayList<Location>();
+					List<Location> deleteLocations = new ArrayList<Location>();
 					deleteLocations.add(location);
 					delete(deleteLocations, em);
 				} else {
@@ -295,8 +292,7 @@ public class LocationServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory and create EntityManager
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
@@ -316,7 +312,7 @@ public class LocationServlet extends HttpServlet {
 
 			// read with parameters
 			res = read(em, paramType, paramBoundNorthWestLat, paramBoundNorthWestLong, paramBoundSouthEastLat,
-							paramBoundSouthEastLong);
+					paramBoundSouthEastLong);
 			response.setStatus(200);
 		} catch (Exception e) {
 			// send back error
@@ -337,8 +333,7 @@ public class LocationServlet extends HttpServlet {
 	 * @exception Exception if user is not logged in
 	 */
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// retrieve EntityManagerFactory, create EntityManager and retrieve data (= list
 		// of locations)

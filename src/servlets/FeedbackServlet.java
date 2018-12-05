@@ -50,7 +50,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if user has already given feedback for this route
 	 */
 	private static String createRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding route, check if it exists
 		Route route = em.find(Route.class, id);
@@ -98,7 +98,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if user has already given feedback for this location
 	 */
 	private static String createLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding location, check if it exists
 		Location location = em.find(Location.class, id);
@@ -147,7 +147,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String deleteRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding route, check if it exists
 		Route route = em.find(Route.class, id);
@@ -202,7 +202,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String deleteLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding location, check if it exists
 		Location location = em.find(Location.class, id);
@@ -255,7 +255,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String updateRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding route, check if it exists
 		Route route = em.find(Route.class, id);
@@ -300,7 +300,7 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String updateLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding location, check if it exists
 		Location location = em.find(Location.class, id);

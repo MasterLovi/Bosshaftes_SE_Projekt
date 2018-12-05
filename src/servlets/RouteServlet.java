@@ -62,9 +62,8 @@ public class RouteServlet extends HttpServlet {
 	 * @exception Exception if type is neither "Kultur" nor "Party"
 	 */
 	private static String read(EntityManager em, String type, String maxTime, double minRating, int maxNoStops,
-					double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat,
-					double boundSouthEastLong,
-					Integer owner) throws Exception {
+			double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat, double boundSouthEastLong,
+			Integer owner) throws Exception {
 
 		if (type == null) {
 			throw new Exception("Type cannot be null.");
@@ -75,8 +74,8 @@ public class RouteServlet extends HttpServlet {
 		String selectQuery = "SELECT r FROM Route r" + " WHERE r.type = '" + type + "'";
 
 		String routeParams = " AND r.avgRating >= " + minRating + " AND r.numberOfStops <= " + maxNoStops
-						+ " AND r.firstLat BETWEEN " + boundSouthEastLat + " AND " + boundNorthWestLat
-						+ " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
+				+ " AND r.firstLat BETWEEN " + boundSouthEastLat + " AND " + boundNorthWestLat
+				+ " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
 
 		selectQuery = (owner != null) ? (selectQuery + " AND r.owner.id = " + owner) : selectQuery + routeParams;
 
@@ -145,14 +144,13 @@ public class RouteServlet extends HttpServlet {
 			newRoute.setName(route.getName());
 			newRoute.setType(route.getType());
 			newRoute.setTimeString(route.getTime().getTime());
-			newRoute.setFeedback(new ArrayList<Feedback>());
+			newRoute.setFeedback((List<Feedback>) new ArrayList<Feedback>());
 			newRoute.setAvgRating(5);
 			newRoute.setDescription(route.getDescription());
 
 			// Select Route from database table
 			Query query = em
-							.createQuery("SELECT u FROM Users u WHERE u.username = '" + session.getAttribute("username")
-											+ "'");
+					.createQuery("SELECT u FROM Users u WHERE u.username = '" + session.getAttribute("username") + "'");
 			List<Users> result = query.getResultList();
 			if (result.size() > 0) {
 				Users owner = result.get(0);
@@ -207,8 +205,7 @@ public class RouteServlet extends HttpServlet {
 			if (result != null) {
 				em.remove(result);
 			} else {
-				throw new Exception(
-								"Route \"" + route.getName() + "\"does not exist.");
+				throw new Exception("Route \"" + route.getName() + "\"does not exist.");
 			}
 		}
 		return "Success";
@@ -287,7 +284,7 @@ public class RouteServlet extends HttpServlet {
 			Integer owner = null;
 			Integer paramStops = null;
 			Double paramRating = null, paramBoundNorthWestLat = null, paramBoundNorthWestLong = null,
-							paramBoundSouthEastLat = null, paramBoundSouthEastLong = null;
+					paramBoundSouthEastLat = null, paramBoundSouthEastLong = null;
 
 			if (request.getParameter("rating") != null) {
 				paramRating = Double.valueOf(request.getParameter("rating"));
@@ -303,7 +300,7 @@ public class RouteServlet extends HttpServlet {
 			}
 
 			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWestLat,
-							paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong, owner);
+					paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong, owner);
 
 			response.setStatus(200);
 		} catch (Exception e) {

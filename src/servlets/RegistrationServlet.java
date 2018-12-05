@@ -48,8 +48,7 @@ public class RegistrationServlet extends HttpServlet {
 	 *                      email
 	 */
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// Obtain a database connection:
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
@@ -59,7 +58,7 @@ public class RegistrationServlet extends HttpServlet {
 
 			// retrieve all parameters
 			Users user = new Users();
-			user.setRoutes(new ArrayList<Route>());
+			user.setRoutes((List<Route>) new ArrayList<Route>());
 			user.setUsername(request.getParameter("username"));
 			user.setEmail(request.getParameter("email"));
 
