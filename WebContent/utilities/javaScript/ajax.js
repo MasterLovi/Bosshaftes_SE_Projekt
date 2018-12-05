@@ -118,7 +118,7 @@ function getLocationFromDatabase(sType) {
 					marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
 							"<img class=\"popupImage\" src=\""+json[i].images[0]+"\">" + 
 							"<p>Bewertung</p>" +
-							"<div class=\"ratingWrapper centered\">" +
+							"<div class=\"ratingWrapperPopup centered\">" +
 								"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
 								"<i class='material-icons " + (json[i].avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
 								"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
@@ -493,19 +493,14 @@ function addPointToRoute(locationId, routeId) {
 		}
 	});
 	
-	$.each(globalLayer._layers, function(i, v) {
-		if(v.info.id == locationId) {
-			location = v.info;
-			return;
-		}
-	})
+	location = globalLayer.getLayer(locationId).info;
 	
 	route.stops.push(location);
 	route.numberOfStops = route.numberOfStops + 1;
-	pTimeReturned = calculateTraveltime(json);
+	pTimeReturned = calculateTraveltime(route);
 	
 	pTimeReturned.then(function(time) {
-		json.time.time = time;
+		route.time.time = time;
 		var jsonArray = [route];
 		
 		$.ajax({

@@ -79,7 +79,7 @@ public class RouteServlet extends HttpServlet {
 				+ " AND r.firstLat BETWEEN " + boundSouthEastLat + " AND " + boundNorthWestLat
 				+ " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
 
-		selectQuery = (owner != null) ? (selectQuery + " AND r.owner.id = " + owner) : selectQuery + routeParams;
+		selectQuery = (owner != -1) ? (selectQuery + " AND r.owner.id = " + owner) : selectQuery + routeParams;
 
 		// Select Route from database table
 		Query query = em.createQuery(selectQuery);
@@ -147,7 +147,7 @@ public class RouteServlet extends HttpServlet {
 			newRoute.setType(route.getType());
 			newRoute.setTimeString(route.getTime().getTime());
 			newRoute.setFeedback((List<Feedback>) new ArrayList<Feedback>());
-			newRoute.setAvgRating(5);
+			newRoute.setAvgRating(3);
 			newRoute.setDescription(route.getDescription());
 
 			// Select Route from database table
@@ -284,10 +284,9 @@ public class RouteServlet extends HttpServlet {
 			// retrieve all parameters
 			String paramType = request.getParameter("type");
 			String paramTime = request.getParameter("time");
-			Integer owner = null;
-			Integer paramStops = null;
-			Double paramRating = null, paramBoundNorthWestLat = null, paramBoundNorthWestLong = null,
-					paramBoundSouthEastLat = null, paramBoundSouthEastLong = null;
+			Integer paramStops, owner;
+			Double paramRating, paramBoundNorthWestLat, paramBoundNorthWestLong,
+					paramBoundSouthEastLat, paramBoundSouthEastLong;
 
 			if (request.getParameter("rating") != null) {
 				paramRating = Double.valueOf(request.getParameter("rating"));
@@ -297,9 +296,17 @@ public class RouteServlet extends HttpServlet {
 				paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLng"));
 				paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
 				paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
-
+				owner = -1;
 			} else {
 				owner = Integer.valueOf(request.getParameter("owner"));
+				
+				paramRating = -1.0;
+				paramStops = -1;
+
+				paramBoundNorthWestLat = -1.0;
+				paramBoundNorthWestLong = -1.0;
+				paramBoundSouthEastLat = -1.0;
+				paramBoundSouthEastLong = -1.0;
 			}
 
 			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWestLat,

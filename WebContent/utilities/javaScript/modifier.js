@@ -433,7 +433,7 @@ function showNewRoutePopup(id) {
 
 function showUpdateRoutePopup(id) {
 	loadPopupContent("updateFromRoute")
-	$("#updateRouteform input[name=locationId]").val(id);
+	$("#updateRouteForm input[name=locationId]").val(id);
 	loadUserRoutes();
 
 }
@@ -465,10 +465,10 @@ function changeRouteInformation(routeId) {
 		if (v.id == routeId) {
 			$.each(v.stops,
 					function(i, v) {
-						$("#tourStopsPopup").append(
-								"<li class=\"tourStopsPopupData\">" + v.name
-										+ "</li>");
-					});
+				$("#tourStopsPopup").append(
+						"<li class=\"tourStopsPopupData\"><div class=\"locationDataRoute\"><p class=\"inline locationDataRouteText\">" + v.name
+						+ "</p><i class=\"material-icons userDelete\" onClick=\"\">delete_forever</i></li>");
+			});
 		}
 	});
 }
@@ -492,7 +492,6 @@ function convertImageToBase64(input) {
 			fr.onload = function(e) {
 				base64 = e.target.result;
 				resolve(base64);
-				debugger;
 			};
 			fr.readAsDataURL(file);
 			
@@ -509,7 +508,6 @@ function convertImageToBase64(input) {
 			var base64;
 			fr.onload = function(e) {
 				base64 = e.target.result;
-				debugger;
 				resolve(base64);
 			};
 			fr.readAsDataURL(file);

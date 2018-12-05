@@ -138,7 +138,7 @@ function loadPopupContent(popupType) {
 		"<h4 class=\"centered\">Zu Route hinzufügen</h4>" +
 		"<p id=\"popupError\"></p>" +
 		"<p class=\"centered infoHeader\">Route auswählen</p>" +
-		"<select name=\"routes\">" +
+		"<select id=\"routeSelect\" name=\"routes\">" +
 		"</select>" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
 		"<ul id=\"tourStopsPopup\"></ul>" +
@@ -262,7 +262,7 @@ function loadPopupContent(popupType) {
 			var error = updateRouteValidation();
 			
 			if (!error) {
-				addPointToRoute($("#updateRouteForm input[name=id]").val()); //TODO Create Function (markerId)
+				addPointToRoute($("#updateRouteForm input[name=locationId]").val(), $("#updateRouteForm select[name=routes]").val()); //TODO Create Function (markerId)
 				return false;
 			} else {
 				$("#popupError").html(error);

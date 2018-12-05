@@ -30,10 +30,11 @@ function getAddress(lat, lng) {
 }
 
 function calculateTraveltime(tourObj){
-	var time;
-	var routeObj = getRoutingJsonStructure();
-	
 	return new Promise(function(resolve, reject) {
+		var time;
+		var routeObj = getRoutingJsonStructure();
+		var routeJsonString;
+		
 		$.each(tourObj.stops, function(i, v) {
 			var newElement = {
 				type : "s",
@@ -49,10 +50,20 @@ function calculateTraveltime(tourObj){
 			routeType : "pedestrian"
 		};
 		
-		$.getJSON("http://www.mapquestapi.com/directions/v2/route?key=y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6", tourObj).done( function (data) {
-			resolve(data.route.legs.formattedTime);
-		});
+		routeJsonString = JSON.stringify(routeObj);
 		
+		$.ajax({
+			url: "http://www.mapquestapi.com/directions/v2/route?key=y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6",
+			type: "POST",
+			data: routeJsonString,
+			contentType: "application/json",
+			success: function(response) {
+				resolve(response.route.formattedTime);
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});		
 	});
 	
 	

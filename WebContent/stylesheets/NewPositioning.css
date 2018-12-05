@@ -356,6 +356,15 @@ td .inputSubmit{
 	list-style-type: none;
 }
 
+#routeSelect{
+	padding-bottom: 10px;
+	width: 100%;
+}
+
+#tourStopsPopup{
+	list-style-type: none;
+}
+
 .absolute{
 	position: absolute;
 }
@@ -531,6 +540,10 @@ td .inputSubmit{
 	width: 300px;
 }
 
+.ratingWrapperPopup{
+	width: 300px;
+}
+
 .fullSize {
 	width: 100%;
 }
@@ -567,4 +580,17 @@ td .inputSubmit{
 	text-align: -moz-left;
 	text-align: -webkit-left;
  	text-align: left;
+}
+
+.locationDataRouteText{
+	text-align: -moz-left;
+	text-align: -webkit-left;
+ 	text-align: left;
+	width: 95%;
+	vertical-align: middle;
+}
+
+.locationDataRoute{
+	width: 100%;
+	height: 24px;
 }
