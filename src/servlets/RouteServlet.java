@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.Location;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import model.Feedback;
+import model.Location;
 import model.Route;
 import model.Users;
 import sun.misc.BASE64Decoder;
@@ -64,8 +64,9 @@ public class RouteServlet extends HttpServlet {
 	 * @exception Exception if type is neither "Kultur" nor "Party"
 	 */
 	private static String read(EntityManager em, String type, String maxTime, double minRating, int maxNoStops,
-			double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat, double boundSouthEastLong)
-			throws Exception {
+					double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat,
+					double boundSouthEastLong)
+					throws Exception {
 
 		if (type == null) {
 			throw new Exception("Type darf nicht null sein!");
@@ -145,13 +146,14 @@ public class RouteServlet extends HttpServlet {
 			newRoute.setName(route.getName());
 			newRoute.setType(route.getType());
 			newRoute.setTimeString(route.getTime().getTime());
-			newRoute.setFeedback((List<Feedback>) new ArrayList<Feedback>());
+			newRoute.setFeedback(new ArrayList<Feedback>());
 			newRoute.setAvgRating(5);
 			newRoute.setDescription(route.getDescription());
 
 			// Select Route from database table
 			Query query = em
-					.createQuery("SELECT u FROM Users u WHERE u.username = '" + session.getAttribute("username") + "'");
+							.createQuery("SELECT u FROM Users u WHERE u.username = '" + session.getAttribute("username")
+											+ "'");
 			List<Users> result = query.getResultList();
 			if (result.size() > 0) {
 				Users owner = result.get(0);
@@ -207,7 +209,8 @@ public class RouteServlet extends HttpServlet {
 				em.remove(result);
 			} else {
 				throw new Exception(
-						"Route \"" + route.getName() + "\"existiert nicht und kann daher nicht gelöscht werden");
+								"Route \"" + route.getName()
+												+ "\"existiert nicht und kann daher nicht gelöscht werden");
 			}
 		}
 		return "Success";
@@ -292,7 +295,7 @@ public class RouteServlet extends HttpServlet {
 			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
 
 			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWestLat,
-					paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong);
+							paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong);
 			response.setStatus(200);
 		} catch (Exception e) {
 			// send back error
