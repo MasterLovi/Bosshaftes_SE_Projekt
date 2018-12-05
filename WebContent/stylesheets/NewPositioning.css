@@ -357,12 +357,18 @@ td .inputSubmit{
 }
 
 #routeSelect{
-	padding-bottom: 10px;
+	margin-bottom: 10px;
 	width: 100%;
 }
 
 #tourStopsPopup{
 	list-style-type: none;
+}
+
+#feedbackEditArea{
+	width: 100%;
+	height: 50px;
+	resize: none;
 }
 
 .absolute{
@@ -386,6 +392,14 @@ td .inputSubmit{
  	text-align: center;
 }
 
+.clearfix{
+	clear: both;
+}
+
+.heightFix{
+	height: inherit;
+}
+
 .right{
 	text-align: -moz-right;
 	text-align: -webkit-right;
@@ -404,7 +418,6 @@ td .inputSubmit{
 }
 
 .activeStar{
-	cursor: pointer;
 	color: #ffbf00;
 }
 
@@ -499,6 +512,10 @@ td .inputSubmit{
 	cursor: pointer !important;
 }
 
+.clickable{
+	cursor: pointer;
+}
+
 .popupImage{
 	height: 50px;
 	width: 50px;
@@ -562,11 +579,9 @@ td .inputSubmit{
 
 .feebackRatingWrapper{
 	display: inline-block;
-	cursor: pointer;
 }
 
 .userDelete{
-	display: inline-block;
 	float: right;
 	cursor: pointer;
 }
@@ -586,11 +601,31 @@ td .inputSubmit{
 	text-align: -moz-left;
 	text-align: -webkit-left;
  	text-align: left;
-	width: 95%;
+	width: 90%;
 	vertical-align: middle;
 }
 
 .locationDataRoute{
 	width: 100%;
 	height: 24px;
+}
+
+.tourStopsPopupData{
+    height: 24px;
+    margin-bottom: 3px;
+    overflow: hidden;
+}
+
+
+.red{
+	color: red;
+}
+
+.green{
+	color: green;
+}
+
+.feedbackStar:hover{
+	cursor: pointer;
+	color: #ffbf00;
 }

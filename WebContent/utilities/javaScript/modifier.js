@@ -234,7 +234,8 @@ function toursHoverEvent() {
 					}
 				});
 				// TODO Data must be loaded before the panel is shown
-
+				
+				$("#tourTypeOnPanle").val("global");
 				$("#infoTourName").html(tourObj.name);
 				$("#infoTourDescription").html(tourObj.description);
 				$("#tourIdOnPanle").val(tourObj.id);
@@ -254,6 +255,8 @@ function toursHoverEvent() {
 						+ "</div>";
 
 				$("#infoTourRating").html(ratingElement);
+				
+				$("#infoTourTime").html(tourObj.time.time);
 
 				$("#tourStops").empty();
 
@@ -284,18 +287,27 @@ function toursHoverEvent() {
 	})
 }
 
-function calculateRoute() {
+function calculateRoute(type) {
 	var tour = $("#tourIdOnPanle").val();
 	var tourObj;
 
 	removeCurrentRoute();
-
-	$.each(globalRoutes, function(i, v) {
-		if (v.id == tour) {
-			tourObj = v;
-			return;
-		}
-	});
+	
+	if (type == "global") {
+		$.each(globalRoutes, function(i, v) {
+			if (v.id == tour) {
+				tourObj = v;
+				return;
+			}
+		});
+	} else if (type == "user") {
+		$.each(userRoutes, function(i, v) {
+			if (v.id == tour) {
+				tourObj = v;
+				return;
+			}
+		});
+	}
 
 	var routeObj = getRoutingJsonStructure();
 
@@ -399,11 +411,15 @@ function loadFeedbackToPopup(param) {
 		var userDelete = "";
 		
 		if (v.author.id == $("#userId").val()) {
-			userDelete = "<div class=\"userDelete\"><i class=\"material-icons editIcon\">create</i><i class=\"material-icons deleteIcon\">delete_forever</i></div>";
+			userDelete = "<div class=\"userDelete\">" +
+					"<i class=\"material-icons editIcon\" onClick=\"editFeedback("+v.id+", this)\">create</i>" +
+					"<i class=\"material-icons deleteIcon\" onClick=\"confirmationFeedbackDeletion("+v.id+", this)\">delete_forever</i>" +
+					"</div>";
 		}
 		
 		htmlElement = "<li class=\"popupFeedback\">"
 				+ "<div class=\"feebackRatingWrapper\">"
+				+ "<input type=\"hidden\" value="+v.rating+">"
 				+ "<i class='material-icons "
 				+ (v.rating >= 1 ? "activeStar" : "")
 				+ "'>grade</i>" + "<i class='material-icons "
@@ -434,27 +450,34 @@ function showNewRoutePopup(id) {
 function showUpdateRoutePopup(id) {
 	loadPopupContent("updateFromRoute")
 	$("#updateRouteForm input[name=locationId]").val(id);
-	loadUserRoutes();
+	loadUserRoutes("update");
 
 }
 
-function showFeedbackPopup(id) {
+function showFeedbackPopup(param) {
 	loadPopupContent("showFeedback");
-
-	loadFeedbackToPopup(id);
+	$("#typeOfShownFeedback").val(param.type);
+	$("#idOfShownFeedback").val(param.id);
+	loadFeedbackToPopup(param);
 }
 
 function unloadPopup() {
 	$("#myModal").hide();
 }
 
-function loadUserRoutes() {
+function loadUserRoutes(type) {
 	$.each(userRoutes, function(i, v) {
 		if (i == 0) {
 			changeRouteInformation(v.id)
 		}
-		$("#updateRouteForm select[name=routes]").append(
-				"<option value=" + v.id + ">" + v.name + "</option>");
+		if (type == "update") {
+			$("#updateRouteForm select[name=routes]").append(
+					"<option value=" + v.id + ">" + v.name + "</option>");
+			
+		} else if (type == "show") {
+			$("#manageRouteForm select[name=routes]").append(
+					"<option value=" + v.id + ">" + v.name + "</option>");
+		}
 	});
 }
 
@@ -466,8 +489,8 @@ function changeRouteInformation(routeId) {
 			$.each(v.stops,
 					function(i, v) {
 				$("#tourStopsPopup").append(
-						"<li class=\"tourStopsPopupData\"><div class=\"locationDataRoute\"><p class=\"inline locationDataRouteText\">" + v.name
-						+ "</p><i class=\"material-icons userDelete\" onClick=\"\">delete_forever</i></li>");
+						"<li class=\"tourStopsPopupData\"><div class=\"inline clearfix floatRight heightFix\"><i class=\"material-icons userDelete\" onClick=\"confirmationRoutePartDeletion("+v.id+", this)\">delete_forever</i></div><div class=\"locationDataRoute\"><p class=\"inline locationDataRouteText\">" + v.name
+						+ "</p></li>");
 			});
 		}
 	});
@@ -513,5 +536,246 @@ function convertImageToBase64(input) {
 			fr.readAsDataURL(file);
 		});
 	}
+}
+
+function loadUserRoutePopup() {
+	loadPopupContent("manageRoutes");
+	loadUserRoutes("show");
+}
+
+function showUserRouteOnInfo(id) {
+	
+	var tour = id;
+	var tourObj;
+
+	var ratingElement;
+
+	$.each(userRoutes, function(i, v) {
+		if (v.id == tour) {
+			tourObj = v;
+			return;
+		}
+	});
+	
+	$("#tourTypeOnPanle").val("user");
+	$("#infoTourName").html(tourObj.name);
+	$("#infoTourDescription").html(tourObj.description);
+	$("#tourIdOnPanle").val(tourObj.id);
+
+	ratingElement = "<div class=\"ratingWrapper centered\"><i class='material-icons "
+			+ (tourObj.avgRating >= 1 ? "activeStar" : "")
+			+ "'>grade</i>" + "<i class='material-icons "
+			+ (tourObj.avgRating >= 2 ? "activeStar" : "")
+			+ "'>grade</i>" + "<i class='material-icons "
+			+ (tourObj.avgRating >= 3 ? "activeStar" : "")
+			+ "'>grade</i>" + "<i class='material-icons "
+			+ (tourObj.avgRating >= 4 ? "activeStar" : "")
+			+ "'>grade</i>" + "<i class='material-icons "
+			+ (tourObj.avgRating >= 5 ? "activeStar" : "")
+			+ "'>grade</i>" 
+			+ "<a class=\"feedbackInfoOnPanle\" onClick=\"showFeedbackPopup({id:"+tourObj.id+", type: 'Route'})\"><i class='material-icons'>info_outline</i></a>"
+			+ "</div>";
+
+	$("#infoTourRating").html(ratingElement);
+	
+	$("#infoTourTime").html(tourObj.time.time);
+
+	$("#tourStops").empty();
+
+
+	$.each(tourObj.stops, function(i, v) {
+		$("#tourStops").append(
+				"<li class='infotext'>" + v.name
+						+ "</li><hr>");
+	});
+
+	$("#tourInfoPanel").css("display", "block");
+
+}
+
+function isLocationInRoute(locationId, routeId) {
+	var location = globalLayer.getLayer(locationId).info;
+	var tourObj;
+	var error = false;
+	
+	$.each(userRoutes, function(i,v) {
+		if (v.id == routeId) {
+			tourObj = v;
+			return;
+		}
+	});
+	
+	$.each(tourObj.stops, function(i,v) {
+		if (v.id == location.id) {
+			error = true;
+		}
+	});
+	
+	return error;
+}
+
+
+var prevLocationContent;
+var prevLocationElement;
+
+function confirmationRoutePartDeletion(locationId, element) {
+	var counter = 0;
+	var form;
+	
+	if ($("#manageRouteForm").prop("id") == null) {
+		form = "updateFromRoute";
+	} else {
+		form = "manageRouteForm";
+	}
+	
+	$("#tourStopsPopup li").each(function(i,v) {
+		if (v.firstElementChild.childElementCount > 1) {
+			counter = counter + 1;
+		}
+	});
+	
+	if (counter > 0) {
+		prevLocationElement.innerHTML = prevLocationContent;
+		
+		prevLocationElement = null;
+		prevLocationContent = null;
+		
+		counter = 0
+	}
+	
+	
+	var replaceElement = element.parentElement;
+	prevLocationContent = replaceElement.innerHTML;
+	prevLocationElement = replaceElement;
+	
+	//TODO Add Delete call
+	var confirm = "<i class=\"material-icons green clickable\" onClick=\"removeFromRoute("
+		+ locationId+", " 
+		+ $("#"+form+" select[name=routes] option:selected").val()+")\">done</i>" 
+		+ "<i class=\"material-icons red clickable\" onClick=\"cancelDeletionOrChange('route')\">close</i>"; 
+	
+	replaceElement.innerHTML = confirm;
+}
+
+// Needed if the user decides to not delete the element.
+var prevFeedbackContent;
+var prevFeedbackElement;
+
+function confirmationFeedbackDeletion(feedbackId, element) {
+	var replaceElement = element.parentElement;
+	prevFeedbackContent = replaceElement.innerHTML;
+	prevFeedbackElement = replaceElement;
+	
+	var confirm = "<i class=\"material-icons green clickable\" onClick=\"deleteFeedback('"
+		+ $("#typeOfShownFeedback").val() 
+		+ "', " + $("#idOfShownFeedback").val() 
+		+ ", " + feedbackId + ")\">done</i>" 
+		+ "<i class=\"material-icons red clickable\" onClick=\"cancelDeletionOrChange('feedback')\">close</i>"; 
+	
+	replaceElement.innerHTML = confirm;
+}
+
+function cancelDeletionOrChange(type) {
+	
+	if (type == "feedback") {
+		prevFeedbackElement.innerHTML = prevFeedbackContent;
+		
+		prevFeedbackElement = null;
+		prevFeedbackContent = null;
+	} else if (type == "route") {
+		prevLocationElement.innerHTML = prevLocationContent;
+		
+		prevLocationElement = null;
+		prevLocationContent = null;
+	} else if (type == "edit") {
+		// Disable click event
+		$(".feedbackStar").click(null);
+		
+		prevFeedbackElement.innerHTML = prevFeedbackContent;
+		
+		prevFeedbackElement = null;
+		prevFeedbackContent = null;
+		unchangedFeedbackElement.innerHTML = unchangedComment;
+		unchangedRatingElement.innerHTML = unchangedRating;
+		
+		unchangedComment = null;
+		unchangedFeedbackElement = null;
+		unchangedFeedbackContent= null;
+		unchangedRatingElement = null;
+		unchangedRating = null;
+	}
+	
+}
+
+var unchangedFeedbackElement;
+var unchangedFeedbackContent;
+var unchangedComment;
+var unchangedRatingElement;
+var unchangedRating; 
+
+function editFeedback(feedbackId, element) {
+	var replaceElement = element.parentElement;
+	var stars = element.parentElement.parentElement.firstElementChild.children;
+	var starArray = [];
+	unchangedComment = element.parentElement.parentElement.lastElementChild.innerHTML;
+	unchangedFeedbackContent = replaceElement.innerHTML;
+	unchangedFeedbackElement = element.parentElement.parentElement.lastElementChild;
+	unchangedRatingElement = element.parentElement.parentElement.firstElementChild;
+	unchangedRating = element.parentElement.parentElement.firstElementChild.innerHTML;
+	
+	
+	element.parentElement.parentElement.lastElementChild.innerHTML = "<textarea id=\"feedbackEditArea\">"+element.parentElement.parentElement.lastElementChild.lastElementChild.innerHTML+"</textarea>";
+	
+	// Make the stars editable again
+	// Starts with 1 because the first element must be ignored
+	stars[0].id = "feedbackRatingValue";
+	
+	for(var i = 1; i < stars.length; i++) {
+		stars[i].id = "feedbackStar"+(i);
+		stars[i].className = stars[i].className + " feedbackStar ";
+		starArray.push("feedbackStar"+(i));
+	}
+	
+	$(".feedbackStar").click(function(){
+
+		var id = "";
+		var starCount = 1;
+		var on = true;
+		var stars = starArray;
+		
+		id = $(this).attr("id");
+		for(var i = 0; i < stars.length; i++){
+			if(stars[i] == id){
+				$("#"+stars[i]).addClass('activeStar');
+				on = false;
+			} else {
+				if(on){
+					$("#"+stars[i]).addClass('activeStar');
+					starCount++;
+				} else {
+					$("#"+stars[i]).removeClass('activeStar');
+				}
+			}
+		}
+		
+		$("#feedbackRatingValue").val(starCount);
+	});
+	
+	confirmationFeedbackChange(feedbackId, element);
+}
+
+function confirmationFeedbackChange(feedbackId, element) {
+	var replaceElement = element.parentElement;
+	prevFeedbackContent = replaceElement.innerHTML;
+	prevFeedbackElement = replaceElement;
+	
+	//TODO Add Delete call
+	var confirm = "<i class=\"material-icons green clickable\" onClick=\"changeFeedback('"
+		+ $("#typeOfShownFeedback").val() 
+		+ "', " + $("#idOfShownFeedback").val() 
+		+ ", " + feedbackId + ")\">done</i>" 
+		+ "<i class=\"material-icons red clickable\" onClick=\"cancelDeletionOrChange('edit')\">close</i>"; 
+	
+	replaceElement.innerHTML = confirm;
 }
 

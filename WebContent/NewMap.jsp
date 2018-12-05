@@ -101,6 +101,7 @@
 		<div id="tourInfoPanel">
 			<i class="absolute material-icons" id="closeTourInfo">search</i>
 			<input type="hidden" id="tourIdOnPanle" value="">
+			<input type="hidden" id="tourTypeOnPanle" value ="">
 			<table>
 				<tr>
 					<td class="infoHeader">
@@ -140,8 +141,20 @@
 						Bilder
 					</td>
 				</tr>
+				
 				<tr>
 					<td id="infoTourPics" class="infotext">
+					
+					</td>
+				</tr>
+				<tr>
+					<td class="infoHeader">
+						Dauer der Tour
+					</td>
+				</tr>
+				
+				<tr>
+					<td id="infoTourTime" class="infotext">
 					
 					</td>
 				</tr>

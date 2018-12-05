@@ -57,7 +57,7 @@ $(document).ready(function(){
 	
 	$("#ratingValue").val(starCount);
 	
-	})
+	});
 })
 
 // Links the spot slider and value box
@@ -201,7 +201,8 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	$("#buttonLoad").click(function(){
-		calculateRoute();
+		calculateRoute($("#tourTypeOnPanle").val());
+		unloadPopup();
 	});
 	
 	$("#buttonRate").click(function() {

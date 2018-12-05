@@ -53,13 +53,38 @@ function searchLocation(sType) {
 	});
 }
 
-
+function refreshLayerData(sType) {
+	$.ajax({
+		url: "LocationServlet",
+		type: "GET",
+		data: {
+			type: sType,
+			boundNorthWestLat: getMap().getBounds().getNorthWest().lat, 
+			boundNorthWestLng: getMap().getBounds().getNorthWest().lng,
+			boundSouthEastLat: getMap().getBounds().getSouthEast().lat,
+			boundSouthEastLng: getMap().getBounds().getSouthEast().lng
+		},
+		success: function(response) {
+			// Reload all Infos in globalLayer
+			var json = JSON.parse(response);
+			$.each(json, function(i,v) {
+				$.each(globalLayer._layers, function(j,w) {
+					if (w.info.id == v.id) {
+						w.info = v;
+					}
+				});
+			});
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+}
 
 function getLocationFromDatabase(sType) {
 	$.ajax({
 		url: "LocationServlet",
 		type: "GET",
-		contentType: "application/x-www-form-urlencoded;charset=ISO-8859-2",
 		data: {
 			type: sType,
 			boundNorthWestLat: getMap().getBounds().getNorthWest().lat, 
@@ -326,7 +351,8 @@ function sendFeedback(type, id) {
 			json: JSON.stringify(jsonArray)
 		}, 
 		success: function(response) {
-			console.log(response);
+			refreshLayerData($("#currentAction").val());
+			unloadPopup();
 		},
 		error: function(error) {
 			console.log(error);
@@ -339,14 +365,11 @@ function sendFeedback(type, id) {
 function deleteFeedback(type, id, feedbackId) {
 	var json;
 	var feedback;
+	var locationId;
+	var indexOfFeedback;
 	
 	if (type == "Location") {
-		$.each(globalLayer._layer, function(i,v){
-			if (v.info.id == id) {
-				json = v.info;
-				return;
-			}
-		});
+		json = globalLayer.getLayer(id).info;
 	} else {
 		$.each(globalRoutes, function(i,v){
 			if (v.id == id) {
@@ -356,11 +379,15 @@ function deleteFeedback(type, id, feedbackId) {
 		});
 	}
 	
+	locationId = json.id;
+	
 	$.each(json.feedback, function(i,v) {
 		if(v.id == feedbackId){
 			feedback = v;
+			indexOfFeedback = i;
+			return;
 		}
-	})
+	});
 	
 	var jsonArray = [feedback];
 	
@@ -369,12 +396,16 @@ function deleteFeedback(type, id, feedbackId) {
 		type: "POST",
 		data: {
 			type: type,
-			id: id,
+			id: locationId,
 			operation: "delete",
 			json: JSON.stringify(jsonArray)
 		}, 
 		success: function(response) {
-			console.log(response);
+			// Deletes the recently deleted feedback from the globalLayer
+			globalLayer.getLayer(id).info.feedback.splice(indexOfFeedback, 1);
+			
+			// Reloads the feedback
+			loadFeedbackToPopup({id: id, type: type});
 		},
 		error: function(error) {
 			console.log(error);
@@ -387,14 +418,10 @@ function deleteFeedback(type, id, feedbackId) {
 function changeFeedback(type, id, feedbackId) {
 	var json;
 	var feedback;
+	var locationId;
 	
 	if (type == "Location") {
-		$.each(globalLayer._layer, function(i,v){
-			if (v.info.id == id) {
-				json = v.info;
-				return;
-			}
-		});
+		json = globalLayer.getLayer(id).info;
 	} else {
 		$.each(globalRoutes, function(i,v){
 			if (v.id == id) {
@@ -404,14 +431,17 @@ function changeFeedback(type, id, feedbackId) {
 		});
 	}
 	
+	locationId = json.id;
+	
 	$.each(json.feedback, function(i,v) {
 		if(v.id == feedbackId){
 			feedback = v;
 		}
-	})
+	});
 	
-	feedback.comment = $("#feedbackForm textarea[name=comment]").val();
-	feedback.rating = $("#feedbackForm input[name=rating]").val();
+	//TODO Replace with inbuild textarea and starchagne 
+	feedback.comment = $("#feedbackEditArea").val();
+	feedback.rating = $("#feedbackRatingValue").val();
 	
 	var jsonArray = [feedback];
 	
@@ -420,12 +450,12 @@ function changeFeedback(type, id, feedbackId) {
 		type: "POST",
 		data: {
 			type: type,
-			id: id,
+			id: locationId,
 			operation: "update",
 			json: JSON.stringify(jsonArray)
 		}, 
 		success: function(response) {
-			console.log(response);
+			loadFeedbackToPopup({id: id, type: type});
 		},
 		error: function(error) {
 			console.log(error);
@@ -525,6 +555,8 @@ function removeFromRoute(locationId, routeId) {
 	// Komplettes Route Object 
 	var removeIndex;
 	var route;
+	var location;
+	var pTimeCalculate;
 	
 	$.each(userRoutes, function(i,v) {
 		if(v.id == routeId) {
@@ -540,22 +572,29 @@ function removeFromRoute(locationId, routeId) {
 	});
 	
 	route.stops.splice(removeIndex,1); //Removes the element on index 'removeIndex' in the Array
+	route.numberOfStops = route.numberOfStops-1;
+	pTimeCalculate = calculateTraveltime(route);
 	
-	var jsonArray = [route];
-	
-	$.ajax({
-		url: "RouteServlet",
-		type: "POST",
-		data: {
-			operation: "update",
-			json: JSON.stringify(jsonArray)
-		},
-		success: function(response) {
-			console.log(response);
-		},
-		error: function(error) {
-			console.log(error);
-		}
+	pTimeCalculate.then(function(time) {
+		
+		route.time.time = time;
+		
+		var jsonArray = [route];
+		
+		$.ajax({
+			url: "RouteServlet",
+			type: "POST",
+			data: {
+				operation: "update",
+				json: JSON.stringify(jsonArray)
+			},
+			success: function(response) {
+				changeRouteInformation(routeId);
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
 	});
 }
 

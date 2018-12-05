@@ -161,8 +161,24 @@ function loadPopupContent(popupType) {
 	break;
 	case "showFeedback": {
 		content = content + "<h4 class=\"centered\">Bewertungen</h4>" +
+		"<input type=\"hidden\" id=\"typeOfShownFeedback\" value=\"\">" +
+		"<input type=\"hidden\" id=\"idOfShownFeedback\" value=\"\">" +
 		"<p class=\"centered infoHeader\" id=\"feedbackHeaderTitle\"></p>" +
 		"<ul id=\"feedbackList\"></ul>";
+	};
+	break;
+	case "manageRoutes": {
+		content = content + "<form id=\"manageRouteForm\" method=\"POST\" action=\"\">" +
+		"<h4 class=\"centered\">Ihre Routen</h4>" +
+		"<p id=\"popupError\"></p>" +
+		"<p class=\"centered infoHeader\">Route auswählen</p>" +
+		"<select id=\"routeSelect\" name=\"routes\">" +
+		"</select>" +
+		"<p class=\"centered infoHeader\">Beschreibung</p>" +
+		"<ul id=\"tourStopsPopup\"></ul>" +
+		"<input type=\"submit\" class=\"button\" value=\"Anzeigen\">" +
+		"<button class=\"button\" onClick=\"\">Löschen</button>" + //TODO Set function for delete here
+		"</form>";
 	};
 	break;
 	};
@@ -262,7 +278,12 @@ function loadPopupContent(popupType) {
 			var error = updateRouteValidation();
 			
 			if (!error) {
-				addPointToRoute($("#updateRouteForm input[name=locationId]").val(), $("#updateRouteForm select[name=routes]").val()); //TODO Create Function (markerId)
+				if (isLocationInRoute($("#updateRouteForm input[name=locationId]").val(), $("#updateRouteForm select[name=routes]").val())) {
+					$("#popupError").html("Dieser Ort ist bereits in der Route");
+					return false;
+				}
+				addPointToRoute($("#updateRouteForm input[name=locationId]").val(), $("#updateRouteForm select[name=routes]").val()); 
+				unloadPopup();
 				return false;
 			} else {
 				$("#popupError").html(error);
@@ -293,7 +314,21 @@ function loadPopupContent(popupType) {
 	case "showFeedback": {
 		
 		//TODO Add Function to the delete button
-	}
+	};
+	break;
+	case "manageRoutes": {
+		
+		$("#manageRouteForm").submit(function() {
+			showUserRouteOnInfo($("#manageRouteForm select[name=routes]").val());
+			return false;
+		});
+		
+		
+		
+		$("#manageRouteForm select[name=routes]").change(function() {
+			changeRouteInformation($("#manageRouteForm select[name=routes] option:selected").val());
+		});
+	};
 	break;
 	};
 	
