@@ -60,6 +60,8 @@ public class Location {
 	@Transient
 	@Expose
 	private List<String> images;
+	
+	private List<String> userReports;
 
 	@OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS_ID")
@@ -111,6 +113,10 @@ public class Location {
 	public List<String> getImages() {
 		return images;
 	}
+	
+	public List<String> getUserReports() {
+		return userReports;
+	}
 
 	public Address getAddress() {
 		return address;
@@ -159,6 +165,10 @@ public class Location {
 
 	public void setTime(Time time) {
 		this.time = time;
+	}
+	
+	public void setUserReports(List<String> userReports) {
+		this.userReports = userReports;
 	}
 
 	public void setAddress(Address address) {

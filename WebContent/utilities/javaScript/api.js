@@ -28,3 +28,32 @@ function getAddress(lat, lng) {
 		
 		return returnVals;
 }
+
+function calculateTraveltime(tourObj){
+	var time;
+	var routeObj = getRoutingJsonStructure();
+	
+	return new Promise(function(resolve, reject) {
+		$.each(tourObj.stops, function(i, v) {
+			var newElement = {
+				type : "s",
+				latLng : {
+					lat : v.latitude,
+					lng : v.longitude
+				}
+			};
+			routeObj.locations.push(newElement)
+		});
+
+		routeObj.options = {
+			routeType : "pedestrian"
+		};
+		
+		$.getJSON("http://www.mapquestapi.com/directions/v2/route?key=y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6", tourObj).done( function (data) {
+			resolve(data.route.legs.formattedTime);
+		});
+		
+	});
+	
+	
+}

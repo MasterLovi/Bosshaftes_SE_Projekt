@@ -8,8 +8,8 @@
 		<td><input type='password' name='password' class='inputText' placeholder='Password' required='' /></td>
 	</tr>
 	<tr>
-		<td><a href='register.jsp'>Registrieren</a></td>
-		<td><input type='submit' class='inputSubmit' value='Login'/></td>
+		<td><a href='register.jsp' class="button fullSize">Registrieren</a></td>
+		<td><input type='submit' class='inputSubmit button' value='Login'/></td>
 	</tr>
 	</table>
 </form>

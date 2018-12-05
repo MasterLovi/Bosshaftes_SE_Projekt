@@ -89,10 +89,11 @@ public class LocationServlet extends HttpServlet {
 				// convert pictures and data to JSON
 				if (location.getPictures() != null) {
 					for (byte[] picture : location.getPictures()) {
-						String image64 = new BASE64Encoder().encode(picture);
+						String image64 = new String(picture, "UTF-8");
 						images.add(image64);
 					}
 					location.setImages(images);
+//					System.out.println(images);
 				} else {
 					location.setImages(null);
 				}
@@ -139,12 +140,14 @@ public class LocationServlet extends HttpServlet {
 				newLocation.setLongitude(location.getLongitude());
 				newLocation.setTimesReported(0);
 				newLocation.setDescription(location.getDescription());
+				newLocation.setUserReports((List<String>) new ArrayList<String>());
 
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (location.getImages() != null) {
 					for (String sBase64 : location.getImages()) {
 						if(sBase64 != null) {
-							byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+							System.out.println(sBase64);
+							byte[] image = sBase64.getBytes("UTF-8");
 							images.add(image);
 						}
 					}
@@ -218,7 +221,7 @@ public class LocationServlet extends HttpServlet {
 				if (location.getImages() != null) {
 					for (String sBase64 : location.getImages()) {
 						if(sBase64 != null) {
-							byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+							byte[] image = sBase64.getBytes("UTF-8");
 							images.add(image);
 						}
 					}
@@ -254,7 +257,7 @@ public class LocationServlet extends HttpServlet {
 	 * @return "Success" if timesReported was successfully updated
 	 * @exception is the location that should be reported doesn't exist
 	 */
-	private static String report(List<Location> locations, EntityManager em) throws Exception {
+	private static String report(List<Location> locations, EntityManager em, HttpSession session) throws Exception {
 		// Loop over Locations that should be reported
 		for (Location location : locations) {
 			Query query = em.createQuery("SELECT l from Location l WHERE l.id = " + location.getId());
@@ -265,6 +268,12 @@ public class LocationServlet extends HttpServlet {
 				Location resultLocation = result.get(0);
 				int timesReported = resultLocation.getTimesReported();
 				
+				for(String username : resultLocation.getUserReports()) {
+					if (username.equals((String) session.getAttribute("username"))) {
+						throw new Exception("Du hast diese Location bereits gemeldet.");
+					}
+				}
+				
 				if (timesReported == 2) {
 					// delete Location
 					ArrayList<Location> deleteLocations = new ArrayList<Location>();
@@ -273,6 +282,7 @@ public class LocationServlet extends HttpServlet {
 				} else {
 					timesReported++;
 					resultLocation.setTimesReported(timesReported);
+					resultLocation.getUserReports().add((String) session.getAttribute("username"));
 				}
 
 			} else {
@@ -317,6 +327,8 @@ public class LocationServlet extends HttpServlet {
 			res = e.getMessage();
 		}
 		// Send Response
+		response.setContentType("text/html; charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();
 		writer.append(res);
 		em.close();
@@ -357,7 +369,7 @@ public class LocationServlet extends HttpServlet {
 				res = delete(locations, em);
 				break;
 			case "report":
-				res = report(locations, em);
+				res = report(locations, em, session);
 				break;
 			}
 			response.setStatus(200);
@@ -365,9 +377,12 @@ public class LocationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
+			e.printStackTrace();
 			res = e.getMessage();
 			em.getTransaction().rollback();
 		}
+		response.setContentType("text/html; charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();
 		writer.append(res);
 		em.close();

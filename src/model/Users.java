@@ -86,6 +86,10 @@ public class Users {
 	public void setRoutes(List<Route> routes) {
 		this.routes = routes;
 	}
+	
+	public void setVisitedRoutes(List<Route> visitedRoutes) {
+		this.visitedRoutes = visitedRoutes;
+	}
 
 	// other methods
 	public void addRoute(Route route) {

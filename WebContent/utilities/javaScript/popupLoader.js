@@ -12,6 +12,7 @@ function loadPopupContent(popupType) {
     	"<input type=\"hidden\" name=\"id\" value=\"\"/>" +
 	    	"<input type=\"hidden\" name=\"type\" value=\"\"/>" +
 			"<h4 class=\"centered\">Ihre Meinung ist uns wichitg!</h4>" +
+			"<p id=\"popupError\"><p>" +
 			"<p class=\"centered infoHeader\">Bewertung</p>" +
 			"<div class=\"centered\" id=\"ratingForm\">" +
 				"<i class=\"ratingStarR material-icons activeStar\" id=\"star1r\">grade</i>" +
@@ -24,14 +25,16 @@ function loadPopupContent(popupType) {
 			"<input type=\"hidden\" value=\"3\" name=\"rating\" id=\"ratingValueR\">" +
 	    	"<textarea rows=\"4\" form=\"feedbackForm\" name=\"comment\"></textarea>" +
 	    	"<div class=\"right\">" +
-	    		"<input type=\"submit\" id=\"sendFeedback\" name=\"confirm\" value=\"Senden\"/>" +
+	    		"<input type=\"submit\" id=\"sendFeedback\" class=\"button\" name=\"confirm\" value=\"Senden\"/>" +
 	    	"</div>" +
 	    "</form>";
 	};
 	break;
 	case "update": {
-		content = content +"<form id=\"updateLocationForm\" method=\"POST\" action=\"\">" +
+		content = content + "<h4 class=\"centered\">Ort ändern</h4>" +
+		"<form id=\"updateLocationForm\" method=\"POST\" action=\"\">" +
     	"<input type=\"hidden\" name=\"id\" value=\"\"/>" +
+    	"<p id=\"popupError\"></p>" +
 	    	"<table id=\"popupTable\">" +
 	    	"<tr>" +
 		    	"<td>" +
@@ -46,7 +49,7 @@ function loadPopupContent(popupType) {
 		    		"<p>Bild:</p>" +
 		    	"</td>" +
 	    		"<td>" +
-	    			"<input type=\"file\" name=\"picture\" value=\"\"/>" +
+	    			"<input type=\"file\" accept=\"image/jpeg, image/png, image/jpg\" name=\"picture\" value=\"\"/>" +
 	    		"</td>" +
 	    	"</tr>" +
 	    	"<tr>" +
@@ -54,7 +57,7 @@ function loadPopupContent(popupType) {
 		    		"<p>Beschreibung:</p>" +
 		    	"</td>" +
 	    		"<td>" +
-	    			"<textarea rows=\"7\" form=\"createLocationForm\" name=\"description\"></textarea>" +
+	    			"<textarea rows=\"7\" form=\"updateLocationForm\" name=\"description\"></textarea>" +
 	    		"</td>" +
 	    	"</tr>" +
 	    	"<tr>" +
@@ -70,7 +73,7 @@ function loadPopupContent(popupType) {
 	    			"<!-- Some button -->" +
 	    		"</td>" +
 	    		"<td>" +
-	    			"<input type=\"submit\" name=\"confirm\" value=\"Anlegen\"/>" +
+	    			"<input type=\"submit\" name=\"confirm\" class=\"button\" value=\"Ändern\"/>" +
 	    		"</td>" +
 	    	"</tr>" +
 	    	"</table>" +
@@ -78,10 +81,12 @@ function loadPopupContent(popupType) {
 	};
 	break;
 	case "createNew": {
-		content = content + "<form id=\"createLocationForm\" method=\"POST\" action=\"\">" +
+		content = content + "<h4 class=\"centered\">Neuen Ort anlegen</h4>" +
+		"<form id=\"createLocationForm\" method=\"POST\" action=\"\">" +
     	"<input type=\"hidden\" name=\"lat\" id=\"newLat\" value=\"\"/>" +
 	    	"<input type=\"hidden\" name=\"lng\" id=\"newLng\" value=\"\"/>" +
 	    	"<input type=\"hidden\" name=\"userId\" id=\"userId\" value=\"\"/>" +
+	    	"<p id=\"popupError\"></p>" +
 	    	"<table id=\"popupTable\">" +
 	    	"<tr>" +
 		    	"<td>" +
@@ -96,7 +101,7 @@ function loadPopupContent(popupType) {
 		    		"<p>Bild:</p>" +
 		    	"</td>" +
 	    		"<td>" +
-	    			"<input type=\"file\" name=\"picture\" value=\"\"/>" +
+	    			"<input type=\"file\" accept=\"image/jpeg, image/png, image/jpg\" name=\"picture\" value=\"\"/>" +
 	    		"</td>" +
 	    	"</tr>" +
 	    	"<tr>" +
@@ -120,40 +125,43 @@ function loadPopupContent(popupType) {
 	    			"<!-- Some button -->" +
 	    		"</td>" +
 	    		"<td>" +
-	    			"<input type=\"submit\" name=\"confirm\" value=\"Anlegen\"/>" +
+	    			"<input type=\"submit\" name=\"confirm\" class=\"button\" value=\"Anlegen\"/>" +
 	    		"</td>" +
 	    	"</tr>" +
 	    	"</table>" +
 	    "</form>";
 	};
 	break;
-	case "addToRoute": {
-		content = content + "<form id=\"addToRouteForm\" method=\"POST\" action=\"\">" +
-		"<input type=\"hidden\" name=\"id\" value=\"\"/>" +
+	case "updateFromRoute": {
+		content = content + "<form id=\"updateRouteForm\" method=\"POST\" action=\"\">" +
+		"<input type=\"hidden\" name=\"locationId\" value=\"\"/>" +	
 		"<h4 class=\"centered\">Zu Route hinzufügen</h4>" +
+		"<p id=\"popupError\"></p>" +
 		"<p class=\"centered infoHeader\">Route auswählen</p>" +
 		"<select name=\"routes\">" +
 		"</select>" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
-		"<ul id=\"tourStops\"></ul>" +
-		"<input type=\"submit\" value=\"Hinzufügen\">" +
+		"<ul id=\"tourStopsPopup\"></ul>" +
+		"<input type=\"submit\" class=\"button\" value=\"Hinzufügen\">" +
 		"</form>";
 	};
 	break;
 	case "createRoute": {
 		content = content + "<form id=\"newRouteForm\" method=\"POST\" action=\"\">" +
+		"<input type=\"hidden\" name=\"locationId\" value=\"\">" +
 		"<h4 class=\"centered\">Neue Route erstellen</h4>" +
+		"<p id=\"popupError\"></p>" +
 		"<p class=\"centered infoHeader\">Routenname</p>" +
 		"<input type=\"text\" name=\"name\" placeholder=\"Routenname\">" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
-		"<textarea rows=\"4\" form=\"feedbackForm\" name=\"description\"></textarea>" +
-		"<input type=\"submit\" value=\"Erstellen\">" +
+		"<textarea rows=\"4\" form=\"newRouteForm\" name=\"description\"></textarea>" +
+		"<input type=\"submit\" class=\"button\" value=\"Erstellen\">" +
 		"</form>";
 	};
 	break;
 	case "showFeedback": {
-		content = content + "<h4 class=\"centered\">Feedbacks</h4>" +
-		"<p class=\"centered infoHeader\">Route-Title</p>" +
+		content = content + "<h4 class=\"centered\">Bewertungen</h4>" +
+		"<p class=\"centered infoHeader\" id=\"feedbackHeaderTitle\"></p>" +
 		"<ul id=\"feedbackList\"></ul>";
 	};
 	break;
@@ -161,16 +169,22 @@ function loadPopupContent(popupType) {
 	
 	$(".modal-content").html("");
 	$(".modal-content").html(content);
-	
-	
-	
+		
 	// ############ LOADING POPUP FUNCTIONALITY ###########
 	// Load button functionality
 	switch (popupType) {
 	case "feedback": {
 		$('#feedbackForm').submit(function () {
-			sendFeedback($("#feedbackForm input[name=type]").val(), $("#feedbackForm input[name=id]").val());
-			return false;
+			var error = feedbackValidation();
+			
+			if(!error){
+				sendFeedback($("#feedbackForm input[name=type]").val(), $("#feedbackForm input[name=id]").val());
+				return false;
+			} else {
+				$("#popupError").html(error);
+				return false;
+			}
+			
 		});
 		
 		$(".ratingStarR").click(function(){
@@ -201,35 +215,83 @@ function loadPopupContent(popupType) {
 	};
 	break;
 	case "update": {
+		if ($("#currentAction").val() == "Party") {
+			$("#updateLocationForm input[name=time]").prop("disabled", true);
+		}
+		
 		$('#updateLocationForm').submit(function () {
-			updateMarker($("#updateLocationForm input[name=id]").val());
-			return false;
+			var error = locationValidation($("#currentAction").val(),"update");
+			
+			var pImageLoaded = convertImageToBase64($("#updateLocationForm input[name=picture]"));
+			
+			if (!error){
+				updateMarker($("#updateLocationForm input[name=id]").val(), pImageLoaded);
+				return false;
+			} else {
+				$("#popupError").html(error);
+				return false;
+			}
 		});
 	};
 	break;
 	case "createNew": {
+		if ($("#currentAction").val() == "Party") {
+			$("#createLocationForm input[name=time]").prop("disabled", true);
+		}
+		
 		$('#createLocationForm').submit(function () {
-			createNewMarker($("#currentAction").val());
-			return false;
+			var error = locationValidation($("#currentAction").val(),"createNew");
+			
+			var pImageLoaded = convertImageToBase64($("#createLocationForm input[name=picture]"));
+			
+			if (!error){
+				createNewMarker($("#currentAction").val(), pImageLoaded);
+				return false;
+			} else {
+				$("#popupError").html(error);
+				return false;
+			}
+			
 		});
 	};
 	break;
-	case "addToRoute": {
-		$('#newRouteForm').submit(function () {
-			addToRoute($("#updateLocationForm input[name=id]").val()); //TODO Create Function (markerId)
-			return false;
+	case "updateFromRoute": {
+		
+		//This in only the add event. The remove event will be put in each removeable element.
+		$('#updateRouteForm').submit(function () {
+			var error = updateRouteValidation();
+			
+			if (!error) {
+				addPointToRoute($("#updateRouteForm input[name=id]").val()); //TODO Create Function (markerId)
+				return false;
+			} else {
+				$("#popupError").html(error);
+				return false;
+			}
 		});
+		
+		$("#updateRouteForm select[name=routes]").change(function() {
+			changeRouteInformation($("#updateRouteForm select[name=routes] option:selected").val());
+		});
+		
 	};
 	break;
 	case "createRoute": {
 		$('#newRouteForm').submit(function () {
-			createRoute(); //TODO Create Function
-			return false;
+			var error = newRouteValidation();
+			
+			if (!error) {
+				createNewRoute($("#newRouteForm input[name=locationId]").val());
+				return false;
+			} else {
+				$("#popupError").html(error);
+				return false;
+			}
 		});
 	};
 	break;
 	case "showFeedback": {
-		loadFeedbackToPopup();
+		
 		//TODO Add Function to the delete button
 	}
 	break;

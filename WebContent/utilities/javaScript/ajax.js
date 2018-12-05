@@ -1,3 +1,7 @@
+var globalRoutes;
+var globalLayer; //Will be used to delete and reload marker that are out of the viewport
+var userRoutes = [];
+
 function getLocation(searchString, map){
 
 	// This function takes the input from the search field and sends it
@@ -49,8 +53,7 @@ function searchLocation(sType) {
 	});
 }
 
-//Will be used to delete and reload marker that are out of the viewport
-var globalLayer;
+
 
 function getLocationFromDatabase(sType) {
 	$.ajax({
@@ -74,29 +77,59 @@ function getLocationFromDatabase(sType) {
 				globalLayer = null;
 			}
 			
-			if(getMap()._zoom < 12) { return; }
+			if(getMap()._zoom < 11) { return; }
+			
 			
 			var json = JSON.parse(response);
 			var markerLayer = L.layerGroup();
 			
 			// Loads the new marker to the map
 			for(var i = 0; i < json.length; i++) {
-				var marker
+				var marker;
+				var spot = "Location";
 				
 				marker = (L.marker([json[i].latitude, json[i].longitude])
 							.addTo(getMap()));
 				marker.info = json[i];
 				
-				marker.bindPopup(json[i].name + "<div class=\"ratingWrapper\">" +
+				if ($("#userId").val() != null) {
+				marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
+						"<img class=\"popupImage\" src=\""+ (json[i].images[0] ? json[i].images[0] : "") +"\" />" + 
+						"<p>Bewertung</p>" +
+						"<div class=\"ratingWrapper centered\">" +
 							"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
+							"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup({id: " + marker._leaflet_id + ", type: 'Location'})\"><i class='material-icons'>info_outline</i></a>" +
 						"</div>" +
-						"<br><button onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
-						"<button onClick=reportLocation("+marker._leaflet_id+")>Melden</button>" +
-						"<button onClick=feedbackLocation("+marker._leaflet_id+")>Bewerten</button>");
+						"<p>Beschreibung</p>" +
+						"<p>"+json[i].description+"</p>" +
+						"<div class=\"buttonWrapper\">" +
+							"<br><button class=\"button thirdSpace\" onClick=showUpdatePointPopup("+marker._leaflet_id+")>Ändern</button>" +
+							"<button class=\"button thirdSpace\" onClick=reportLocation("+marker._leaflet_id+")>Melden</button>" +
+							"<button class=\"button thirdSpace\" onClick=feedbackLocation("+marker._leaflet_id+")>Bewerten</button><br>" +
+							"<button class=\"button halfSpace\" onClick=showNewRoutePopup("+marker._leaflet_id+")>Zu neuer Route</button>" +
+							"<button class=\"button halfSpace\" onClick=showUpdateRoutePopup("+marker._leaflet_id+")>Hinzufügen zu</button>" +
+						"</div>");
+						
+				} else {
+					marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
+							"<img class=\"popupImage\" src=\""+json[i].images[0]+"\">" + 
+							"<p>Bewertung</p>" +
+							"<div class=\"ratingWrapper centered\">" +
+								"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
+								"<i class='material-icons " + (json[i].avgRating >= 2 ? "activeStar" : "") + "'>grade</i>" +
+								"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
+								"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
+								"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
+								"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup({id: " + marker._leaflet_id + ", type: 'Location'})\"><i class='material-icons'>info_outline</i></a>" +
+							"</div>" +
+							"<p>Beschreibung</p>" +
+							"<p>"+json[i].description+"</p>");
+				}
+				
 				marker._icon.style.zIndex = 50; // Makes sure everything is in front of the default marker 
 				markerLayer.addLayer(marker);
 				
@@ -111,7 +144,7 @@ function getLocationFromDatabase(sType) {
 }
 
 
-function createNewMarker(sType) {
+function createNewMarker(sType, pImageLoaded) {
 	var json = getJsonDatastrucutreLocation("create");
 	var addressData = getAddress($("#createLocationForm input[name=lat]").val(), $("#createLocationForm input[name=lng]").val());
 
@@ -119,7 +152,8 @@ function createNewMarker(sType) {
 	json.type = sType;
 
 	// ToDo Split the time
-	if(sType == "Kultur") json.time = $("#createLocationForm input[name=locationName]").val();
+	if(sType == "Kultur") json.time.time = $("#createLocationForm input[name=time]").val()+":00";
+;
 
 	json.address.cityName = addressData.cityName;
 	json.address.country = addressData.country;
@@ -130,13 +164,14 @@ function createNewMarker(sType) {
 	json.latitude = $("#createLocationForm input[name=lat]").val();
 	json.longitude = $("#createLocationForm input[name=lng]").val();
 
-	// Loading the time and split into min and hours
-	json.time.time = $("#createLocationForm input[name=time]").val()+":00";
-
 	json.description = $("#createLocationForm textarea[name=description]").val();
 	
-	var jsonArray = [json];
 
+	pImageLoaded.then(function(image) {
+	
+	json.images = [image];
+	var jsonArray = [json];
+		
 	$.ajax({
 		url: "LocationServlet",
 		type: "POST",
@@ -160,9 +195,10 @@ function createNewMarker(sType) {
 			console.log(error);
 		}
 	});
+});
 }
 
-function updateMarker(markerId){
+function updateMarker(markerId, pImageLoaded){
 	var marker = globalLayer.getLayer(markerId);
 	var json = getJsonDatastrucutreLocation("update");
 	
@@ -174,32 +210,33 @@ function updateMarker(markerId){
 	json.type = marker.info.type;
 	json.timesReported = marker.info.timesReported;
 	json.address = marker.info.address;
+
 	json.latitude = marker.info.latitude;
 	json.longitude = marker.info.longitude;
 	json.feedback = marker.info.feedback;
 	
 	// TODO Set images and tranform it
+	pImageLoaded.then(function(image) {
+		json.images = [image];
+		var jsonArray = [json];
+		debugger;
+		$.ajax({
+			url: "LocationServlet",
+			type: "POST",
+			data: {
+				operation: "update",
+				json: JSON.stringify(jsonArray) //Json file
 
-	
-	var jsonArray = [json];
-	
-
-	
-	$.ajax({
-		url: "LocationServlet",
-		type: "POST",
-		data: {
-			operation: "update",
-			json: JSON.stringify(jsonArray) //Json file
-
-		},
-		success: function(response) {
-			unloadPopup();
-		},
-		error: function(error) {
-			console.log(error);
-		}
+			},
+			success: function(response) {
+				unloadPopup();
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
 	});
+	
 }
 
 function reportLocation(markerId){
@@ -238,12 +275,12 @@ function reportLocation(markerId){
 	});
 }
 
-var globalRoutes;
+
 
 function getRoute(sType){
 	var stops = $("#routeForm input[name=spots]").val();
 	var rating = $("#routeForm input[name=rating]").val();
-	var time = $("#routeForm input[name=time]").val()+":00";
+	var time = $("#routeForm input[name=time]").val()+":00:00";
 	
 	$.ajax({
 		url: "RouteServlet",
@@ -273,11 +310,6 @@ function getRoute(sType){
 
 function sendFeedback(type, id) {
 	var json = getDatastructureFeedback();
-	var id;
-	var type;
-	
-	this.id = id;
-	this.type = type;
 	
 	json.rating = $("#feedbackForm input[name=rating]").val();
 	json.comment = $("#feedbackForm textarea[name=comment]").val();
@@ -300,22 +332,281 @@ function sendFeedback(type, id) {
 			console.log(error);
 		}
 		
+	});
+	
+}
+
+function deleteFeedback(type, id, feedbackId) {
+	var json;
+	var feedback;
+	
+	if (type == "Location") {
+		$.each(globalLayer._layer, function(i,v){
+			if (v.info.id == id) {
+				json = v.info;
+				return;
+			}
+		});
+	} else {
+		$.each(globalRoutes, function(i,v){
+			if (v.id == id) {
+				json = v;
+				return;
+			}
+		});
+	}
+	
+	$.each(json.feedback, function(i,v) {
+		if(v.id == feedbackId){
+			feedback = v;
+		}
 	})
 	
-}
-
-function deleteFeedback(type, id) {
-	console.log(type + " " + id);
-}
-
-function createNewRoute() {
+	var jsonArray = [feedback];
+	
+	$.ajax({
+		url: "FeedbackServlet",
+		type: "POST",
+		data: {
+			type: type,
+			id: id,
+			operation: "delete",
+			json: JSON.stringify(jsonArray)
+		}, 
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+		
+	});
 	
 }
 
-function addPointToRoute() {
+function changeFeedback(type, id, feedbackId) {
+	var json;
+	var feedback;
+	
+	if (type == "Location") {
+		$.each(globalLayer._layer, function(i,v){
+			if (v.info.id == id) {
+				json = v.info;
+				return;
+			}
+		});
+	} else {
+		$.each(globalRoutes, function(i,v){
+			if (v.id == id) {
+				json = v;
+				return;
+			}
+		});
+	}
+	
+	$.each(json.feedback, function(i,v) {
+		if(v.id == feedbackId){
+			feedback = v;
+		}
+	})
+	
+	feedback.comment = $("#feedbackForm textarea[name=comment]").val();
+	feedback.rating = $("#feedbackForm input[name=rating]").val();
+	
+	var jsonArray = [feedback];
+	
+	$.ajax({
+		url: "FeedbackServlet",
+		type: "POST",
+		data: {
+			type: type,
+			id: id,
+			operation: "update",
+			json: JSON.stringify(jsonArray)
+		}, 
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+		
+	});
 	
 }
 
-function removeFromRoute() {
+function createNewRoute(id) {
+
+	var data = globalLayer;
+	var location;
+	var json = getDatastructureRoute();
+		
+	$.each(data._layers, function(i,v) {
+		if (v._leaflet_id == id) {
+			location = v.info;
+		}
+	});
 	
+	json.stops.push(location); //Adding the first location to the new tour
+	json.firstLong = location.longitude;
+	json.firstLat = location.latitude;
+	json.numberOfStops = 1;
+	json.name = $("#newRouteForm input[name=name]").val();
+	json.description = $("#newRouteForm textarea[name=description]").val();
+	json.type = $("#currentAction").val();
+	json.time.time = "01:00:00";
+	json.avgRating = "3";
+	json.owner.id = null;
+	json.owner.username = null;
+	json.owner.email = null;
+	json.id = null;
+	
+
+	var jsonArray = [json];
+	
+	$.ajax({
+		url: "RouteServlet",
+		type: "POST",
+		data: {
+			operation: "create",
+			json: JSON.stringify(jsonArray)
+		},
+		success: function(response) {
+			getUserRoutes($("#currentAction").val(), $("#userId").val());
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+}
+// WICHTIG KEINE LEEREN ROUTEN
+function addPointToRoute(locationId, routeId) {
+	// Operation 'update'
+	// Komplettes Route Object 
+	var route;
+	var location;
+	
+	$.each(userRoutes, function(i,v) {
+		if(v.id == routeId) {
+			route = v;
+			return;
+		}
+	});
+	
+	$.each(globalLayer._layers, function(i, v) {
+		if(v.info.id == locationId) {
+			location = v.info;
+			return;
+		}
+	})
+	
+	route.stops.push(location);
+	route.numberOfStops = route.numberOfStops + 1;
+	pTimeReturned = calculateTraveltime(json);
+	
+	pTimeReturned.then(function(time) {
+		json.time.time = time;
+		var jsonArray = [route];
+		
+		$.ajax({
+			url: "RouteServlet",
+			type: "POST",
+			data: {
+				operation: "update",
+				json: JSON.stringify(jsonArray)
+			},
+			success: function(response) {
+				console.log(response);
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
+	});
+}
+
+function removeFromRoute(locationId, routeId) {
+	// Operation 'update'
+	// Komplettes Route Object 
+	var removeIndex;
+	var route;
+	
+	$.each(userRoutes, function(i,v) {
+		if(v.id == routeId) {
+			route = v;
+			return;
+		}
+	});
+	
+	$.each(route.stops, function(i,v) {
+		if (v.id == locationId) {
+			removeIndex = i;
+		}
+	});
+	
+	route.stops.splice(removeIndex,1); //Removes the element on index 'removeIndex' in the Array
+	
+	var jsonArray = [route];
+	
+	$.ajax({
+		url: "RouteServlet",
+		type: "POST",
+		data: {
+			operation: "update",
+			json: JSON.stringify(jsonArray)
+		},
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+}
+
+function deleteRoute(routeId) {
+	var route;
+	
+	$.each(userRoutes, function(i,v) {
+		if(v.id == routeId) {
+			route = v;
+			return;
+		}
+	});
+	
+	var jsonArray = [route];
+	
+	$.ajax({
+		url: "RouteServlet",
+		type: "POST",
+		data: {
+			operation: "delete",
+			json: JSON.stringify(jsonArray)
+		},
+		success: function(response) {
+			console.log(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+}
+
+function getUserRoutes(sType, userId) {
+	$.ajax({
+		url: "RouteServlet",
+		type: "GET",
+		data: {
+			type: sType,
+			owner: userId,
+			time: "200:00:00" //Threshhold for all Routes
+
+		},
+		success: function(response) {
+			userRoutes = JSON.parse(response);
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
 }

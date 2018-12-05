@@ -9,10 +9,12 @@ import test.servlets.TestLocationServlet;
 import test.servlets.TestRegistrationServlet;
 import test.servlets.TestRouteServlet;
 import test.servlets.TestUserSessionServlet;
+import test.util.TestTimeClass;
 
 @RunWith(Suite.class)
 @SuiteClasses({
 	TestJPAClasses.class,
+	TestTimeClass.class,
 	TestRegistrationServlet.class, 
 	TestUserSessionServlet.class,
 	TestLocationServlet.class,

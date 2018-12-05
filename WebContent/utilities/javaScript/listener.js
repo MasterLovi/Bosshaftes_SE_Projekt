@@ -124,13 +124,40 @@ $(document).ready(function() {
 
 // Changes the type of search if the user clicks on the header icons 
 $(document).ready(function() {
+	if ($("#currentAction").val() == "Party") {
+		
+		$("#partyText").css("background-color", "#555555");
+		$("#partyText").css("color", "white");
+		
+	} else if ($("#currentAction").val() == "Kultur") {
+		
+		$("#cultureText").css("background-color", "#555555");
+		$("#cultureText").css("color", "white");
+		
+	}
+	
+	
 	$("#headerIconMiddle").click(function() {
 		if ($("#headerIconMiddle").html() == "chevron_left") {
 			$("#headerIconMiddle").html("chevron_right");
+			
+			$("#cultureText").css("background-color", "#555555");
+			$("#cultureText").css("color", "white");
+			
+			$("#partyText").css("background-color", "");
+			$("#partyText").css("color", "");
+			
 			$("#currentAction").val("Kultur");
 			getLocationFromDatabase($("#currentAction").val()); 
 		} else {
 			$("#headerIconMiddle").html("chevron_left");
+			
+			$("#partyText").css("background-color", "#555555");
+			$("#partyText").css("color", "white");
+		
+			$("#cultureText").css("background-color", "");
+			$("#cultureText").css("color", "");
+			
 			$("#currentAction").val("Party");
 			getLocationFromDatabase($("#currentAction").val()); 
 		}
@@ -139,6 +166,13 @@ $(document).ready(function() {
 	$("#partyText").click(function() {
 		if($("#currentAction").val() == "Party") {return}
 		$("#headerIconMiddle").html("chevron_left");
+		
+		$("#partyText").css("background-color", "#555555");
+		$("#partyText").css("color", "white");
+	
+		$("#cultureText").css("background-color", "");
+		$("#cultureText").css("color", "");
+		
 		$("#currentAction").val("Party");
 		getLocationFromDatabase($("#currentAction").val()); 
 	});
@@ -146,6 +180,13 @@ $(document).ready(function() {
 	$("#cultureText").click(function() {
 		if($("#currentAction").val() == "Kultur") {return}
 		$("#headerIconMiddle").html("chevron_right");
+		
+		$("#cultureText").css("background-color", "#555555");
+		$("#cultureText").css("color", "white");
+		
+		$("#partyText").css("background-color", "");
+		$("#partyText").css("color", "");
+		
 		$("#currentAction").val("Kultur");
 		getLocationFromDatabase($("#currentAction").val()); 
 	});
@@ -165,5 +206,13 @@ $(document).ready(function() {
 	
 	$("#buttonRate").click(function() {
 		feedbackRoute();
-	})
+	});
+})
+
+$(document).ready(function() {
+	if($("#userId").val() == "undefined") {
+		return;
+	} else {
+		getUserRoutes($("#currentAction").val(), $("#userId").val());
+	}
 })

@@ -24,8 +24,6 @@ import model.Feedback;
 import model.Location;
 import model.Route;
 import model.Users;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 import util.Time;
 
 /**
@@ -65,8 +63,8 @@ public class RouteServlet extends HttpServlet {
 	 */
 	private static String read(EntityManager em, String type, String maxTime, double minRating, int maxNoStops,
 					double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat,
-					double boundSouthEastLong)
-					throws Exception {
+					double boundSouthEastLong,
+					Integer owner) throws Exception {
 
 		if (type == null) {
 			throw new Exception("Type darf nicht null sein!");
@@ -74,12 +72,13 @@ public class RouteServlet extends HttpServlet {
 			throw new Exception("Type muss entweder \"Party\" oder \"Kultur\" sein!");
 		}
 		// Build query with given parameters
-		String selectQuery = "SELECT r FROM Route r"
-						+ " WHERE r.type = '" + type + "'"
-						+ " AND r.avgRating >= " + minRating
-						+ " AND r.numberOfStops <= " + maxNoStops
+		String selectQuery = "SELECT r FROM Route r" + " WHERE r.type = '" + type + "'";
+
+		String routeParams = " AND r.avgRating >= " + minRating + " AND r.numberOfStops <= " + maxNoStops
 						+ " AND r.firstLat BETWEEN " + boundSouthEastLat + " AND " + boundNorthWestLat
 						+ " AND r.firstLong BETWEEN " + boundNorthWestLong + " AND " + boundSouthEastLong;
+
+		selectQuery = (owner != null) ? (selectQuery + " AND r.owner.id = " + owner) : selectQuery + routeParams;
 
 		// Select Route from database table
 		Query query = em.createQuery(selectQuery);
@@ -99,7 +98,7 @@ public class RouteServlet extends HttpServlet {
 					// convert pictures and data to JSON
 					if (route.getPictures() != null) {
 						for (byte[] picture : route.getPictures()) {
-							String image64 = new BASE64Encoder().encode(picture);
+							String image64 = new String(picture, "UTF-8");
 							images.add(image64);
 						}
 						route.setImages(images);
@@ -109,7 +108,7 @@ public class RouteServlet extends HttpServlet {
 							if (stop.getPictures() != null) {
 								images = new ArrayList<String>();
 								for (byte[] picture : stop.getPictures()) {
-									String image64 = new BASE64Encoder().encode(picture);
+									String image64 = new String(picture, "UTF-8");
 									images.add(image64);
 								}
 								stop.setImages(images);
@@ -166,7 +165,7 @@ public class RouteServlet extends HttpServlet {
 			List<byte[]> images = new ArrayList<byte[]>();
 			if (route.getImages() != null) {
 				for (String sBase64 : route.getImages()) {
-					byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+					byte[] image = sBase64.getBytes("UTF-8");
 					images.add(image);
 				}
 				newRoute.setPictures(images);
@@ -254,7 +253,7 @@ public class RouteServlet extends HttpServlet {
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (route.getImages() != null) {
 					for (String sBase64 : route.getImages()) {
-						byte[] image = new BASE64Decoder().decodeBuffer(sBase64);
+						byte[] image = sBase64.getBytes("UTF-8");
 						images.add(image);
 					}
 				}
@@ -286,23 +285,37 @@ public class RouteServlet extends HttpServlet {
 			// retrieve all parameters
 			String paramType = request.getParameter("type");
 			String paramTime = request.getParameter("time");
-			double paramRating = Double.valueOf(request.getParameter("rating"));
-			int paramStops = Integer.valueOf(request.getParameter("stops"));
+			Integer owner = null;
+			Integer paramStops = null;
+			Double paramRating = null, paramBoundNorthWestLat = null, paramBoundNorthWestLong = null,
+							paramBoundSouthEastLat = null, paramBoundSouthEastLong = null;
 
-			double paramBoundNorthWestLat = Double.valueOf(request.getParameter("boundNorthWestLat"));
-			double paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLng"));
-			double paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
-			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
+			if (request.getParameter("rating") != null) {
+				paramRating = Double.valueOf(request.getParameter("rating"));
+				paramStops = Integer.valueOf(request.getParameter("stops"));
+
+				paramBoundNorthWestLat = Double.valueOf(request.getParameter("boundNorthWestLat"));
+				paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLng"));
+				paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
+				paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
+
+			} else {
+				owner = Integer.valueOf(request.getParameter("owner"));
+			}
 
 			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWestLat,
-							paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong);
+							paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong, owner);
+
 			response.setStatus(200);
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
+			e.printStackTrace();
 			res = e.getMessage();
 		}
 		// Send Response
+		response.setContentType("text/html; charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();
 		writer.append(res);
 		em.close();
@@ -321,7 +334,7 @@ public class RouteServlet extends HttpServlet {
 		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute("emf");
 		EntityManager em = emf.createEntityManager();
 		Gson gson = new Gson();
-		List<Route> routes = gson.fromJson(request.getParameter("data"), new TypeToken<List<Route>>() {
+		List<Route> routes = gson.fromJson(request.getParameter("json"), new TypeToken<List<Route>>() {
 		}.getType());
 		String res = "";
 
@@ -349,6 +362,8 @@ public class RouteServlet extends HttpServlet {
 			res = e.getMessage();
 			em.getTransaction().rollback();
 		}
+		response.setContentType("text/html; charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();
 		writer.print(res);
 		em.close();

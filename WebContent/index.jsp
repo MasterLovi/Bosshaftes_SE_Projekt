@@ -60,7 +60,7 @@
 						Viel Spaß und let the party never stop :D
 					</p>
 	        		<div class='buttonWrapper'>
-	        			<a href="NewMap.jsp?type=Party"><button class='actionButton' >Finde eine Tour die zu deiner Zeit passt</button></a>
+	        			<a href="NewMap.jsp?type=Party"><button class='actionButton button' >Finde eine Tour die zu deiner Zeit passt</button></a>
 	        		</div>
         		</div>
         	</div>
@@ -78,7 +78,7 @@
 						Erleben Sie unvergessliche Stunden, starten Sie gleich mit einer von vielen Kul-touren!
 					</p>
 	        		<div class='buttonWrapper'>
-	        			<a href="NewMap.jsp?type=Kultur"><button class='actionButton' >Finde eine Tour die zu deiner Zeit passt</button></a>
+	        			<a href="NewMap.jsp?type=Kultur"><button class='actionButton button' >Finde eine Tour die zu deiner Zeit passt</button></a>
 	        		</div>
         		</div>
         	</div>

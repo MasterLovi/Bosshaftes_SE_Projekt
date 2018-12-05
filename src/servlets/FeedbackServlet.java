@@ -408,9 +408,10 @@ public class FeedbackServlet extends HttpServlet {
 			// send back error
 			response.setStatus(500);
 			res = e.getMessage();
-			e.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		response.setContentType("text/html; charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();
 		writer.append(res);
 		em.close();
