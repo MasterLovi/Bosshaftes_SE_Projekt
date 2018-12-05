@@ -59,7 +59,7 @@ public class RegistrationServlet extends HttpServlet {
 
 			// retrieve all parameters
 			Users user = new Users();
-			user.setRoutes((List<Route>) new ArrayList<Route>()); 
+			user.setRoutes(new ArrayList<Route>());
 			user.setUsername(request.getParameter("username"));
 			user.setEmail(request.getParameter("email"));
 
@@ -74,7 +74,7 @@ public class RegistrationServlet extends HttpServlet {
 
 			// First check: passwords identical?
 			if (!password.equals(passwordRep)) {
-				throw new Exception("Die Passwörter stimmen nicht überein!");
+				throw new Exception("Repeated password is not the same as your password.");
 			}
 
 			// Second check: username taken?
@@ -82,7 +82,7 @@ public class RegistrationServlet extends HttpServlet {
 			Query query = em.createQuery("SELECT u FROM Users u WHERE u.username = '" + user.getUsername() + "'");
 			List<Users> resultUser = query.getResultList();
 			if (resultUser.size() > 0) {
-				throw new Exception("Username schon vergeben!");
+				throw new Exception("this username already exists.");
 			}
 
 			// Third check: account with email existing?
@@ -90,7 +90,7 @@ public class RegistrationServlet extends HttpServlet {
 			query = em.createQuery("SELECT u FROM Users u WHERE u.email = '" + user.getEmail() + "'");
 			resultUser = query.getResultList();
 			if (resultUser.size() > 0) {
-				throw new Exception("Es existiert schon ein Account mit dieser E-Mail!");
+				throw new Exception("There is already an account attached to this email.");
 			}
 
 			// if everything's fine, save new user

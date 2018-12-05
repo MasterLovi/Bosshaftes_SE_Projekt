@@ -30,16 +30,16 @@ public class Location {
 	@Column(name = "ID")
 	@Expose
 	private int id;
-	
+
 	@Expose
 	private String name;
-	
+
 	@Expose
 	private double longitude;
-	
+
 	@Expose
 	private double latitude;
-	
+
 	@Expose
 	private String type;
 
@@ -48,10 +48,10 @@ public class Location {
 	@Transient
 	@Expose
 	private Time time;
-	
+
 	@Expose
 	private Integer timesReported;
-	
+
 	@Expose
 	private String description;
 
@@ -60,7 +60,7 @@ public class Location {
 	@Transient
 	@Expose
 	private List<String> images;
-	
+
 	private List<String> userReports;
 
 	@OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
@@ -72,6 +72,9 @@ public class Location {
 	@JoinColumn(name = "FEEDBACK_ID_L")
 	@Expose
 	private List<Feedback> feedback;
+
+	@Expose
+	private double avgRating;
 
 	// getter
 	public int getId() {
@@ -113,7 +116,7 @@ public class Location {
 	public List<String> getImages() {
 		return images;
 	}
-	
+
 	public List<String> getUserReports() {
 		return userReports;
 	}
@@ -124,6 +127,10 @@ public class Location {
 
 	public List<Feedback> getFeedback() {
 		return feedback;
+	}
+
+	public double getAvgRating() {
+		return avgRating;
 	}
 
 	public List<byte[]> getPictures() {
@@ -166,7 +173,7 @@ public class Location {
 	public void setTime(Time time) {
 		this.time = time;
 	}
-	
+
 	public void setUserReports(List<String> userReports) {
 		this.userReports = userReports;
 	}
@@ -196,6 +203,10 @@ public class Location {
 		this.feedback.add(feedback);
 	}
 
+	public void setAvgRating(double avgRating) {
+		this.avgRating = avgRating;
+	}
+
 	public void removeFeedback(Feedback feedback) {
 		this.feedback.remove(feedback);
 	}
@@ -211,7 +222,7 @@ public class Location {
 						+ "Time: "
 						+ this.time.toString() + ", " + "TimesReported: " + this.timesReported + ", " + "Description: "
 						+ this.description + ", " + "Address: " + this.address.toString() + ", "
-						+ "Feedback: geb ich jetzt dazu sicherlich nicht aus";
+						+ "Feedback: not gonna print this here";
 
 		return locationString;
 	}

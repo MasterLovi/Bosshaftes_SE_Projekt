@@ -22,8 +22,6 @@ import com.google.gson.reflect.TypeToken;
 import model.Address;
 import model.Feedback;
 import model.Location;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 import util.Time;
 
 /**
@@ -66,7 +64,7 @@ public class LocationServlet extends HttpServlet {
 		if (type == null) {
 			throw new Exception("Type darf nicht null sein!");
 		} else if (!(type.equals("Party") || type.equals("Kultur"))) {
-			throw new Exception("Type muss entweder \"Party\" oder \"Kultur\" sein!");
+			throw new Exception("Type can only be \"Party\" or \"Kultur\".");
 		}
 
 		// Build query with given parameters
@@ -98,7 +96,7 @@ public class LocationServlet extends HttpServlet {
 					location.setImages(null);
 				}
 			}
-			GsonBuilder builder = new GsonBuilder();  
+			GsonBuilder builder = new GsonBuilder();
 			builder.excludeFieldsWithoutExposeAnnotation();
 			Gson gson = builder.create();
 			JSONData = gson.toJson(result);
@@ -134,18 +132,18 @@ public class LocationServlet extends HttpServlet {
 				newLocation.setName(location.getName());
 				newLocation.setType(location.getType());
 				newLocation.setTimeString(location.getTime().getTime());
-				newLocation.setFeedback((List<Feedback>) new ArrayList<Feedback>());
+				newLocation.setFeedback(new ArrayList<Feedback>());
 				newLocation.setAddress(location.getAddress());
 				newLocation.setLatitude(location.getLatitude());
 				newLocation.setLongitude(location.getLongitude());
 				newLocation.setTimesReported(0);
 				newLocation.setDescription(location.getDescription());
-				newLocation.setUserReports((List<String>) new ArrayList<String>());
+				newLocation.setUserReports(new ArrayList<String>());
 
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (location.getImages() != null) {
 					for (String sBase64 : location.getImages()) {
-						if(sBase64 != null) {
+						if (sBase64 != null) {
 							System.out.println(sBase64);
 							byte[] image = sBase64.getBytes("UTF-8");
 							images.add(image);
@@ -158,7 +156,7 @@ public class LocationServlet extends HttpServlet {
 
 				em.persist(newLocation);
 			} else {
-				throw new Exception("Location \"" + location.getName() + "\" existiert bereits.");
+				throw new Exception("Location \"" + location.getName() + "\" exists already.");
 			}
 		}
 		return "Success";
@@ -180,8 +178,7 @@ public class LocationServlet extends HttpServlet {
 			if (result != null) {
 				em.remove(result);
 			} else {
-				throw new Exception("Location \"" + location.getName()
-								+ "\"existiert nicht und kann daher nicht gelöscht werden");
+				throw new Exception("Location \"" + location.getName() + "\" does not exist.");
 			}
 		}
 		return "Success";
@@ -220,7 +217,7 @@ public class LocationServlet extends HttpServlet {
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (location.getImages() != null) {
 					for (String sBase64 : location.getImages()) {
-						if(sBase64 != null) {
+						if (sBase64 != null) {
 							byte[] image = sBase64.getBytes("UTF-8");
 							images.add(image);
 						}
@@ -243,7 +240,7 @@ public class LocationServlet extends HttpServlet {
 					resultLocation.setAddress(address);
 				}
 			} else {
-				throw new Exception("Location \"" + location.getName() + "\" existiert nicht.");
+				throw new Exception("Location \"" + location.getName() + "\" does not exist.");
 			}
 		}
 		return "Success";
@@ -267,13 +264,13 @@ public class LocationServlet extends HttpServlet {
 			if (result.size() > 0) {
 				Location resultLocation = result.get(0);
 				int timesReported = resultLocation.getTimesReported();
-				
-				for(String username : resultLocation.getUserReports()) {
-					if (username.equals((String) session.getAttribute("username"))) {
-						throw new Exception("Du hast diese Location bereits gemeldet.");
+
+				for (String username : resultLocation.getUserReports()) {
+					if (username.equals(session.getAttribute("username"))) {
+						throw new Exception("You have already reported this location.");
 					}
 				}
-				
+
 				if (timesReported == 2) {
 					// delete Location
 					ArrayList<Location> deleteLocations = new ArrayList<Location>();
@@ -286,9 +283,9 @@ public class LocationServlet extends HttpServlet {
 				}
 
 			} else {
-				throw new Exception("Location \"" + location.getName() + "\" existiert nicht.");
+				throw new Exception("Location \"" + location.getName() + "\" does not exist.");
 			}
-			
+
 		}
 		return "Success";
 	}
@@ -316,7 +313,7 @@ public class LocationServlet extends HttpServlet {
 			double paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLng"));
 			double paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
 			double paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
-			
+
 			// read with parameters
 			res = read(em, paramType, paramBoundNorthWestLat, paramBoundNorthWestLong, paramBoundSouthEastLat,
 							paramBoundSouthEastLong);
@@ -354,7 +351,7 @@ public class LocationServlet extends HttpServlet {
 		String res = "";
 		em.getTransaction().begin();
 		try {
-			if ((boolean)session.getAttribute("loggedin") != true) {
+			if ((boolean) session.getAttribute("loggedin") != true) {
 				throw new Exception("You are not logged in.");
 			}
 			// get operation parameter and run the corresponding method

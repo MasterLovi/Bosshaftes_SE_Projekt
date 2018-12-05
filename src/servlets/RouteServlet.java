@@ -67,9 +67,9 @@ public class RouteServlet extends HttpServlet {
 					Integer owner) throws Exception {
 
 		if (type == null) {
-			throw new Exception("Type darf nicht null sein!");
+			throw new Exception("Type cannot be null.");
 		} else if (!(type.equals("Party") || type.equals("Kultur"))) {
-			throw new Exception("Type muss entweder \"Party\" oder \"Kultur\" sein!");
+			throw new Exception("Type can only be \"Party\" or \"Kultur\".");
 		}
 		// Build query with given parameters
 		String selectQuery = "SELECT r FROM Route r" + " WHERE r.type = '" + type + "'";
@@ -208,8 +208,7 @@ public class RouteServlet extends HttpServlet {
 				em.remove(result);
 			} else {
 				throw new Exception(
-								"Route \"" + route.getName()
-												+ "\"existiert nicht und kann daher nicht gelöscht werden");
+								"Route \"" + route.getName() + "\"does not exist.");
 			}
 		}
 		return "Success";
@@ -260,7 +259,7 @@ public class RouteServlet extends HttpServlet {
 				result.setPictures(images);
 
 			} else {
-				throw new Exception("Route \"" + route.getName() + "\" existiert net.");
+				throw new Exception("Route \"" + route.getName() + "\" does not exist.");
 			}
 
 		}

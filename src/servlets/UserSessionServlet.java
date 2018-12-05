@@ -100,7 +100,7 @@ public class UserSessionServlet extends HttpServlet {
 			else {
 				session.setAttribute("loggedin", false);
 				session.invalidate();
-				throw new Exception("Passwort oder Nutzername ist inkorrekt.");
+				throw new Exception("Password or username is incorrect.");
 			}
 
 			response.sendRedirect(request.getHeader("referer"));
