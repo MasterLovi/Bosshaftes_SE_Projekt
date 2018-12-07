@@ -65,19 +65,17 @@ public class FeedbackServlet extends HttpServlet {
 
 		if (result.size() > 0) {
 			Users user = result.get(0);
-			// check if user has already given feedback for this route
-			query = em.createQuery("SELECT f from Feedback f WHERE f.author.username = '" + username + "'");
-			result = query.getResultList();
-			if (result.size() > 0) {
-				throw new Exception("This user has already given feedback for this route.");
-			} else {
-
-				for (Feedback feedback : feedbackList) {
-					// persist feedback
-					em.persist(feedback);
-					feedback.setAuthor(user);
-					route.getFeedback().add(feedback);
+			for (Feedback routeFeedback : route.getFeedback()) {
+				if (routeFeedback.getAuthor().getUsername().equals((String) session.getAttribute("username"))) {
+					throw new Exception("This user has already given feedback for this route.");
 				}
+			}
+
+			for (Feedback feedback : feedbackList) {
+				// persist feedback
+				em.persist(feedback);
+				feedback.setAuthor(user);
+				route.getFeedback().add(feedback);
 			}
 			route.setAvgRating(updateAvgRouteRating(route));
 		} else {
@@ -112,21 +110,20 @@ public class FeedbackServlet extends HttpServlet {
 		List<Users> result = query.getResultList();
 
 		if (result.size() > 0) {
+
+			for (Feedback locationFeedback : location.getFeedback()) {
+				if (locationFeedback.getAuthor().getUsername().equals((String) session.getAttribute("username"))) {
+					throw new Exception("This user has already given feedback for this route.");
+				}
+			}
+
 			Users user = result.get(0);
 
-			// check if user has already given feedback for this location
-			query = em.createQuery("SELECT f from Feedback f WHERE f.author.username = '" + username + "'");
-			result = query.getResultList();
-			if (result.size() > 0) {
-				throw new Exception("This user has already given feedback for this location.");
-			} else {
-
-				for (Feedback feedback : feedbackList) {
-					// persist location
-					em.persist(feedback);
-					feedback.setAuthor(user);
-					location.getFeedback().add(feedback);
-				}
+			for (Feedback feedback : feedbackList) {
+				// persist location
+				em.persist(feedback);
+				feedback.setAuthor(user);
+				location.getFeedback().add(feedback);
 			}
 			location.setAvgRating(updateAvgLocationRating(location));
 		} else {
