@@ -127,7 +127,6 @@ public class LocationServlet extends HttpServlet {
 			if (result.size() == 0) {
 				Location newLocation = new Location();
 				newLocation.setName(location.getName());
-				newLocation.setAvgRating(3);
 				newLocation.setType(location.getType());
 				newLocation.setTimeString(location.getTime().getTime());
 				newLocation.setFeedback((List<Feedback>) new ArrayList<Feedback>());

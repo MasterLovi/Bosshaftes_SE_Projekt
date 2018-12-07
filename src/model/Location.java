@@ -54,10 +54,6 @@ public class Location {
 
 	@Expose
 	private String description;
-	
-	@Column(name = "AVGRATING")
-	@Expose
-	private double avgRating;
 
 	private List<byte[]> pictures;
 
@@ -77,6 +73,8 @@ public class Location {
 	@Expose
 	private List<Feedback> feedback;
 
+	@Expose
+	private double avgRating;
 
 	// getter
 	public int getId() {
