@@ -50,12 +50,12 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if user has already given feedback for this route
 	 */
 	private static String createRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding route, check if it exists
 		Route route = em.find(Route.class, id);
 		if (route == null) {
-			throw new Exception("Zugehörige Route existiert nicht!");
+			throw new Exception("The corresponding route does not exist.");
 		}
 
 		// get corresponding user
@@ -69,7 +69,7 @@ public class FeedbackServlet extends HttpServlet {
 			query = em.createQuery("SELECT f from Feedback f WHERE f.author.username = '" + username + "'");
 			result = query.getResultList();
 			if (result.size() > 0) {
-				throw new Exception("Dieser User hat schon ein Feedback für diese Route abgegeben.");
+				throw new Exception("This user has already given feedback for this route.");
 			} else {
 
 				for (Feedback feedback : feedbackList) {
@@ -81,7 +81,7 @@ public class FeedbackServlet extends HttpServlet {
 			}
 			route.setAvgRating(updateAvgRouteRating(route));
 		} else {
-			throw new Exception("User \"" + username + "\" existiert nicht.");
+			throw new Exception("User \"" + username + "\" does not exist.");
 		}
 		return "Success";
 	}
@@ -98,12 +98,12 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if user has already given feedback for this location
 	 */
 	private static String createLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding location, check if it exists
 		Location location = em.find(Location.class, id);
 		if (location == null) {
-			throw new Exception("Zugehörige Location existiert nicht!");
+			throw new Exception("The corresponding location does not exist.");
 		}
 
 		// get corresponding user
@@ -118,7 +118,7 @@ public class FeedbackServlet extends HttpServlet {
 			query = em.createQuery("SELECT f from Feedback f WHERE f.author.username = '" + username + "'");
 			result = query.getResultList();
 			if (result.size() > 0) {
-				throw new Exception("Dieser User hat schon ein Feedback für diese Location abgegeben.");
+				throw new Exception("This user has already given feedback for this location.");
 			} else {
 
 				for (Feedback feedback : feedbackList) {
@@ -128,8 +128,9 @@ public class FeedbackServlet extends HttpServlet {
 					location.getFeedback().add(feedback);
 				}
 			}
+			location.setAvgRating(updateAvgLocationRating(location));
 		} else {
-			throw new Exception("User \"" + username + "\" existiert nicht.");
+			throw new Exception("User \"" + username + "\" does not exist.");
 		}
 		return "Success";
 	}
@@ -146,12 +147,12 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String deleteRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding route, check if it exists
 		Route route = em.find(Route.class, id);
 		if (route == null) {
-			throw new Exception("Zugehörige Route existiert nicht!");
+			throw new Exception("The corresponding route does not exist.");
 		}
 
 		// get corresponding user
@@ -179,12 +180,12 @@ public class FeedbackServlet extends HttpServlet {
 					// if everything went fine, delete feedback
 					em.remove(feedback);
 				} else {
-					throw new Exception("Du kannst nur dein eigenes Feedback löschen.");
+					throw new Exception("You can only delete your own feedback.");
 				}
 			}
 			route.setAvgRating(updateAvgRouteRating(route));
 		} else {
-			throw new Exception("User \"" + username + "\" existiert nicht.");
+			throw new Exception("User \"" + username + "\" does not exist.");
 		}
 		return "Success";
 	}
@@ -201,12 +202,12 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String deleteLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding location, check if it exists
 		Location location = em.find(Location.class, id);
 		if (location == null) {
-			throw new Exception("Zugehörige Location existiert nicht!");
+			throw new Exception("The corresponding location does not exist.");
 		}
 
 		// get corresponding user
@@ -232,11 +233,12 @@ public class FeedbackServlet extends HttpServlet {
 					// if everything went fine, delete feedback
 					em.remove(feedback);
 				} else {
-					throw new Exception("Du kannst nur dein eigenes Feedback löschen.");
+					throw new Exception("You can only delete your own feedback.");
 				}
 			}
+			location.setAvgRating(updateAvgLocationRating(location));
 		} else {
-			throw new Exception("User \"" + username + "\" existiert nicht.");
+			throw new Exception("User \"" + username + "\" does not exist.");
 		}
 		return "Success";
 	}
@@ -253,12 +255,12 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String updateRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding route, check if it exists
 		Route route = em.find(Route.class, id);
 		if (route == null) {
-			throw new Exception("Zugehörige Route existiert nicht!");
+			throw new Exception("The corresponding route does not exist.");
 		}
 
 		// get corresponding user
@@ -276,12 +278,12 @@ public class FeedbackServlet extends HttpServlet {
 					resultFeedback.setComment(feedback.getComment());
 					resultFeedback.setRating(feedback.getRating());
 				} else {
-					throw new Exception("Du kannst nur dein eigenes Feedback bearbeiten.");
+					throw new Exception("You can only modify your own feedback.");
 				}
 			}
 			route.setAvgRating(updateAvgRouteRating(route));
 		} else {
-			throw new Exception("User \"" + username + "\" existiert nicht.");
+			throw new Exception("User \"" + username + "\" does not exist.");
 		}
 		return "Success";
 	}
@@ -298,12 +300,12 @@ public class FeedbackServlet extends HttpServlet {
 	 * @exception Exception if logged in user != author of feedback
 	 */
 	private static String updateLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
-					HttpSession session) throws Exception {
+			HttpSession session) throws Exception {
 
 		// get corresponding location, check if it exists
 		Location location = em.find(Location.class, id);
 		if (location == null) {
-			throw new Exception("Zugehörige Location existiert nicht!");
+			throw new Exception("The corresponding location does not exist.");
 		}
 
 		// get corresponding user
@@ -322,15 +324,24 @@ public class FeedbackServlet extends HttpServlet {
 					resultFeedback.setComment(feedback.getComment());
 					resultFeedback.setRating(feedback.getRating());
 				} else {
-					throw new Exception("Du kannst nur dein eigenes Feedback bearbeiten.");
+					throw new Exception("You can only modify your own feedback.");
 				}
 			}
+			location.setAvgRating(updateAvgLocationRating(location));
 		} else {
-			throw new Exception("User \"" + username + "\" existiert nicht.");
+			throw new Exception("User \"" + username + "\" does not exist.");
 		}
 		return "Success";
 	}
 
+	/**
+	 * Method to calculate the new average rating of a route as soon as anything has
+	 * changed
+	 * 
+	 * @param route Route of which the average rating should be updated
+	 * @return avgRating Returns new average rating of the route
+	 * @exception Exception when a wrong number format is used
+	 */
 	private static double updateAvgRouteRating(Route route) throws Exception {
 		// get current feedback from route
 		List<Feedback> routeFeedback = route.getFeedback();
@@ -344,7 +355,33 @@ public class FeedbackServlet extends HttpServlet {
 			avgRating = avgRating / routeFeedback.size();
 			avgRating = Math.round(avgRating * Math.pow(10, 1)) / Math.pow(10, 1);
 		} else {
-			avgRating = 5;
+			avgRating = 3;
+		}
+		return avgRating;
+	}
+
+	/**
+	 * Method to calculate the new average rating of a location as soon as anything
+	 * has changed
+	 * 
+	 * @param location Location of which the average rating should be updated
+	 * @return avgRating Returns new average rating of the location
+	 * @exception Exception when a wrong number format is used
+	 */
+	private static double updateAvgLocationRating(Location location) throws Exception {
+		// get current feedback from route
+		List<Feedback> locationFeedback = location.getFeedback();
+		double avgRating = 0;
+
+		// update avg rating
+		if (locationFeedback != null && locationFeedback.size() > 0) {
+			for (Feedback feedback : locationFeedback) {
+				avgRating = avgRating + feedback.getRating();
+			}
+			avgRating = avgRating / locationFeedback.size();
+			avgRating = Math.round(avgRating * Math.pow(10, 1)) / Math.pow(10, 1);
+		} else {
+			avgRating = 3;
 		}
 		return avgRating;
 	}
@@ -400,7 +437,7 @@ public class FeedbackServlet extends HttpServlet {
 					break;
 				}
 			} else {
-				throw new Exception("Type muss entweder \"Route\" oder \"Location\" sein!");
+				throw new Exception("Type can only be \"Route\" or \"Location\".");
 			}
 			em.getTransaction().commit();
 			response.setStatus(200);

@@ -40,8 +40,7 @@ public class UserSessionServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// get URI Parameter for logout and retrieve session
 		String sLogout = request.getParameter("logout");
 		HttpSession session = request.getSession();
@@ -66,8 +65,7 @@ public class UserSessionServlet extends HttpServlet {
 	 * @exception Exception if username or password is incorrect
 	 */
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-					throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 
@@ -100,7 +98,7 @@ public class UserSessionServlet extends HttpServlet {
 			else {
 				session.setAttribute("loggedin", false);
 				session.invalidate();
-				throw new Exception("Passwort oder Nutzername ist inkorrekt.");
+				throw new Exception("Password or username is incorrect.");
 			}
 
 			response.sendRedirect(request.getHeader("referer"));

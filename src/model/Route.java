@@ -32,10 +32,10 @@ public class Route {
 	@Column(name = "ID")
 	@Expose
 	private int id;
-	
+
 	@Expose
 	private String name;
-	
+
 	@Expose
 	private String type;
 
@@ -44,7 +44,7 @@ public class Route {
 	@Transient
 	@Expose
 	private Time time;
-	
+
 	@Expose
 	private String description;
 
@@ -58,7 +58,7 @@ public class Route {
 	@JoinColumn(name = "FEEDBACK_ID_R")
 	@Expose
 	private List<Feedback> feedback;
-	
+
 	@Expose
 	private double avgRating;
 
@@ -66,7 +66,7 @@ public class Route {
 	@JoinTable(name = "ROUTES_LOCATION", joinColumns = @JoinColumn(name = "ROUTE_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "LOCATION_ID", referencedColumnName = "ID"))
 	@Expose
 	private List<Location> stops;
-	
+
 	@Expose
 	private int numberOfStops;
 
@@ -256,7 +256,7 @@ public class Route {
 						+ "Type: " + this.type + ", "
 						+ "Time: " + this.time.toString() + ", "
 						+ "Description: " + this.description + ", "
-						+ "|| Feedback und Location spar ich mir";
+						+ "|| won't print Feedback and Location here";
 
 		return routeString;
 	}
