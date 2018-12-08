@@ -571,7 +571,7 @@ function removeFromRoute(locationId, routeId) {
 		}
 	});
 	
-	route.stops.splice(removeIndex,1); //Removes the element on index 'removeIndex' in the Array
+	route.stops.splice(removeIndex, 1); //Removes the element on index 'removeIndex' in the Array
 	route.numberOfStops = route.numberOfStops-1;
 	pTimeCalculate = calculateTraveltime(route);
 	
@@ -601,7 +601,7 @@ function removeFromRoute(locationId, routeId) {
 function deleteRoute(routeId) {
 	var route;
 	
-	$.each(userRoutes, function(i,v) {
+	$.each(userRoutes, function(i, v) {
 		if(v.id == routeId) {
 			route = v;
 			return;
@@ -618,6 +618,12 @@ function deleteRoute(routeId) {
 			json: JSON.stringify(jsonArray)
 		},
 		success: function(response) {
+			$.each(userRoutes, function(i, v) {
+				if(v.id == routeId) {
+					userRoutes.splice(i, i+1)
+					return;
+				}
+			});
 			console.log(response);
 		},
 		error: function(error) {
