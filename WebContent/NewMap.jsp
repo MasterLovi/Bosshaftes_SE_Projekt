@@ -39,7 +39,7 @@
 	<body>
 		<div class="absolute" id="header">
 			<div id='logoWrapper'>
-	        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\Title.png'></a>
+	        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\Logodiedritte.jpg'></a>
 	        </div>
 	        
 	        <div id='otherMapHeader'>

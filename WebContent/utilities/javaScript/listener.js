@@ -148,6 +148,7 @@ $(document).ready(function() {
 			$("#partyText").css("color", "");
 			
 			$("#currentAction").val("Kultur");
+			window.history.pushState("","", "NewMap.jsp?type=Kultur");
 			unloadPopup();
 			getLocationFromDatabase($("#currentAction").val()); 
 		} else {
@@ -160,6 +161,7 @@ $(document).ready(function() {
 			$("#cultureText").css("color", "");
 			
 			$("#currentAction").val("Party");
+			window.history.pushState("","", "NewMap.jsp?type=Party");
 			unloadPopup();
 			getLocationFromDatabase($("#currentAction").val()); 
 		}
@@ -176,6 +178,7 @@ $(document).ready(function() {
 		$("#cultureText").css("color", "");
 		
 		$("#currentAction").val("Party");
+		window.history.pushState("","", "NewMap.jsp?type=Party");
 		unloadPopup();
 		getLocationFromDatabase($("#currentAction").val()); 
 	});
@@ -191,6 +194,7 @@ $(document).ready(function() {
 		$("#partyText").css("color", "");
 		
 		$("#currentAction").val("Kultur");
+		window.history.pushState("","", "NewMap.jsp?type=Kultur");
 		unloadPopup();
 		getLocationFromDatabase($("#currentAction").val()); 
 	});

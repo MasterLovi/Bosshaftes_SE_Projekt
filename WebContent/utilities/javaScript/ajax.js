@@ -94,6 +94,8 @@ function getLocationFromDatabase(sType) {
 		},
 		success: function(response) {
 			
+			var defaultImage = sType == "Party" ? "utilities/pic/PartyDefault.png" : "utilities/pic/KulturDefault.png"
+			
 			// Clears the map before the new markers are loaded
 			if(globalLayer != null) {
 				globalLayer.eachLayer(function(layer) {
@@ -118,8 +120,8 @@ function getLocationFromDatabase(sType) {
 				marker.info = json[i];
 				
 				if ($("#userId").val() != null) {
-				marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
-						"<img class=\"popupImage\" src=\""+ (json[i].images[0].lenght > 30 ? json[i].images[0] : "utilities/pic/Bild1.jpg") +"\" />" + 
+				marker.bindPopup("<h4 class=\"centered popupMarkerHeader\">"+json[i].name+"</h4>" +
+						"<div class=\"popupMarkerImageWrapper\"><img class=\"popupImage\" src=\""+ (json[i].images[0].length > 30 ? json[i].images[0] : defaultImage) +"\" /></div>" + 
 						"<p>Bewertung</p>" +
 						"<div class=\"ratingWrapper centered\">" +
 							"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
@@ -141,7 +143,7 @@ function getLocationFromDatabase(sType) {
 						
 				} else {
 					marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
-							"<img class=\"popupImage\" src=\""+(json[i].images[0].lenght > 30 ? json[i].images[0] : "utilities/pic/Bild1.jpg")+"\">" + 
+							"<img class=\"popupImage\" src=\""+(json[i].images[0].length > 30 ? json[i].images[0] : defaultImage)+"\">" + 
 							"<p>Bewertung</p>" +
 							"<div class=\"ratingWrapperPopup centered\">" +
 								"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +

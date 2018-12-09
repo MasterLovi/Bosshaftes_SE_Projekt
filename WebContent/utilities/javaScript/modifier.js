@@ -133,6 +133,8 @@ function toureListRightShift() {
 
 function addRoutesToSelection(data) {
 	var json = JSON.parse(data);
+	var defaultImage = $("#currentAction").val() == "Party" ? "utilities/pic/PartyDefault.png" : "utilities/pic/KulturDefault.png";
+	
 
 	// Clears the List
 	$("#tourList").empty();
@@ -169,8 +171,7 @@ function addRoutesToSelection(data) {
 				+ "</div>"
 				+ "<div class='iconWrapper'>"
 				+ "<img class='tourIcon' src='"
-				+ (json[i].images.length > 0 ? json[i].images[i] + "'"
-						: "utilities/pic/OP2.jpg'") + ">" + "</div>" + "</li>";
+				+ (json[i].images[0] != undefined ? json[i].images[0] : defaultImage) + "'>" + "</div>" + "</li>";
 
 		$("#tourList").append(listelement);
 	}
@@ -271,8 +272,8 @@ function toursHoverEvent() {
 					if (v.id == tour) {
 						$.each(v.stops, function(i, v) {
 							$("#tourStops").append(
-									"<li class='infotext'>" + v.name
-											+ "</li><hr>");
+									"<li class='infotext'><i class=\"material-icons\">place</i><p class=\"inline\">" + v.name
+											+ "</p></li><hr>");
 						})
 					}
 				});
@@ -530,7 +531,7 @@ function convertImageToBase64(input) {
 	} else if (!input.prop("files")[0]) {
 		
 		return new Promise(function(resolve, reject) {
-			var file = new File([""], "./WebContent/utilities/pic/Bild1.jpg", {type: "image/jpeg"});
+			var file = new File([""], "file:///C:/Users/Sascha%20Dietz/Documents/GitHub/Bosshaftes_SE_Projekt/WebContent/utilities/pic/Bild1.jpg", {type: "image/jpeg"});
 
 			var fr = new FileReader();
 			var base64;

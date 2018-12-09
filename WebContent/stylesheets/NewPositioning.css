@@ -280,6 +280,10 @@ td .inputSubmit{
 #spotValue{
 	width: 20%;
 	float: right;
+	text-align: center;
+	text-align: -moz-center;
+	text-align: -webkit-center;
+	border-radius: 25px;
 }
 
 #timeRange{
@@ -289,6 +293,10 @@ td .inputSubmit{
 #timeValue{
 	width:	20%;
 	float: right;
+	text-align: center;
+	text-align: -moz-center;
+	text-align: -webkit-center;
+	border-radius: 25px;
 }
 
 #rating{
@@ -353,7 +361,7 @@ td .inputSubmit{
 	right: 20px;
 	top: 151px;
 	width: 200px;
-	height: 60%;
+	bottom: 30px;
 	background-color: #ffffff;
 	z-index: 801;
 	border-radius: 4px;
@@ -495,7 +503,7 @@ td .inputSubmit{
 #statusMessageText {
 	color: green;
 	font-weight: bold;
-	font-size: 24px;
+	font-size: 20px;
 	padding: 10px;
 	
 }
@@ -565,11 +573,15 @@ td .inputSubmit{
 .tourIcon{
 	display: block;
 	height: 100%;
-	width: 100%;
+	width: auto;
+	max-with: 100%;
 	border-radius: 4px;
 }
 
 .iconWrapper{
+	text-align: center;
+	text-align: -moz-center;
+	text-align: -webkit-center;
 	width: 156px;
 	height: 80px;
 }
@@ -646,8 +658,9 @@ td .inputSubmit{
 }
 
 .popupImage{
-	height: 50px;
-	width: 50px;
+	height: 60px;
+	width: auto;
+	max-width: 100%;
 }
 
 .button {
@@ -765,5 +778,20 @@ td .inputSubmit{
 
 .standardInputSize{
 	width: 100%;
+	margin-bottom: 10px;
+}
+
+.popupMarkerImageWrapper{
+	text-align: center;
+	text-align: -moz-center;
+	text-align: -webkit-center;
+}
+
+.popupMarkerHeader{
+	font-size: 24px;
+	margin-bottom: 10px;
+}
+
+.imageSelectorRoute {
 	margin-bottom: 10px;
 }
