@@ -190,5 +190,9 @@
 		  </div>
 		
 		</div>
+		
+		<div id="statusMessage">
+			<p id="statusMessageText">test</p>
+		</div>
 	</body>
 </html>

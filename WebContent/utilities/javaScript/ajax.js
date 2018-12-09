@@ -119,7 +119,7 @@ function getLocationFromDatabase(sType) {
 				
 				if ($("#userId").val() != null) {
 				marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
-						"<img class=\"popupImage\" src=\""+ (json[i].images[0] ? json[i].images[0] : "") +"\" />" + 
+						"<img class=\"popupImage\" src=\""+ (json[i].images[0].lenght > 30 ? json[i].images[0] : "utilities/pic/Bild1.jpg") +"\" />" + 
 						"<p>Bewertung</p>" +
 						"<div class=\"ratingWrapper centered\">" +
 							"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
@@ -141,7 +141,7 @@ function getLocationFromDatabase(sType) {
 						
 				} else {
 					marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
-							"<img class=\"popupImage\" src=\""+json[i].images[0]+"\">" + 
+							"<img class=\"popupImage\" src=\""+(json[i].images[0].lenght > 30 ? json[i].images[0] : "utilities/pic/Bild1.jpg")+"\">" + 
 							"<p>Bewertung</p>" +
 							"<div class=\"ratingWrapperPopup centered\">" +
 								"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
@@ -214,6 +214,7 @@ function createNewMarker(sType, pImageLoaded) {
 			}
 			
 			unloadPopup();
+			sendStatusMessage("Neuer Ort erfolgreich erstellt.", "green");
 			
 		},
 		error: function(error) {
@@ -255,6 +256,7 @@ function updateMarker(markerId, pImageLoaded){
 			},
 			success: function(response) {
 				unloadPopup();
+				sendStatusMessage("Ort erfolgreich geändert.", "green");
 			},
 			error: function(error) {
 				console.log(error);
@@ -291,11 +293,11 @@ function reportLocation(markerId){
 
 		},
 		success: function(response) {
-			//TODO Set Point after success and close popup
-			console.log(response);
+			sendStatusMessage("Ort erfolgreich gemeldet.", "green");
 		},
 		error: function(error) {
-			console.log(error);
+			
+			sendStatusMessage("Sie haben diesen Ort bereits gemeldet", "red");
 		}
 	});
 }
@@ -351,11 +353,12 @@ function sendFeedback(type, id) {
 			json: JSON.stringify(jsonArray)
 		}, 
 		success: function(response) {
-			refreshLayerData($("#currentAction").val());
+			getLocationFromDatabase($("#currentAction").val());
+			sendStatusMessage("Feedback erfolgreich gespeichert.", "green");
 			unloadPopup();
 		},
 		error: function(error) {
-			console.log(error);
+			$("#popupError").html("Sie haben diesen Ort oder Route bereits bewertet.");
 		}
 		
 	});
@@ -403,9 +406,12 @@ function deleteFeedback(type, id, feedbackId) {
 		success: function(response) {
 			// Deletes the recently deleted feedback from the globalLayer
 			globalLayer.getLayer(id).info.feedback.splice(indexOfFeedback, 1);
-			
 			// Reloads the feedback
 			loadFeedbackToPopup({id: id, type: type});
+			
+			refreshLayerData($("#currentAction").val());
+			
+			sendStatusMessage("Feedback erfolgreich gelöscht.", "green");
 		},
 		error: function(error) {
 			console.log(error);
@@ -456,6 +462,8 @@ function changeFeedback(type, id, feedbackId) {
 		}, 
 		success: function(response) {
 			loadFeedbackToPopup({id: id, type: type});
+			refreshLayerData($("#currentAction").val());
+			sendStatusMessage("Feedback erfolgreich geändert.", "green");
 		},
 		error: function(error) {
 			console.log(error);
@@ -503,6 +511,8 @@ function createNewRoute(id) {
 		},
 		success: function(response) {
 			getUserRoutes($("#currentAction").val(), $("#userId").val());
+			unloadPopup();
+			sendStatusMessage("Route wurde erfolgreich erstellt.", "green");
 		},
 		error: function(error) {
 			console.log(error);
@@ -541,7 +551,8 @@ function addPointToRoute(locationId, routeId) {
 				json: JSON.stringify(jsonArray)
 			},
 			success: function(response) {
-				console.log(response);
+				unloadPopup();
+				sendStatusMessage("Ort wurder erfolgreich der Route hinzufügt.", "green");
 			},
 			error: function(error) {
 				console.log(error);
@@ -571,6 +582,12 @@ function removeFromRoute(locationId, routeId) {
 		}
 	});
 	
+	if (route.numberOfStops-1 == 0) {
+		$("#popupError").html("Die Route darf nicht leer sein. Sie können den Punkt nicht löschen!");
+		cancelDeletionOrChange('route');
+		return;
+	}
+	
 	route.stops.splice(removeIndex, 1); //Removes the element on index 'removeIndex' in the Array
 	route.numberOfStops = route.numberOfStops-1;
 	pTimeCalculate = calculateTraveltime(route);
@@ -590,6 +607,7 @@ function removeFromRoute(locationId, routeId) {
 			},
 			success: function(response) {
 				changeRouteInformation(routeId);
+				sendStatusMessage("Punkt erfolgreich aus Route gelöscht.", "green");
 			},
 			error: function(error) {
 				console.log(error);
@@ -620,11 +638,13 @@ function deleteRoute(routeId) {
 		success: function(response) {
 			$.each(userRoutes, function(i, v) {
 				if(v.id == routeId) {
-					userRoutes.splice(i, i+1)
+					userRoutes.splice(i, 1);
 					return;
 				}
 			});
-			console.log(response);
+			loadUserRoutes("show");
+			changeRouteInformation($("#manageRoutesForm select[name=routes]").val());
+			sendStatusMessage("Route wurde erfolgreich gelöscht.", "green");
 		},
 		error: function(error) {
 			console.log(error);

@@ -148,6 +148,7 @@ $(document).ready(function() {
 			$("#partyText").css("color", "");
 			
 			$("#currentAction").val("Kultur");
+			unloadPopup();
 			getLocationFromDatabase($("#currentAction").val()); 
 		} else {
 			$("#headerIconMiddle").html("chevron_left");
@@ -159,6 +160,7 @@ $(document).ready(function() {
 			$("#cultureText").css("color", "");
 			
 			$("#currentAction").val("Party");
+			unloadPopup();
 			getLocationFromDatabase($("#currentAction").val()); 
 		}
 	});
@@ -174,6 +176,7 @@ $(document).ready(function() {
 		$("#cultureText").css("color", "");
 		
 		$("#currentAction").val("Party");
+		unloadPopup();
 		getLocationFromDatabase($("#currentAction").val()); 
 	});
 	
@@ -188,6 +191,7 @@ $(document).ready(function() {
 		$("#partyText").css("color", "");
 		
 		$("#currentAction").val("Kultur");
+		unloadPopup();
 		getLocationFromDatabase($("#currentAction").val()); 
 	});
 })

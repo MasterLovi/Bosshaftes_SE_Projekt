@@ -5,10 +5,12 @@ function loadPopupContent(popupType) {
 		return;
 	}
 	
+	$(".modal-content").html("");
+	
 	//loading the content of the popup
 	switch (popupType) {
 	case "feedback": {
-		content = content + "<form id=\"feedbackForm\" method=\"POST\" action=\"\">" +
+		content = content + "<form autocomplete=\"off\" id=\"feedbackForm\" method=\"POST\" action=\"\">" +
     	"<input type=\"hidden\" name=\"id\" value=\"\"/>" +
 	    	"<input type=\"hidden\" name=\"type\" value=\"\"/>" +
 			"<h4 class=\"centered\">Ihre Meinung ist uns wichitg!</h4>" +
@@ -32,7 +34,7 @@ function loadPopupContent(popupType) {
 	break;
 	case "update": {
 		content = content + "<h4 class=\"centered\">Ort ändern</h4>" +
-		"<form id=\"updateLocationForm\" method=\"POST\" action=\"\">" +
+		"<form autocomplete=\"off\" id=\"updateLocationForm\" method=\"POST\" action=\"\">" +
     	"<input type=\"hidden\" name=\"id\" value=\"\"/>" +
     	"<p id=\"popupError\"></p>" +
 	    	"<table id=\"popupTable\">" +
@@ -82,7 +84,7 @@ function loadPopupContent(popupType) {
 	break;
 	case "createNew": {
 		content = content + "<h4 class=\"centered\">Neuen Ort anlegen</h4>" +
-		"<form id=\"createLocationForm\" method=\"POST\" action=\"\">" +
+		"<form autocomplete=\"off\" id=\"createLocationForm\" method=\"POST\" action=\"\">" +
     	"<input type=\"hidden\" name=\"lat\" id=\"newLat\" value=\"\"/>" +
 	    	"<input type=\"hidden\" name=\"lng\" id=\"newLng\" value=\"\"/>" +
 	    	"<input type=\"hidden\" name=\"userId\" id=\"userId\" value=\"\"/>" +
@@ -142,20 +144,20 @@ function loadPopupContent(popupType) {
 		"</select>" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
 		"<ul id=\"tourStopsPopup\"></ul>" +
-		"<input type=\"submit\" class=\"button\" value=\"Hinzufügen\">" +
+		"<input type=\"submit\" class=\"button buttonStandardSize\" value=\"Hinzufügen\">" +
 		"</form>";
 	};
 	break;
 	case "createRoute": {
-		content = content + "<form id=\"newRouteForm\" method=\"POST\" action=\"\">" +
+		content = content + "<form autocomplete=\"off\" id=\"newRouteForm\" method=\"POST\" action=\"\">" +
 		"<input type=\"hidden\" name=\"locationId\" value=\"\">" +
 		"<h4 class=\"centered\">Neue Route erstellen</h4>" +
 		"<p id=\"popupError\"></p>" +
 		"<p class=\"centered infoHeader\">Routenname</p>" +
-		"<input type=\"text\" name=\"name\" placeholder=\"Routenname\">" +
+		"<input type=\"text\" class=\"standardInputSize\" name=\"name\" placeholder=\"Routenname\">" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
 		"<textarea rows=\"4\" form=\"newRouteForm\" name=\"description\"></textarea>" +
-		"<input type=\"submit\" class=\"button\" value=\"Erstellen\">" +
+		"<input type=\"submit\" class=\"button buttonStandardSize\" value=\"Erstellen\">" +
 		"</form>";
 	};
 	break;
@@ -176,8 +178,8 @@ function loadPopupContent(popupType) {
 		"</select>" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
 		"<ul id=\"tourStopsPopup\"></ul>" +
-		"<input type=\"submit\" class=\"button\" value=\"Anzeigen\">" +
-		"<button class=\"button\" onClick=\"\">Löschen</button>" + //TODO Set function for delete here
+		"<input type=\"submit\" class=\"button buttonStandardSize\" value=\"Anzeigen\">" +
+		"<button type=\"button\" id=\"deleteRouteBtn\" class=\"button buttonStandardSize\">Löschen</button>" + //type has to be set so that the button does not submit the form
 		"</form>";
 	};
 	break;
@@ -313,17 +315,31 @@ function loadPopupContent(popupType) {
 	break;
 	case "showFeedback": {
 		
-		//TODO Add Function to the delete button
+		// No functionality needed
 	};
 	break;
-	case "manageRoutes": {
+	case "manageRoutes": {		
 		
 		$("#manageRouteForm").submit(function() {
-			showUserRouteOnInfo($("#manageRouteForm select[name=routes]").val());
-			return false;
+			var error = manageRouteValidation();
+			if (!error) {
+				showUserRouteOnInfo($("#manageRouteForm select[name=routes]").val());
+				return false;
+			} else {
+				$("#popupError").html(error);
+				return false;
+			}
 		});
-		
-		
+
+		$("#deleteRouteBtn").click(function() {
+			var error = manageRouteValidation();
+			if (!error) {
+				deleteRoute($("#manageRouteForm select[name=routes]").val());
+			} else {
+				$("#popupError").html(error);
+				return false;
+			}
+		});
 		
 		$("#manageRouteForm select[name=routes]").change(function() {
 			changeRouteInformation($("#manageRouteForm select[name=routes] option:selected").val());

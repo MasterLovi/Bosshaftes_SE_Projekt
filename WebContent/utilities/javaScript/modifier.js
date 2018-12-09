@@ -46,19 +46,26 @@ $(document).ready(function getLocation() {
 })
 
 // Prints out the geo point that was loaded to the map.
+var myLocation; // Needed if the user wants to add his location to the database 
+
 function showPosition(position) {
 	var coords = '{ "coordinates": ["' + position.coords.latitude + '" ,"'
 			+ position.coords.longitude + '"]}';
 	var json = JSON.parse(coords);
 
-	var layer = L.marker(json.coordinates, {
+	myLocation = L.marker(json.coordinates, {
 		icon : L.mapquest.icons.marker({
 			primaryColor : '#111111',
 			secondaryColor : '#0066ff'
 		})
 	}).addTo(getMap())
-	layer.bindPopup("Your location");
-
+	
+	if ($("#userId").val() != null) {
+		myLocation.bindPopup("<p>Ihr Standort nach IP Adresse</p><p>Möchten Sie den Standort hinzufügen</p><button class=\"fullSize button\" onClick='showNewPointPopup(myLocation)'>Hinzufügen</button>");
+	} else {
+		myLocation.bindPopup("<p>Ihr Standort nach IP Adresse</p>");
+	}
+	
 	getMap().panTo(json.coordinates);
 }
 
@@ -466,15 +473,26 @@ function unloadPopup() {
 }
 
 function loadUserRoutes(type) {
+	
+	if (type == "update") {
+		$("#updateRouteForm select[name=routes]").empty();
+		
+	} else if (type == "show") {
+		$("#manageRouteForm select[name=routes]").empty();
+	}
+	
+	
 	$.each(userRoutes, function(i, v) {
 		if (i == 0) {
-			changeRouteInformation(v.id)
+			if ($("#currentAction").val() == v.type) {
+				changeRouteInformation(v.id)
+			}
 		}
-		if (type == "update") {
+		if (type == "update" && $("#currentAction").val() == v.type) {
 			$("#updateRouteForm select[name=routes]").append(
 					"<option value=" + v.id + ">" + v.name + "</option>");
 			
-		} else if (type == "show") {
+		} else if (type == "show" && $("#currentAction").val() == v.type) {
 			$("#manageRouteForm select[name=routes]").append(
 					"<option value=" + v.id + ">" + v.name + "</option>");
 		}
@@ -484,6 +502,10 @@ function loadUserRoutes(type) {
 function changeRouteInformation(routeId) {
 	$("#tourStopsPopup").empty();
 
+	if (routeId == undefined) {
+		return;
+	}
+	
 	$.each(userRoutes, function(i, v) {
 		if (v.id == routeId) {
 			$.each(v.stops,
@@ -769,7 +791,6 @@ function confirmationFeedbackChange(feedbackId, element) {
 	prevFeedbackContent = replaceElement.innerHTML;
 	prevFeedbackElement = replaceElement;
 	
-	//TODO Add Delete call
 	var confirm = "<i class=\"material-icons green clickable\" onClick=\"changeFeedback('"
 		+ $("#typeOfShownFeedback").val() 
 		+ "', " + $("#idOfShownFeedback").val() 
@@ -779,3 +800,8 @@ function confirmationFeedbackChange(feedbackId, element) {
 	replaceElement.innerHTML = confirm;
 }
 
+function sendStatusMessage(message, color) {
+	$("#statusMessageText").html(message);
+	$("#statusMessageText").css("color", color);
+	$("#statusMessage").animate({"bottom": "5px"}, "slow").delay(3000).animate({"bottom": "-50px"},"slow");
+}

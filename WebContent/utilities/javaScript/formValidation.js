@@ -108,3 +108,20 @@ function updateRouteValidation() {
 		return false;
 	}
 }
+
+function manageRouteValidation() {
+	var selection = "";
+	var error;
+	
+	selection = $("#manageRouteForm select[name=routes]").val();
+	
+	if (selection == undefined) {
+		error = "Sie haben keine Route ausgewählt.";
+	}
+	
+	if (error != "") {
+		return error;
+	} else {
+		return false;
+	}
+}
