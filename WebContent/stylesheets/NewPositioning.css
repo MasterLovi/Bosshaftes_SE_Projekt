@@ -230,6 +230,8 @@ td .inputSubmit{
 	height: 50px;
 	vertical-align: middle;
 	border-radius: 50%;
+	border: 2px solid grey;
+	box-shadow: 3px 3px 3px #bbb;
 }
 
 #mapHeader{ 

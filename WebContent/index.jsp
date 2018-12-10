@@ -18,7 +18,7 @@
     	<div id='headerbar'>
 	    	<div id='otherHeader'>
 	    		<div id='logoWrapper'>
-		        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\Title_round.png'></a>
+		        	<a href='index.jsp'><img id='mainLogo' src='utilities\pic\MainLogo.jpg'></a>
 		        </div>
 	    	</div>
 	    	<div id='loginArea'>
