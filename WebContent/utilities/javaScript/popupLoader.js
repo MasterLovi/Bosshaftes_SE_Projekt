@@ -306,9 +306,11 @@ function loadPopupContent(popupType) {
 	case "createRoute": {
 		$('#newRouteForm').submit(function () {
 			var error = newRouteValidation();
+			var pImageLoaded;
 			
 			if (!error) {
-				createNewRoute($("#newRouteForm input[name=locationId]").val());
+				pImageLoaded = convertImageToBase64($("#newRouteForm input[name=tourImage]").val())
+				createNewRoute($("#newRouteForm input[name=locationId]").val(), pImageLoaded);
 				return false;
 			} else {
 				$("#popupError").html(error);

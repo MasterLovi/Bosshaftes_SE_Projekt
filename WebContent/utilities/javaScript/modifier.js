@@ -521,35 +521,28 @@ function changeRouteInformation(routeId) {
 
 function convertImageToBase64(input) {
 
-	var error;
-
-	if (!input) {
-		console.log("Um, couldn't find the fileinput element.");
-	} else if (!input.prop("files")) {
-		console
-				.log("This browser doesn't seem to support the `files` property of file inputs.");
-	} else if (!input.prop("files")[0]) {
+	return new Promise(function(resolve, reject){
+		var error;
 		
-		return new Promise(function(resolve, reject) {
-			var file = new File([""], "file:///C:/Users/Sascha%20Dietz/Documents/GitHub/Bosshaftes_SE_Projekt/WebContent/utilities/pic/Bild1.jpg", {type: "image/jpeg"});
-
-			var fr = new FileReader();
-			var base64;
-			fr.onload = function(e) {
-				base64 = e.target.result;
-				resolve(base64);
-			};
-			fr.readAsDataURL(file);
+		if (!input) {
+			console.log("Element existiert nicht.");
 			
-		});
-		
-	} else if (input.prop("files")[0].size > 10000000) {
-		console.log("Kein 4K bitte")
-	} else {
-
-		return new Promise(function(resolve, reject) {
+			resolve(null);
+			
+		} else if (!input.prop("files")) {
+			console.log("Dateiinput wird von Ihrem Browser nicht untersützt.");
+			
+			resolve(null);
+			
+		} else if (!input.prop("files")[0]) {
+				
+			resolve(null);
+			
+		} else if (input.prop("files")[0].size > 10000000) {
+			console.log("Kein 4K bitte")
+		} else {
 			var file = input.prop("files")[0];
-
+	
 			var fr = new FileReader();
 			var base64;
 			fr.onload = function(e) {
@@ -557,8 +550,8 @@ function convertImageToBase64(input) {
 				resolve(base64);
 			};
 			fr.readAsDataURL(file);
-		});
-	}
+		}
+	});
 }
 
 function loadUserRoutePopup() {

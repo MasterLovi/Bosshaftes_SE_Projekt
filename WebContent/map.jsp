@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" pageEncoding="utf-8" contentType="text/html"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%! 
@@ -37,7 +36,7 @@
 
 <html>
 	<head>
-		<meta charset="ISO-8859-1">
+		<meta charset="utf-8">
 		
         <link rel="stylesheet" type="text/css" href="stylesheets/design.css">
         <link rel="stylesheet" type="text/css" href="stylesheets/positioning.css">
@@ -127,7 +126,7 @@
     		<input type="checkbox" name="demo3" value="demo3">Option3<br>
     		<input type="checkbox" name="demo4" value="demo4">Option4<br>
     		<hr>
-    		<p>Anzahl Sehenwürdigkeiten</p>
+    		<p>Anzahl SehenwÃ¼rdigkeiten</p>
     		<input type="range" name="demo4" value="demo4"><br>
     		<hr>
     		<p>Zeit</p>
@@ -159,7 +158,7 @@
   	 		
   	 		//Initialize the map
 //  	 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-//  	 		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+//  	 		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery Â© <a href="https://www.mapbox.com/">Mapbox</a>',
 //  	 		    maxZoom: 18,
 //  	 		    id: 'mapbox.streets',
 //  	 		    accessToken: 'pk.eyJ1IjoiYW1ubmV5IiwiYSI6ImNqbmVjeDdnZDA2dGYzcm1pYjZienZyMDgifQ.hVVhNmhJ6sM2kUKlSVPN5Q'
@@ -190,7 +189,7 @@
   	 	    "Heidelberg",
   	 	    "Schwetzingen",
   	 	    "Mundenheim",
-  	 	    "Mutterstadt, Birkenstraße 16"
+  	 	    "Mutterstadt, BirkenstraÃŸe 16"
   	 	  ],
   	 	  "options": {
   	 	    "allToAll": true

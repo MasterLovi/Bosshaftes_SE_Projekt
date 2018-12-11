@@ -2,6 +2,37 @@ var globalRoutes;
 var globalLayer; //Will be used to delete and reload marker that are out of the viewport
 var userRoutes = [];
 
+function regUser(){
+	var username = $("#regForm input[name=username]").val();
+	var email = $("#regForm input[name=email]").val();
+	var pw1 = $("#regForm input[name=password]").val();
+	var pw2 = $("#regForm input[name=passwordRep]").val();
+	
+	if (pw1 !== pw2) {
+		$("#error").html("Die Passwörter stimmen nicht überein.");
+		return;
+	}
+	
+	$.ajax({
+		url: "RegistrationServlet",
+		type: "POST",
+		data: {
+			username: username,
+			email: email,
+			password: pw1,
+			passwordRep: pw2
+		},
+		success: function(response) {
+			document.location = "index.jsp";
+		},
+		error: function(error) {
+			$("#error").html(error.responseText);
+		}
+	});
+	
+	
+}
+
 function getLocation(searchString, map){
 
 	// This function takes the input from the search field and sends it
@@ -196,7 +227,8 @@ function createNewMarker(sType, pImageLoaded) {
 
 	pImageLoaded.then(function(image) {
 	
-	json.images = [image];
+	if (image != null) { json.images[0] = [image] }
+	
 	var jsonArray = [json];
 		
 	$.ajax({
@@ -220,7 +252,8 @@ function createNewMarker(sType, pImageLoaded) {
 			
 		},
 		error: function(error) {
-			console.log(error);
+			unloadPopup();
+			sendStatusMessage("Ort konnte nicht angelegt werden.", "red");
 		}
 	});
 });
@@ -243,9 +276,10 @@ function updateMarker(markerId, pImageLoaded){
 	json.longitude = marker.info.longitude;
 	json.feedback = marker.info.feedback;
 	
-	// TODO Set images and tranform it
 	pImageLoaded.then(function(image) {
-		json.images = [image];
+		
+		if (image != null) { json.images[0] = [image] }
+		
 		var jsonArray = [json];
 		debugger;
 		$.ajax({
@@ -447,7 +481,6 @@ function changeFeedback(type, id, feedbackId) {
 		}
 	});
 	
-	//TODO Replace with inbuild textarea and starchagne 
 	feedback.comment = $("#feedbackEditArea").val();
 	feedback.rating = $("#feedbackRatingValue").val();
 	
@@ -475,11 +508,12 @@ function changeFeedback(type, id, feedbackId) {
 	
 }
 
-function createNewRoute(id) {
+function createNewRoute(id, pImageLoaded) {
 
 	var data = globalLayer;
 	var location;
 	var json = getDatastructureRoute();
+	var pConvertedImage;
 		
 	$.each(data._layers, function(i,v) {
 		if (v._leaflet_id == id) {
@@ -501,27 +535,31 @@ function createNewRoute(id) {
 	json.owner.email = null;
 	json.id = null;
 	
-
-	var jsonArray = [json];
-	
-	$.ajax({
-		url: "RouteServlet",
-		type: "POST",
-		data: {
-			operation: "create",
-			json: JSON.stringify(jsonArray)
-		},
-		success: function(response) {
-			getUserRoutes($("#currentAction").val(), $("#userId").val());
-			unloadPopup();
-			sendStatusMessage("Route wurde erfolgreich erstellt.", "green");
-		},
-		error: function(error) {
-			console.log(error);
-		}
-	});
+	pImageLoaded.then(function(image){
+		
+		if (image != null) { json.images[0] = [image] }
+		
+		var jsonArray = [json];
+		
+		$.ajax({
+			url: "RouteServlet",
+			type: "POST",
+			data: {
+				operation: "create",
+				json: JSON.stringify(jsonArray)
+			},
+			success: function(response) {
+				getUserRoutes($("#currentAction").val(), $("#userId").val());
+				unloadPopup();
+				sendStatusMessage("Route wurde erfolgreich erstellt.", "green");
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
+	})
 }
-// WICHTIG KEINE LEEREN ROUTEN
+
 function addPointToRoute(locationId, routeId) {
 	// Operation 'update'
 	// Komplettes Route Object 

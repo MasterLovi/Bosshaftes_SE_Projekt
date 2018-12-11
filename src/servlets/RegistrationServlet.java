@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -101,11 +102,20 @@ public class RegistrationServlet extends HttpServlet {
 			session.setAttribute("userid", user.getId());
 			session.setAttribute("username", user.getUsername());
 			session.setAttribute("loggedin", true);
-
-			response.sendRedirect(request.getHeader("referer"));
+						
+			response.setContentType("text/html; charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			
+			PrintWriter writer = response.getWriter();
+			writer.append("Success");
 
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			response.setStatus(500);
+			response.setContentType("text/html; charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			
+			PrintWriter writer = response.getWriter();
+			writer.append(e.getMessage());
 		}
 		em.close();
 	}

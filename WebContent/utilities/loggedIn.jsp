@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" pageEncoding="utf-8" contentType="text/html"%>
 <!DOCTYPE html>
 <div id='rightIcon'>
 	<input type="hidden" id="userId" value=<% out.println(session.getAttribute("userid")); %> >

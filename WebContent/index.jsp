@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" pageEncoding="utf-8" contentType="text/html"%>
 <%@page import="java.util.*"%>
 
 
@@ -53,11 +53,11 @@
 	        			Businessmeeting, auf der Durchreise oder die Verwandten besuchen gewesen?
 						Du kennst niemanden und bist auch noch nie hier gewesen?
 						Wenn du deinen Abend nicht im Hotelzimmer totschlagen willst bist du hier genau richtig!
-						Einfach klicken und die besten Clubs, Bars und sonstige Party-Locations in einer Übersicht.
+						Einfach klicken und die besten Clubs, Bars und sonstige Party-Locations in einer Ãœbersicht.
 						Egal ob du die Nacht durchfeiern willst oder nur 2 Stunden Zeit hast bis dein Zug kommt.
 						Hier kommt jeder auf seine Kosten.
-						Die ganz Harten können auch direkt eine Kneipen- oder Discotour machen!
-						Viel Spaß und let the party never stop :D
+						Die ganz Harten kÃ¶nnen auch direkt eine Kneipen- oder Discotour machen!
+						Viel SpaÃŸ und let the party never stop :D
 					</p>
 	        		<div class='buttonWrapper'>
 	        			<a href="NewMap.jsp?type=Party"><button class='actionButton button' >Finde eine Tour die zu deiner Zeit passt</button></a>
@@ -71,10 +71,10 @@
         		<div class='infoWrapper'>
 	        		<p class='optionInfo'><img class='optionImg' align='left' src='utilities\pic\Culture_round.png' />
 	        			Auf der Durchreise, oder sogar etwas zu erledigen?
-						Sie haben noch etwas Zeit zu Verfügung bis ihre Bahn fährt oder das Meeting anfängt?
+						Sie haben noch etwas Zeit zu VerfÃ¼gung bis ihre Bahn fÃ¤hrt oder das Meeting anfÃ¤ngt?
 						Sie sind an den kulturellen Hotspots interessiert die die Region zu bieten hat?
 						Dann sind Sie hier genau richtig.
-						Einfach Ihre verbleibende Zeit eingeben und schon können Sie sich auf eine von vielen Touren durch Altstadt, Museen, Kulturzentren und sonstigen Sehenswürdigkeiten machen.
+						Einfach Ihre verbleibende Zeit eingeben und schon kÃ¶nnen Sie sich auf eine von vielen Touren durch Altstadt, Museen, Kulturzentren und sonstigen SehenswÃ¼rdigkeiten machen.
 						Erleben Sie unvergessliche Stunden, starten Sie gleich mit einer von vielen Kul-touren!
 					</p>
 	        		<div class='buttonWrapper'>

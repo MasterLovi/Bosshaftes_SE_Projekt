@@ -1,12 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" pageEncoding="utf-8" contentType="text/html"%>
 <!DOCTYPE html>
 
 <html lang="de">
 	<head>
 		<title>NewMap Design</title>
 		
-		<meta charset="UTF-8">
+		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		
         <link rel="stylesheet" type="text/css" href="stylesheets/NewDesign.css">
