@@ -33,6 +33,30 @@ function regUser(){
 	
 }
 
+function userLogin(){
+	var username = $("#loginForm input[name=username]").val();
+	var pw1 = $("#loginForm input[name=password]").val();
+	
+	$.ajax({
+		url: "UserSessionServlet",
+		type: "POST",
+		data: {
+			username: username,
+			password: pw1
+		},
+		success: function(response) {
+		},
+		error: function(error) {
+			$("#loginForm input[name=username]").val("");
+			$("#loginForm input[name=password]").val("");
+			$("#loginForm input[name=username]").css("border", "solid 1px red");
+			$("#loginForm input[name=password]").css("border", "solid 1px red");
+			$("#loginForm").effect("shake");
+		}
+	});
+	
+}
+
 function getLocation(searchString, map){
 
 	// This function takes the input from the search field and sends it
