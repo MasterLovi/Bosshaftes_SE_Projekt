@@ -11,6 +11,7 @@
         <link rel="stylesheet" type="text/css" href="stylesheets/design.css">
         <link rel="stylesheet" type="text/css" href="stylesheets/icon.css">
      	
+   	    <script src="utilities/javaScript/jquery-ui.min.js"></script>
     </head>
 
     <body>
