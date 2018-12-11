@@ -78,6 +78,7 @@ public class TestJPAClasses {
 		location.setTime(new Time("05:05:05"));
 		location.setTimesReported(0);
 		location.setTimeString("05:05:05");
+		location.setAvgRating(3.0);
 		location.setUserReports(userReports);
 		
 		route.setAvgRating(4);
@@ -176,6 +177,7 @@ public class TestJPAClasses {
 	public void tLocation() {
 		
 		assertEquals(-5, location.getId());
+		assertTrue(location.getAvgRating() == 3.0);
 		assertEquals(address, location.getAddress());
 		assertEquals("test", location.getDescription());
 		assertEquals(feedback, location.getFeedback().get(0));
@@ -223,7 +225,7 @@ public class TestJPAClasses {
 				+ "testStreet" + " " + 0 + ", "
 				+ 68169 + " " + "Mannheim" + ", "
 				+ "Deutschland" + ", "
-				+ "Feedback: geb ich jetzt dazu sicherlich nicht aus";
+				+ "Feedback: not gonna print this here";
 		assertEquals(test, location.toString());
 	}
 	
@@ -303,7 +305,7 @@ public class TestJPAClasses {
 				+ "Type: " + "Kultur" + ", "
 				+ "Time: " + "05:05:05" + ", "
 				+ "Description: " + "test" + ", "
-				+ "|| Feedback und Location spar ich mir";
+				+ "|| won't print Feedback and Location here";
 		
 		assertEquals(test, route.toString());
 		
