@@ -105,7 +105,7 @@ public class TestFeedbackServlet {
 		String result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Type muss entweder \"Route\" oder \"Location\" sein!"));
+		assertTrue(result.equals("Type can only be \"Route\" or \"Location\"."));
 	}
 
 	@Test
@@ -166,7 +166,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Dieser User hat schon ein Feedback für diese Location abgegeben."));
+		assertTrue(result.equals("This user has already given feedback for this route."));
 
 		when(session.getAttribute("username")).thenReturn("testFail");
 		pw.flush();
@@ -175,7 +175,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("User \"testFail\" existiert nicht."));
+		assertTrue(result.equals("User \"testFail\" does not exist."));
 
 		when(request.getParameter("id")).thenReturn("-1");
 		pw.flush();
@@ -184,7 +184,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Zugehörige Location existiert nicht!"));
+		assertTrue(result.equals("The corresponding location does not exist."));
 
 	}
 
@@ -229,7 +229,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Du kannst nur dein eigenes Feedback bearbeiten."));
+		assertTrue(result.equals("You can only modify your own feedback."));
 
 		when(session.getAttribute("username")).thenReturn("testFail");
 		pw.flush();
@@ -238,7 +238,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("User \"testFail\" existiert nicht."));
+		assertTrue(result.equals("User \"testFail\" does not exist."));
 
 		when(request.getParameter("id")).thenReturn("-1");
 		pw.flush();
@@ -247,7 +247,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Zugehörige Location existiert nicht!"));
+		assertTrue(result.equals("The corresponding location does not exist."));
 	}
 
 	public void t3LDelete() throws IOException, ServletException {
@@ -280,7 +280,7 @@ public class TestFeedbackServlet {
 		String result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Du kannst nur dein eigenes Feedback löschen."));
+		assertTrue(result.equals("You can only delete your own feedback."));
 
 		em.getTransaction().begin();
 		em.remove(testUser);
@@ -293,7 +293,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("User \"testFail\" existiert nicht."));
+		assertTrue(result.equals("User \"testFail\" does not exist."));
 
 		when(request.getParameter("id")).thenReturn("-1");
 		pw.flush();
@@ -302,7 +302,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Zugehörige Location existiert nicht!"));
+		assertTrue(result.equals("The corresponding location does not exist."));
 
 		when(request.getParameter("id")).thenReturn("5");
 		when(request.getParameter("json")).thenReturn(testData);
@@ -359,7 +359,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Dieser User hat schon ein Feedback für diese Route abgegeben."));
+		assertTrue(result.equals("This user has already given feedback for this route."));
 
 		when(session.getAttribute("username")).thenReturn("testFail");
 		pw.flush();
@@ -368,7 +368,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("User \"testFail\" existiert nicht."));
+		assertTrue(result.equals("User \"testFail\" does not exist."));
 
 		when(request.getParameter("id")).thenReturn("-1");
 		pw.flush();
@@ -377,7 +377,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Zugehörige Route existiert nicht!"));
+		assertTrue(result.equals("The corresponding route does not exist."));
 
 	}
 
@@ -422,7 +422,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Du kannst nur dein eigenes Feedback bearbeiten."));
+		assertTrue(result.equals("You can only modify your own feedback."));
 
 		when(session.getAttribute("username")).thenReturn("testFail");
 		pw.flush();
@@ -431,7 +431,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("User \"testFail\" existiert nicht."));
+		assertTrue(result.equals("User \"testFail\" does not exist."));
 
 		when(request.getParameter("id")).thenReturn("-1");
 		pw.flush();
@@ -440,7 +440,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Zugehörige Route existiert nicht!"));
+		assertTrue(result.equals("The corresponding route does not exist."));
 	}
 
 	public void t3RDelete() throws IOException, ServletException {
@@ -473,7 +473,7 @@ public class TestFeedbackServlet {
 		String result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Du kannst nur dein eigenes Feedback löschen."));
+		assertTrue(result.equals("You can only delete your own feedback."));
 
 		em.getTransaction().begin();
 		em.remove(testUser);
@@ -486,7 +486,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("User \"testFail\" existiert nicht."));
+		assertTrue(result.equals("User \"testFail\" does not exist."));
 
 		when(request.getParameter("id")).thenReturn("-1");
 		pw.flush();
@@ -495,7 +495,7 @@ public class TestFeedbackServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Zugehörige Route existiert nicht!"));
+		assertTrue(result.equals("The corresponding route does not exist."));
 
 		when(request.getParameter("id")).thenReturn("2");
 		when(request.getParameter("json")).thenReturn(testData);

@@ -101,7 +101,7 @@ public class TestLocationServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Location \"" + "test 1" + "\" existiert bereits."));
+		assertTrue(result.equals("Location \"" + "test 1" + "\" exists already."));
 	}
 
 	public void t2Read() throws IOException, ServletException {
@@ -133,7 +133,7 @@ public class TestLocationServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Type muss entweder \"Party\" oder \"Kultur\" sein!"));
+		assertTrue(result.equals("Type can only be \"Party\" or \"Kultur\"."));
 
 		when(request.getParameter("type")).thenReturn(null);
 		pw.flush();
@@ -185,7 +185,7 @@ public class TestLocationServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Location \"rama lama ding dong\" existiert nicht."));
+		assertTrue(result.equals("Location \"rama lama ding dong\" does not exist."));
 	}
 
 	public void t4Report() throws IOException, ServletException {
@@ -217,7 +217,7 @@ public class TestLocationServlet {
 			result = sw.getBuffer().toString();
 
 			System.out.println(result);
-			String message = (i != 2 ? "Du hast diese Location bereits gemeldet." : "Location \"test 3\" existiert nicht.");
+			String message = (i != 2 ? "You have already reported this location." : "Location \"test 3\" does not exist.");
 			assertTrue(result.equals(message));
 
 		}
@@ -236,7 +236,7 @@ public class TestLocationServlet {
 		result = sw.getBuffer().toString();
 
 		System.out.println(result);
-		assertTrue(result.equals("Location \"rama lama ding dong\" existiert nicht."));
+		assertTrue(result.equals("Location \"rama lama ding dong\" does not exist."));
 	}
 
 	public void t5Delete() throws IOException, ServletException {
@@ -271,7 +271,7 @@ public class TestLocationServlet {
 
 		System.out.println(result);
 		assertTrue(
-				result.equals("Location \"rama lama ding dong\"existiert nicht und kann daher nicht gelöscht werden"));
+				result.equals("Location \"rama lama ding dong\" does not exist."));
 
 	}
 

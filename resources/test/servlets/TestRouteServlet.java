@@ -119,6 +119,17 @@ public class TestRouteServlet {
 		routeServlet.doGet(request, response);
 		String result = sw.getBuffer().toString();
 		
+		System.out.println(result);
+		assertTrue(result.equals(testData));
+		
+		when(request.getParameter("owner")).thenReturn("1");
+		when(request.getParameter("rating")).thenReturn(null);
+		pw.flush();
+ 	    sw.getBuffer().delete(0, sw.getBuffer().length());
+		routeServlet.doGet(request, response);
+		result = sw.getBuffer().toString();
+		
+		System.out.println(result);
 		assertTrue(result.equals(testData));
 		
 		when(request.getParameter("time")).thenReturn("00:00:05");
@@ -149,7 +160,7 @@ public class TestRouteServlet {
         result = sw.getBuffer().toString();
         
         System.out.println(result);
-        assertTrue(result.equals("Type muss entweder \"Party\" oder \"Kultur\" sein!"));
+        assertTrue(result.equals("Type can only be \"Party\" or \"Kultur\"."));
         
         
         when(request.getParameter("type")).thenReturn(null);
@@ -159,7 +170,7 @@ public class TestRouteServlet {
         result = sw.getBuffer().toString();
         
         System.out.println(result);
-        assertTrue(result.equals("Type darf nicht null sein!"));
+        assertTrue(result.equals("Type cannot be null."));
 	}
 	
 	public void t3Update() throws IOException, ServletException {
@@ -194,7 +205,7 @@ public class TestRouteServlet {
         
         //verify that parameters were called
         System.out.println(result);
-        assertTrue(result.equals("Route \"rama lama ding dong\" existiert net."));
+        assertTrue(result.equals("Route \"rama lama ding dong\" does not exist."));
         
         when(request.getParameter("json")).thenReturn("[]");
         pw.flush();
@@ -240,7 +251,7 @@ public class TestRouteServlet {
         
         //verify that parameters were called
         System.out.println(result);
-        assertTrue(result.equals("Route \"rama lama ding dong\"existiert nicht und kann daher nicht gelöscht werden"));
+        assertTrue(result.equals("Route \"rama lama ding dong\"does not exist."));
         
 	}
 	
