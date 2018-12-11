@@ -34,19 +34,23 @@ function regUser(){
 }
 
 function userLogin(){
+	var loginError = false;
 	var username = $("#loginForm input[name=username]").val();
 	var pw1 = $("#loginForm input[name=password]").val();
 	
 	$.ajax({
 		url: "UserSessionServlet",
 		type: "POST",
+		async: false,
 		data: {
 			username: username,
 			password: pw1
 		},
 		success: function(response) {
+			
 		},
 		error: function(error) {
+			loginError = true;
 			$("#loginForm input[name=username]").val("");
 			$("#loginForm input[name=password]").val("");
 			$("#loginForm input[name=username]").css("border", "solid 1px red");
@@ -55,6 +59,7 @@ function userLogin(){
 		}
 	});
 	
+	return loginError;
 }
 
 function getLocation(searchString, map){
@@ -176,7 +181,7 @@ function getLocationFromDatabase(sType) {
 				
 				if ($("#userId").val() != null) {
 				marker.bindPopup("<h4 class=\"centered popupMarkerHeader\">"+json[i].name+"</h4>" +
-						"<div class=\"popupMarkerImageWrapper\"><img class=\"popupImage\" src=\""+ (json[i].images[0].length > 30 ? json[i].images[0] : defaultImage) +"\" /></div>" + 
+						"<div class=\"popupMarkerImageWrapper\"><img class=\"popupImage\" src=\""+ (json[i].images != null && json[i].images.length > 0 ? json[i].images[0] : defaultImage) +"\" /></div>" + 
 						"<p>Bewertung</p>" +
 						"<div class=\"ratingWrapper centered\">" +
 							"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
@@ -184,7 +189,7 @@ function getLocationFromDatabase(sType) {
 							"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
 							"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
-							"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup({id: " + marker._leaflet_id + ", type: 'Location'})\"><i class='material-icons'>info_outline</i></a>" +
+							"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup(" + marker._leaflet_id + ", 'Location')\"><i class='material-icons'>info_outline</i></a>" +
 						"</div>" +
 						"<p>Beschreibung</p>" +
 						"<p>"+json[i].description+"</p>" +
@@ -198,7 +203,7 @@ function getLocationFromDatabase(sType) {
 						
 				} else {
 					marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
-							"<img class=\"popupImage\" src=\""+(json[i].images[0].length > 30 ? json[i].images[0] : defaultImage)+"\">" + 
+							"<img class=\"popupImage\" src=\""+(json[i].images != null && json[i].images.length > 0 ? json[i].images[0] : defaultImage)+"\">" + 
 							"<p>Bewertung</p>" +
 							"<div class=\"ratingWrapperPopup centered\">" +
 								"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
@@ -206,7 +211,7 @@ function getLocationFromDatabase(sType) {
 								"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
 								"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
 								"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
-								"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup({id: " + marker._leaflet_id + ", type: 'Location'})\"><i class='material-icons'>info_outline</i></a>" +
+								"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup(" + marker._leaflet_id + "´, 'Location')\"><i class='material-icons'>info_outline</i></a>" +
 							"</div>" +
 							"<p>Beschreibung</p>" +
 							"<p>"+json[i].description+"</p>");
@@ -251,7 +256,7 @@ function createNewMarker(sType, pImageLoaded) {
 
 	pImageLoaded.then(function(image) {
 	
-	if (image != null) { json.images[0] = [image] }
+	if (image != null) { json.images = [image] }
 	
 	var jsonArray = [json];
 		
@@ -302,10 +307,10 @@ function updateMarker(markerId, pImageLoaded){
 	
 	pImageLoaded.then(function(image) {
 		
-		if (image != null) { json.images[0] = [image] }
+		if (image != null) { json.images = [image] }
 		
 		var jsonArray = [json];
-		debugger;
+		
 		$.ajax({
 			url: "LocationServlet",
 			type: "POST",
@@ -430,6 +435,7 @@ function deleteFeedback(type, id, feedbackId) {
 	var feedback;
 	var locationId;
 	var indexOfFeedback;
+	var tourIndex;
 	
 	if (type == "Location") {
 		json = globalLayer.getLayer(id).info;
@@ -437,6 +443,7 @@ function deleteFeedback(type, id, feedbackId) {
 		$.each(globalRoutes, function(i,v){
 			if (v.id == id) {
 				json = v;
+				tourIndex = i;
 				return;
 			}
 		});
@@ -464,8 +471,15 @@ function deleteFeedback(type, id, feedbackId) {
 			json: JSON.stringify(jsonArray)
 		}, 
 		success: function(response) {
-			// Deletes the recently deleted feedback from the globalLayer
-			globalLayer.getLayer(id).info.feedback.splice(indexOfFeedback, 1);
+			
+			if (type == "Location") {
+				// Deletes the recently deleted feedback from the globalLayer
+				globalLayer.getLayer(id).info.feedback.splice(indexOfFeedback, 1);
+			} else {
+				globalRoutes[tourIndex].feedback.splice(indexOfFeedback, 1);
+				getRoute($("#currentAction").val());
+				loadRouteToPanel(id);
+			}
 			// Reloads the feedback
 			loadFeedbackToPopup({id: id, type: type});
 			
@@ -561,7 +575,7 @@ function createNewRoute(id, pImageLoaded) {
 	
 	pImageLoaded.then(function(image){
 		
-		if (image != null) { json.images[0] = [image] }
+		if (image != null) { json.images = [image] }
 		
 		var jsonArray = [json];
 		

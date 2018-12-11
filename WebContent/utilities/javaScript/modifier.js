@@ -231,52 +231,8 @@ function toursHoverEvent() {
 				var obj = JSON.parse(json);
 
 				var tour = $(this).children(".tourId").val();
-				var tourObj;
 
-				var ratingElement;
-
-				$.each(globalRoutes, function(i, v) {
-					if (v.id == tour) {
-						tourObj = v;
-						return;
-					}
-				});
-				// TODO Data must be loaded before the panel is shown
-				
-				$("#tourTypeOnPanle").val("global");
-				$("#infoTourName").html(tourObj.name);
-				$("#infoTourDescription").html(tourObj.description);
-				$("#tourIdOnPanle").val(tourObj.id);
-
-				ratingElement = "<div class=\"ratingWrapper centered\"><i class='material-icons "
-						+ (tourObj.avgRating >= 1 ? "activeStar" : "")
-						+ "'>grade</i>" + "<i class='material-icons "
-						+ (tourObj.avgRating >= 2 ? "activeStar" : "")
-						+ "'>grade</i>" + "<i class='material-icons "
-						+ (tourObj.avgRating >= 3 ? "activeStar" : "")
-						+ "'>grade</i>" + "<i class='material-icons "
-						+ (tourObj.avgRating >= 4 ? "activeStar" : "")
-						+ "'>grade</i>" + "<i class='material-icons "
-						+ (tourObj.avgRating >= 5 ? "activeStar" : "")
-						+ "'>grade</i>" 
-						+ "<a class=\"feedbackInfoOnPanle\" onClick=\"showFeedbackPopup("+tourObj.id+", 'Route')\"><i class='material-icons'>info_outline</i></a>"
-						+ "</div>";
-
-				$("#infoTourRating").html(ratingElement);
-				
-				$("#infoTourTime").html(tourObj.time.time);
-
-				$("#tourStops").empty();
-
-				$.each(globalRoutes, function(i, v) {
-					if (v.id == tour) {
-						$.each(v.stops, function(i, v) {
-							$("#tourStops").append(
-									"<li class='infotext'><i class=\"material-icons\">place</i><p class=\"inline\">" + v.name
-											+ "</p></li><hr>");
-						})
-					}
-				});
+				loadRouteToPanel(tour);	
 
 				$("#tourInfoPanel").css("display", "block");
 
@@ -293,6 +249,53 @@ function toursHoverEvent() {
 		// $("#tourInfoPanel").css("display", "none");
 		getMap().removeLayer(layer);
 	})
+}
+
+function loadRouteToPanel(tour) {
+	var tourObj;
+	var ratingElement;
+	
+	$.each(globalRoutes, function(i, v) {
+		if (v.id == tour) {
+			tourObj = v;
+			return;
+		}
+	});
+	
+	$("#tourTypeOnPanle").val("global");
+	$("#infoTourName").html(tourObj.name);
+	$("#infoTourDescription").html(tourObj.description);
+	$("#tourIdOnPanle").val(tourObj.id);
+
+	ratingElement = "<div class=\"ratingWrapper centered\"><i class='material-icons "
+			+ (tourObj.avgRating >= 1 ? "activeStar" : "")
+			+ "'>grade</i>" + "<i class='material-icons "
+			+ (tourObj.avgRating >= 2 ? "activeStar" : "")
+			+ "'>grade</i>" + "<i class='material-icons "
+			+ (tourObj.avgRating >= 3 ? "activeStar" : "")
+			+ "'>grade</i>" + "<i class='material-icons "
+			+ (tourObj.avgRating >= 4 ? "activeStar" : "")
+			+ "'>grade</i>" + "<i class='material-icons "
+			+ (tourObj.avgRating >= 5 ? "activeStar" : "")
+			+ "'>grade</i>" 
+			+ "<a class=\"feedbackInfoOnPanle\" onClick=\"showFeedbackPopup("+tourObj.id+", 'Route')\"><i class='material-icons'>info_outline</i></a>"
+			+ "</div>";
+
+	$("#infoTourRating").html(ratingElement);
+	
+	$("#infoTourTime").html(tourObj.time.time);
+
+	$("#tourStops").empty();
+
+	$.each(globalRoutes, function(i, v) {
+		if (v.id == tour) {
+			$.each(v.stops, function(i, v) {
+				$("#tourStops").append(
+						"<li class='infotext'><i class=\"material-icons\">place</i><p class=\"inline\">" + v.name
+								+ "</p></li><hr>");
+			})
+		}
+	});
 }
 
 function calculateRoute(type) {
@@ -413,7 +416,9 @@ function loadFeedbackToPopup(param) {
 	}
 
 	$("#feedbackHeaderTitle").html(dataElement.name);
-	// TODO add delete Button if user is logged in and is
+	
+	if (dataElement.feedback.length == 0) {$("#feedbackList").append("<li class=\"centered\">Sei der Erste der ein Feedback abgibt!</li>")}
+	
 	$.each(dataElement.feedback, function(i, v) {
 		
 		var userDelete = "";
@@ -462,11 +467,11 @@ function showUpdateRoutePopup(id) {
 
 }
 
-function showFeedbackPopup(param) {
+function showFeedbackPopup(id, type) {
 	loadPopupContent("showFeedback");
-	$("#typeOfShownFeedback").val(param.type);
-	$("#idOfShownFeedback").val(param.id);
-	loadFeedbackToPopup(param);
+	$("#typeOfShownFeedback").val(type);
+	$("#idOfShownFeedback").val(id);
+	loadFeedbackToPopup({id: id, type: type});
 }
 
 function unloadPopup() {

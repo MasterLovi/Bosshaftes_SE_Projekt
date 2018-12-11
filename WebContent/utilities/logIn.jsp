@@ -1,7 +1,7 @@
 <%@ page language="java" pageEncoding="utf-8" contentType="text/html"%>
 <!DOCTYPE html>
 
-<form id='loginForm' action='UserSessionServlet' method='post'>
+<form id='loginForm' action='' method='POST'>
 	<table>
 		<tr>
 			<td><input type='text' name='username' class='inputText' placeholder='Username' required='' /></td>
@@ -13,3 +13,11 @@
 		</tr>
 	</table>
 </form>
+<script>
+	$(document).ready(function() {
+		$("#loginForm").submit(function() {
+			if(userLogin()){return false};
+			
+		});
+	});
+</script>

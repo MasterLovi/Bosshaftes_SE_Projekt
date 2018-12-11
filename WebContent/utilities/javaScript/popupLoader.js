@@ -156,7 +156,7 @@ function loadPopupContent(popupType) {
 		"<p class=\"centered infoHeader\">Routenname</p>" +
 		"<input type=\"text\" class=\"standardInputSize\" name=\"name\" placeholder=\"Routenname\">" +
 		"<p class=\"centered infoHeader\">Bild</p>" +
-		"<input type=\"file\" class=\"imageSelectorRoute\" accept=\"image/jpeg, image/png, image/jpg\" name=\"tourImage\">" +
+		"<input type=\"file\" class=\"imageSelectorRoute\" accept=\"image/jpeg, image/png, image/jpg\" name=\"tourImage\"><br>" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
 		"<textarea rows=\"4\" form=\"newRouteForm\" name=\"description\"></textarea>" +
 		"<input type=\"submit\" class=\"button buttonStandardSize\" value=\"Erstellen\">" +
@@ -181,7 +181,7 @@ function loadPopupContent(popupType) {
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
 		"<ul id=\"tourStopsPopup\"></ul>" +
 		"<p class=\"centered infoHeader\">Bild ändern</p>" +
-		"<input type=\"file\" class=\"imageSelectorRoute\" accept=\"image/jpeg, image/png, image/jpg\" name=\"tourImage\">" +
+		"<input type=\"file\" class=\"imageSelectorRoute\" accept=\"image/jpeg, image/png, image/jpg\" name=\"tourImage\"><br>" +
 		"<input type=\"submit\" class=\"button buttonStandardSize\" value=\"Anzeigen\">" +
 		"<button type=\"button\" id=\"deleteRouteBtn\" class=\"button buttonStandardSize\">Löschen</button>" + //type has to be set so that the button does not submit the form
 		"</form>";
@@ -309,7 +309,7 @@ function loadPopupContent(popupType) {
 			var pImageLoaded;
 			
 			if (!error) {
-				pImageLoaded = convertImageToBase64($("#newRouteForm input[name=tourImage]").val())
+				pImageLoaded = convertImageToBase64($("#newRouteForm input[name=tourImage]"));
 				createNewRoute($("#newRouteForm input[name=locationId]").val(), pImageLoaded);
 				return false;
 			} else {
