@@ -804,3 +804,19 @@ function sendStatusMessage(message, color) {
 	$("#statusMessageText").css("color", color);
 	$("#statusMessage").animate({"bottom": "5px"}, "slow").delay(3000).animate({"bottom": "-50px"},"slow");
 }
+
+function calculateAvgRating(obj) {
+	var elementCount = 0;
+	var ratingTotal = 0;
+	
+	$.each(obj.feedback, function(i,v) {
+		ratingTotal += parseInt(v.rating);
+		elementCount = i + 1;
+	});
+	
+	if (ratingTotal == 0) {
+		return 3;
+	} else {
+		return ratingTotal / elementCount;
+	}
+}

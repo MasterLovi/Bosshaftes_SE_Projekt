@@ -203,7 +203,7 @@ function getLocationFromDatabase(sType) {
 						
 				} else {
 					marker.bindPopup("<h4 class=\"centered\">"+json[i].name+"</h4>" +
-							"<img class=\"popupImage\" src=\""+(json[i].images != null && json[i].images.length > 0 ? json[i].images[0] : defaultImage)+"\">" + 
+							"<div class=\"popupMarkerImageWrapper\"><img class=\"popupImage\" src=\""+(json[i].images != null && json[i].images.length > 0 ? json[i].images[0] : defaultImage)+"\"></div>" + 
 							"<p>Bewertung</p>" +
 							"<div class=\"ratingWrapperPopup centered\">" +
 								"<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" +
@@ -418,7 +418,13 @@ function sendFeedback(type, id) {
 			json: JSON.stringify(jsonArray)
 		}, 
 		success: function(response) {
-			getLocationFromDatabase($("#currentAction").val());
+			if (type == "Location") {
+				getLocationFromDatabase($("#currentAction").val());
+			} else {
+				getRoute($("#currentAction").val());
+				loadRouteToPanel(id);
+			}
+			
 			sendStatusMessage("Feedback erfolgreich gespeichert.", "green");
 			unloadPopup();
 		},
@@ -475,8 +481,10 @@ function deleteFeedback(type, id, feedbackId) {
 			if (type == "Location") {
 				// Deletes the recently deleted feedback from the globalLayer
 				globalLayer.getLayer(id).info.feedback.splice(indexOfFeedback, 1);
+				globalLayer.getLayer(id).info.avgRating = calculateAvgRating(globalLayer.getLayer(id).info);
 			} else {
 				globalRoutes[tourIndex].feedback.splice(indexOfFeedback, 1);
+				globalRoutes[tourIndex].avgRating = calculateAvgRating(globalRoutes[tourIndex]);
 				getRoute($("#currentAction").val());
 				loadRouteToPanel(id);
 			}
@@ -499,6 +507,7 @@ function changeFeedback(type, id, feedbackId) {
 	var json;
 	var feedback;
 	var locationId;
+	var tourIndex;
 	
 	if (type == "Location") {
 		json = globalLayer.getLayer(id).info;
@@ -506,6 +515,7 @@ function changeFeedback(type, id, feedbackId) {
 		$.each(globalRoutes, function(i,v){
 			if (v.id == id) {
 				json = v;
+				tourIndex = i;
 				return;
 			}
 		});
@@ -534,8 +544,15 @@ function changeFeedback(type, id, feedbackId) {
 			json: JSON.stringify(jsonArray)
 		}, 
 		success: function(response) {
-			loadFeedbackToPopup({id: id, type: type});
-			refreshLayerData($("#currentAction").val());
+			if (type == "Location") {
+				loadFeedbackToPopup({id: id, type: type});
+				refreshLayerData($("#currentAction").val());
+			} else {
+				loadFeedbackToPopup({id: id, type: type});
+				globalRoutes[tourIndex].avgRating = calculateAvgRating(globalRoutes[tourIndex]);
+				getRoute($("#currentAction").val());
+				loadRouteToPanel(id);
+			}
 			sendStatusMessage("Feedback erfolgreich geändert.", "green");
 		},
 		error: function(error) {
