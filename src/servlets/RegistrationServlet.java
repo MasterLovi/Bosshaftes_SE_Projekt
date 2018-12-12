@@ -40,13 +40,11 @@ public class RegistrationServlet extends HttpServlet {
 	/**
 	 * Method to create a new user in the database
 	 *
-	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
-	 * @exception Exception if password and repeated password are not identical
-	 * @exception Exception if the chosen username already exists
-	 * @exception Exception if there is already an account registered with that
-	 *                      email
+	 * @exception - Exception if password and repeated password are not identical
+	 * @exception - Exception if the chosen username already exists
+	 * @exception . Exception if there is already an account registered with that email
 	 */
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -97,7 +95,8 @@ public class RegistrationServlet extends HttpServlet {
 			em.getTransaction().begin();
 			em.persist(user);
 			em.getTransaction().commit();
-
+			
+			// set session attributes
 			HttpSession session = request.getSession();
 			session.setAttribute("userid", user.getId());
 			session.setAttribute("username", user.getUsername());

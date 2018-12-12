@@ -46,20 +46,18 @@ public class RouteServlet extends HttpServlet {
 	/**
 	 * Method to read route data from the database
 	 * 
-	 * @param em                 EntityManager manages database operations
-	 * @param type               Type of Location (must be "Kultur" or "Party")
-	 * @param maxTime            maximum time that the routes selected should have
-	 * @param minRating          minimal rating that the routes selected should have
-	 * @param maxNoStops         maximum number of stops that the routes selected
-	 *                           should have
-	 * @param boundNorthWestLat  Latitude of upper left corner of the map
-	 * @param boundNorthWestLong Longitude of upper left corner of the map
-	 * @param boundSouthEastLat  Latitude of lower right corner of the map
-	 * @param boundSouthEastLong Longitude of lower right corner of the map
-	 * @return JSONData with found routes; if no entries are found it returns an
-	 *         empty array []
-	 * @exception Exception if type is null
-	 * @exception Exception if type is neither "Kultur" nor "Party"
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param type {String} - Type of Location (must be "Kultur" or "Party")
+	 * @param maxTime {String} - Maximum time that the routes selected should have
+	 * @param minRating {Integer} - Minimal rating that the routes selected should have
+	 * @param maxNoStops {Integer} - Maximum number of stops that the routes selected should have
+	 * @param boundNorthWestLat {Double} - Latitude of upper left corner of the map
+	 * @param boundNorthWestLong {Double} - Longitude of upper left corner of the map
+	 * @param boundSouthEastLat {Double} - Latitude of lower right corner of the map
+	 * @param boundSouthEastLong {Double} - Longitude of lower right corner of the map
+	 * @return {String} - JSONData with found routes; if no entries are found it returns an empty array []
+	 * @exception - Exception if type is null
+	 * @exception - Exception if type is neither "Kultur" nor "Party"
 	 */
 	private static String read(EntityManager em, String type, String maxTime, double minRating, int maxNoStops,
 			double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat, double boundSouthEastLong,
@@ -87,13 +85,18 @@ public class RouteServlet extends HttpServlet {
 
 		// check for empty resultList
 		if (result.size() > 0) {
+			
+			// Filter result and remove Routes that are not applicable for the given maxtime
 			for (Iterator<Route> iter = result.iterator(); iter.hasNext();) {
 				Route route = iter.next();
 				Time t = new Time(maxTime);
 				route.setTime(new Time(route.getTimeString()));
 
 				if (route.getTime().IsLessThan(t)) {
+					
+					// Convert and save Images
 					List<String> images = new ArrayList<String>();
+					
 					// convert pictures and data to JSON
 					if (route.getPictures() != null) {
 						for (byte[] picture : route.getPictures()) {
@@ -102,6 +105,8 @@ public class RouteServlet extends HttpServlet {
 						}
 						route.setImages(images);
 					}
+					
+					// Set Stops
 					if (route.getStops() != null) {
 						for (Location stop : route.getStops()) {
 							if (stop.getPictures() != null) {
@@ -118,6 +123,8 @@ public class RouteServlet extends HttpServlet {
 					iter.remove();
 				}
 			}
+			
+			//Convert to JSON
 			GsonBuilder builder = new GsonBuilder();
 			builder.excludeFieldsWithoutExposeAnnotation();
 			Gson gson = builder.create();
@@ -132,22 +139,22 @@ public class RouteServlet extends HttpServlet {
 	/**
 	 * Method to create new routes in the database
 	 * 
-	 * @param routes  List of routes that should be created
-	 * @param em      EntityManager manages database operations
-	 * @param session Needed to retrieve the user that creates the route
-	 * @return "Success" if the routes are successfully created
+	 * @param routes {List<Route>} - List of routes that should be created
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param session {HttpSession} - Needed to retrieve the user that creates the route
+	 * @return {String} - "Success" if the routes are successfully created
 	 */
 	private static String create(List<Route> routes, EntityManager em, HttpSession session) throws Exception {
 		// Loop over Routes that should be created
 		for (Route route : routes) {
+			
+			// Set Route Values
 			Route newRoute = new Route();
 			newRoute.setName(route.getName());
 			newRoute.setType(route.getType());
 			newRoute.setTimeString(route.getTime().getTime());
-
 			newRoute.setFeedback((List<Feedback>) new ArrayList<Feedback>());
 			newRoute.setAvgRating(3);
-
 			newRoute.setDescription(route.getDescription());
 
 			// Select Route from database table
@@ -161,7 +168,8 @@ public class RouteServlet extends HttpServlet {
 			} else {
 				newRoute.setOwner(null);
 			}
-
+			
+			// Convert and Save images
 			List<byte[]> images = new ArrayList<byte[]>();
 			if (route.getImages() != null) {
 				for (String sBase64 : route.getImages()) {
@@ -173,7 +181,8 @@ public class RouteServlet extends HttpServlet {
 				newRoute.setPictures(null);
 			}
 			em.persist(newRoute);
-
+			
+			// Set Locations
 			List<Location> locations = new ArrayList<Location>();
 			if (route.getStops() != null && route.getStops().size() > 0) {
 				for (Location location : route.getStops()) {
@@ -195,10 +204,10 @@ public class RouteServlet extends HttpServlet {
 	/**
 	 * Method to delete routes from database
 	 * 
-	 * @param routes List of routes that should be deleted
-	 * @param em     EntityManager manages database operations
-	 * @return "Success" if the routes are successfully deleted
-	 * @exception Exception if route doesn't exist
+	 * @param routes {List<Route>} - List of routes that should be deleted
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @return {String} - "Success" if the routes are successfully deleted
+	 * @exception - Exception if route doesn't exist
 	 */
 	private static String delete(List<Route> routes, EntityManager em) throws Exception {
 		// Loop over Routes that should be deleted
@@ -216,10 +225,10 @@ public class RouteServlet extends HttpServlet {
 	/**
 	 * Method to update routes in the database
 	 * 
-	 * @param routes List of routes that should be updated
-	 * @param em     EntityManager manages database operations
-	 * @return "Success" if the routes are successfully updated
-	 * @exception Exception if route doesn't exist
+	 * @param routes {List<Route>} - List of routes that should be updated
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @return {String} - "Success" if the routes are successfully updated
+	 * @exception - Exception if route doesn't exist
 	 */
 	private static String update(List<Route> routes, EntityManager em) throws Exception {
 
@@ -228,12 +237,14 @@ public class RouteServlet extends HttpServlet {
 			Route result = em.find(Route.class, route.getId());
 
 			if (result != null) {
+				// Set Route Values
 				result.setName(route.getName());
 				result.setTimeString(route.getTime().getTime());
 				result.setType(route.getType());
 				result.setFeedback(route.getFeedback());
 				result.setOwner(route.getOwner());
 
+				//Update Locations
 				List<Location> locations = new ArrayList<Location>();
 				if (route.getStops() != null && route.getStops().size() > 0) {
 					for (Location location : route.getStops()) {
@@ -247,7 +258,8 @@ public class RouteServlet extends HttpServlet {
 				}
 				result.setStops(locations);
 				result.setNumberOfStops(locations.size());
-
+				
+				// Update Images
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (route.getImages() != null) {
 					for (String sBase64 : route.getImages()) {
@@ -287,28 +299,32 @@ public class RouteServlet extends HttpServlet {
 			Integer paramStops, owner;
 			Double paramRating, paramBoundNorthWestLat, paramBoundNorthWestLong,
 					paramBoundSouthEastLat, paramBoundSouthEastLong;
-
+			
+			// Check if User Routes or all Routes
 			if (request.getParameter("rating") != null) {
+				
+				// Set and Convert Parameters
 				paramRating = Double.valueOf(request.getParameter("rating"));
 				paramStops = Integer.valueOf(request.getParameter("stops"));
-
 				paramBoundNorthWestLat = Double.valueOf(request.getParameter("boundNorthWestLat"));
 				paramBoundNorthWestLong = Double.valueOf(request.getParameter("boundNorthWestLng"));
 				paramBoundSouthEastLat = Double.valueOf(request.getParameter("boundSouthEastLat"));
 				paramBoundSouthEastLong = Double.valueOf(request.getParameter("boundSouthEastLng"));
 				owner = -1;
-			} else {
-				owner = Integer.valueOf(request.getParameter("owner"));
 				
+			} else {
+				
+				// Set and Convert Parameters
+				owner = Integer.valueOf(request.getParameter("owner"));
 				paramRating = -1.0;
 				paramStops = -1;
-
 				paramBoundNorthWestLat = -1.0;
 				paramBoundNorthWestLong = -1.0;
 				paramBoundSouthEastLat = -1.0;
 				paramBoundSouthEastLong = -1.0;
 			}
-
+			
+			// Do read operation
 			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWestLat,
 					paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong, owner);
 
@@ -330,7 +346,6 @@ public class RouteServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
-	 * @exception Exception if user is not logged in
 	 */
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -345,6 +360,8 @@ public class RouteServlet extends HttpServlet {
 		String res = "";
 
 		em.getTransaction().begin();
+		
+		// Check for operation and do it
 		try {
 			if ((boolean) session.getAttribute("loggedin") != true) {
 				throw new Exception("You are not logged in.");
@@ -360,6 +377,8 @@ public class RouteServlet extends HttpServlet {
 				res = delete(routes, em);
 				break;
 			}
+			
+			// Create Response
 			response.setStatus(200);
 			em.getTransaction().commit();
 		} catch (Exception e) {
@@ -368,6 +387,8 @@ public class RouteServlet extends HttpServlet {
 			res = e.getMessage();
 			em.getTransaction().rollback();
 		}
+		
+		// Send Response
 		response.setContentType("text/html; charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();

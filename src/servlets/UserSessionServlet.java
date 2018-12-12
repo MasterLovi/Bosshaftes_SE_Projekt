@@ -63,7 +63,6 @@ public class UserSessionServlet extends HttpServlet {
 	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
-	 * @exception Exception if username or password is incorrect
 	 */
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -101,7 +100,8 @@ public class UserSessionServlet extends HttpServlet {
 				session.invalidate();
 				throw new Exception("Password or username is incorrect.");
 			}
-
+			
+			// Create and Send Response
 			response.setContentType("text/html; charset=UTF-8");
 			response.setCharacterEncoding("UTF-8");
 			
@@ -109,6 +109,8 @@ public class UserSessionServlet extends HttpServlet {
 			writer.append("Success");
 
 		} catch (Exception e) {
+			
+			// Create and send Error Response
 			response.setStatus(500);
 			response.setContentType("text/html; charset=UTF-8");
 			response.setCharacterEncoding("UTF-8");

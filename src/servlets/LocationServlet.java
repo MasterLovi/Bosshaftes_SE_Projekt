@@ -45,16 +45,15 @@ public class LocationServlet extends HttpServlet {
 	/**
 	 * Method to read location data from the database
 	 * 
-	 * @param em                 EntityManager manages database operations
-	 * @param type               Type of Location (must be "Kultur" or "Party")
-	 * @param boundNorthWestLat  Latitude of upper left corner of the map
-	 * @param boundNorthWestLong Longitude of upper left corner of the map
-	 * @param boundSouthEastLat  Latitude of lower right corner of the map
-	 * @param boundSouthEastLong Longitude of lower right corner of the map
-	 * @return JSONData with found locations; if no entries are found it returns an
-	 *         empty array []
-	 * @exception Exception if type is null
-	 * @exception Exception if type is neither "Kultur" nor "Party"
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param type {String} - Type of Location (must be "Kultur" or "Party")
+	 * @param boundNorthWestLat {Double} - Latitude of upper left corner of the map
+	 * @param boundNorthWestLong {Double} - Longitude of upper left corner of the map
+	 * @param boundSouthEastLat {Double} - Latitude of lower right corner of the map
+	 * @param boundSouthEastLong {Double} - Longitude of lower right corner of the map
+	 * @return {String} - JSONData with found locations; if no entries are found it returns an empty array []
+	 * @exception - Exception if type is null
+	 * @exception - Exception if type is neither "Kultur" nor "Party"
 	 */
 	private static String read(EntityManager em, String type, double boundNorthWestLat, double boundNorthWestLong,
 			double boundSouthEastLat, double boundSouthEastLong) throws Exception {
@@ -94,6 +93,7 @@ public class LocationServlet extends HttpServlet {
 					location.setImages(null);
 				}
 			}
+			// Convert Data to JSON
 			GsonBuilder builder = new GsonBuilder();
 			builder.excludeFieldsWithoutExposeAnnotation();
 			Gson gson = builder.create();
@@ -108,10 +108,10 @@ public class LocationServlet extends HttpServlet {
 	/**
 	 * Method to create new locations in the database
 	 * 
-	 * @param locations List of locations that should be created
-	 * @param em        EntityManager manages database operations
-	 * @return "Success" if the locations are successfully created
-	 * @exception Exception if one of the locations is already in the database
+	 * @param locations {List<Location>} - List of locations that should be created
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @return {String} - "Success" if the locations are successfully created
+	 * @exception - Exception if one of the locations is already in the database
 	 */
 	private static String create(List<Location> locations, EntityManager em) throws Exception {
 		// Loop over Routes that should be created
@@ -125,6 +125,8 @@ public class LocationServlet extends HttpServlet {
 
 			// if the locations aren't already in the database, start persisting
 			if (result.size() == 0) {
+				
+				// Set Location Attributes
 				Location newLocation = new Location();
 				newLocation.setName(location.getName());
 				newLocation.setType(location.getType());
@@ -137,6 +139,7 @@ public class LocationServlet extends HttpServlet {
 				newLocation.setDescription(location.getDescription());
 				newLocation.setUserReports((List<String>) new ArrayList<String>());
 
+				// Convert and save Images
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (location.getImages() != null) {
 					for (String sBase64 : location.getImages()) {
@@ -150,7 +153,8 @@ public class LocationServlet extends HttpServlet {
 				} else {
 					newLocation.setPictures(null);
 				}
-
+				
+				// Persist Location
 				em.persist(newLocation);
 			} else {
 				throw new Exception("Location \"" + location.getName() + "\" exists already.");
@@ -162,11 +166,10 @@ public class LocationServlet extends HttpServlet {
 	/**
 	 * Method to delete locations from the database
 	 * 
-	 * @param locations List of locations that should be deleted
-	 * @param em        EntityManager manages database operations
-	 * @return "Success" if locations are successfully deleted
-	 * @exception Exception if one location that should be deleted doesn't exist in
-	 *                      the database
+	 * @param locations {List<Location>} - List of locations that should be deleted
+	 * @param em [{EntityManager} - EntityManager manages database operations
+	 * @return {String} - "Success" if locations are successfully deleted
+	 * @exception - Exception if one location that should be deleted doesn't exist in the database
 	 */
 	private static String delete(List<Location> locations, EntityManager em) throws Exception {
 		// Loop over Locations that should be deleted
@@ -185,10 +188,10 @@ public class LocationServlet extends HttpServlet {
 	 * Method to update locations in the database; all information will be updated,
 	 * there is no check if only some attributes have changed
 	 * 
-	 * @param locations List of locations that should be updated
-	 * @param em        EntityManager manages database operations
-	 * @return "Success" if locations are successfully updated
-	 * @exception Exception if one location that should be updated doesn't exist
+	 * @param locations {List<Location>} - List of locations that should be updated
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @return {String} - "Success" if locations are successfully updated
+	 * @exception - Exception if one location that should be updated doesn't exist
 	 */
 	private static String update(List<Location> locations, EntityManager em) throws Exception {
 
@@ -209,8 +212,7 @@ public class LocationServlet extends HttpServlet {
 				resultLocation.setLongitude(location.getLongitude());
 				resultLocation.setDescription(location.getDescription());
 
-				// update Images
-
+				// Convert and update Images
 				List<byte[]> images = new ArrayList<byte[]>();
 				if (location.getImages() != null) {
 					for (String sBase64 : location.getImages()) {
@@ -246,10 +248,10 @@ public class LocationServlet extends HttpServlet {
 	/**
 	 * Method to update the timesReported counter of a location
 	 * 
-	 * @param locations List of locations that should be reported
-	 * @param em        EntityManager manages database operations
-	 * @return "Success" if timesReported was successfully updated
-	 * @exception is the location that should be reported doesn't exist
+	 * @param locations {List<Location>} - List of locations that should be reported
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @return {String} - "Success" if timesReported was successfully updated
+	 * @exception - Exception if the location that should be reported doesn't exist
 	 */
 	private static String report(List<Location> locations, EntityManager em, HttpSession session) throws Exception {
 		// Loop over Locations that should be reported
@@ -367,12 +369,13 @@ public class LocationServlet extends HttpServlet {
 			response.setStatus(200);
 			em.getTransaction().commit();
 		} catch (Exception e) {
-			// send back error
+			// Create Error Response
 			response.setStatus(500);
 			e.printStackTrace();
 			res = e.getMessage();
 			em.getTransaction().rollback();
 		}
+		// Send back Response
 		response.setContentType("text/html; charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();
