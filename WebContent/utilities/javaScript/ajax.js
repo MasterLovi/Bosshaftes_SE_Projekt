@@ -1,18 +1,25 @@
-var globalRoutes;
-var globalLayer; //Will be used to delete and reload marker that are out of the viewport
-var userRoutes = [];
+var globalRoutes; // Contains the routes after a user used the search function
+var globalLayer; // Will be used to delete and reload marker that are out of the viewport
+var userRoutes = []; // Contains all the routes that are owned by the user - Will be loaded on page load
 
+/**
+ *Reads the information form the registration page and send them to the backend.
+ * @returns NONE
+ */
 function regUser(){
+	// Get all the variables from the user registration form
 	var username = $("#regForm input[name=username]").val();
 	var email = $("#regForm input[name=email]").val();
 	var pw1 = $("#regForm input[name=password]").val();
 	var pw2 = $("#regForm input[name=passwordRep]").val();
 	
+	// Check if the password is equal
 	if (pw1 !== pw2) {
 		$("#error").html("Die Passwörter stimmen nicht überein.");
 		return;
 	}
 	
+	// Make the ajax call and register the user
 	$.ajax({
 		url: "RegistrationServlet",
 		type: "POST",
@@ -23,21 +30,27 @@ function regUser(){
 			passwordRep: pw2
 		},
 		success: function(response) {
+			// Forward to the index page if the registration was successful
 			document.location = "index.jsp";
 		},
 		error: function(error) {
+			// Displays the error that occured in the backend to the user
 			$("#error").html(error.responseText);
 		}
 	});
-	
-	
 }
 
+/**
+ * Send a login request to the backend
+ * @returns {Boolean} - Contains either an error or not
+ */
 function userLogin(){
+	// Get the username and password from the login form
 	var loginError = false;
 	var username = $("#loginForm input[name=username]").val();
 	var pw1 = $("#loginForm input[name=password]").val();
 	
+	// Make the ajax call 
 	$.ajax({
 		url: "UserSessionServlet",
 		type: "POST",
@@ -47,9 +60,10 @@ function userLogin(){
 			password: pw1
 		},
 		success: function(response) {
-			
+			// No action needed inhere since the page will be reloaded automatically after form submit
 		},
 		error: function(error) {
+			// If the login failed. Change appearance of the form and make it shake
 			loginError = true;
 			$("#loginForm input[name=username]").val("");
 			$("#loginForm input[name=password]").val("");
@@ -62,6 +76,13 @@ function userLogin(){
 	return loginError;
 }
 
+/**
+ * Call the mapquest geocode api. API return a location object.
+ * Centers the map based on the give inputs.
+ * @param searchString {String} - Contains the searchinput from the user
+ * @param map {Object} - Contains the map object where the centering should take place
+ * @returns NONE
+ */
 function getLocation(searchString, map){
 
 	// This function takes the input from the search field and sends it
@@ -76,56 +97,38 @@ function getLocation(searchString, map){
 				"maxResults": 1
 			}
 	};
-
+	
+	// Identity key for mapquest
 	var key = 'y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6';
-
+	
+	// API call with GET method
 	$.getJSON(url+"?key="+key, data, function(result, status){
 		if (result.results.length==0){
 			alert("Ihre Eingabe konnte keiner Adresse zugeordnet werden.")
 		}
+		// centering the map
 		map.panTo(result.results[0].locations[0].latLng);
 	});
-
 }
 
-//Always put type as parameter 
-//This function will be used if the user wants to search for a spot and not for a address
-function searchLocation(sType) {
-	$.ajax({
-		url: "LocationServlet",
-		type: "GET",
-		data: {
-			type: sType,
-			name: "" 
-		},
-		success: function(response) {
-			var json = response;
-			var marker;
-
-			for(var i = 0; i < json.length; i++){
-				var layer = L.marker(json[i].geometry.coordinates).addTo(getMap());
-				layer.bindPopup(json[i].properties.popupContent);
-			}	
-		},
-		error: function(error) {
-			console.log(error);
-		}
-	});
-}
-
+/**
+ * Reloads the information of the displayed markers without reloading them
+ * @param sType {String} - Contains the type of markers that will be loaded from the database
+ * @returns NONE
+ */
 function refreshLayerData(sType) {
 	$.ajax({
 		url: "LocationServlet",
 		type: "GET",
 		data: {
 			type: sType,
-			boundNorthWestLat: getMap().getBounds().getNorthWest().lat, 
-			boundNorthWestLng: getMap().getBounds().getNorthWest().lng,
+			boundNorthWestLat: getMap().getBounds().getNorthWest().lat, // Border information, so not every marker is loaded
+			boundNorthWestLng: getMap().getBounds().getNorthWest().lng,	
 			boundSouthEastLat: getMap().getBounds().getSouthEast().lat,
 			boundSouthEastLng: getMap().getBounds().getSouthEast().lng
 		},
 		success: function(response) {
-			// Reload all Infos in globalLayer
+			// Reload all information in globalLayer
 			var json = JSON.parse(response);
 			$.each(json, function(i,v) {
 				$.each(globalLayer._layers, function(j,w) {
@@ -141,6 +144,11 @@ function refreshLayerData(sType) {
 	});
 }
 
+/**
+ * Loads all the markers from the database that are visible to the user and creates these marker on the map
+ * @param sType {String} - Contains the type of markers that will be loaded from the database
+ * @returns NONE
+ */
 function getLocationFromDatabase(sType) {
 	$.ajax({
 		url: "LocationServlet",
@@ -154,6 +162,7 @@ function getLocationFromDatabase(sType) {
 		},
 		success: function(response) {
 			
+			// Defining the default image 
 			var defaultImage = sType == "Party" ? "utilities/pic/PartyDefault.png" : "utilities/pic/KulturDefault.png"
 			
 			// Clears the map before the new markers are loaded
@@ -164,9 +173,10 @@ function getLocationFromDatabase(sType) {
 				globalLayer = null;
 			}
 			
+			// If the zoom of the map is to far, no markers will be shown
 			if(getMap()._zoom < 11) { return; }
 			
-			
+			// Get the response into the json format
 			var json = JSON.parse(response);
 			var markerLayer = L.layerGroup();
 			
@@ -175,10 +185,13 @@ function getLocationFromDatabase(sType) {
 				var marker;
 				var spot = "Location";
 				
+				// Putting the marker on the map
 				marker = (L.marker([json[i].latitude, json[i].longitude])
 							.addTo(getMap()));
 				marker.info = json[i];
 				
+				// Check if the user is logged in
+				// if yes, put all the function buttons into the popup.
 				if ($("#userId").val() != null) {
 				marker.bindPopup("<h4 class=\"centered popupMarkerHeader\">"+json[i].name+"</h4>" +
 						"<div class=\"popupMarkerImageWrapper\"><img class=\"popupImage\" src=\""+ (json[i].images != null && json[i].images.length > 0 ? json[i].images[0] : defaultImage) +"\" /></div>" + 
@@ -217,8 +230,9 @@ function getLocationFromDatabase(sType) {
 							"<p>"+json[i].description+"</p>");
 				}
 				
+				
 				marker._icon.style.zIndex = 50; // Makes sure everything is in front of the default marker 
-				markerLayer.addLayer(marker);
+				markerLayer.addLayer(marker); // Add the marker to a layer. This is needed, so all markers can be removed on a reload
 				
 			}
 			// Makes the local layer globally available 
@@ -230,18 +244,26 @@ function getLocationFromDatabase(sType) {
 	});
 }
 
-
+/**
+ * Creates a new marker information object and sends it to the database
+ * @param sType {String} - Contains the marker type 
+ * @param pImageLoaded {Promise} - Contains a promise that will return the encoded image
+ * @returns NONE
+ */
 function createNewMarker(sType, pImageLoaded) {
+	// Load basic location structure
 	var json = getJsonDatastrucutreLocation("create");
+	// Load address information form the mapquest api
 	var addressData = getAddress($("#createLocationForm input[name=lat]").val(), $("#createLocationForm input[name=lng]").val());
 
+	// Inserting information into the json structure
 	json.name = $("#createLocationForm input[name=locationName]").val();
 	json.type = sType;
 
-	// ToDo Split the time
+	// Time will only be set if the marker type is culture
 	if(sType == "Kultur") json.time.time = $("#createLocationForm input[name=time]").val()+":00";
-;
 
+	// Inserting address information 
 	json.address.cityName = addressData.cityName;
 	json.address.country = addressData.country;
 	json.address.postCode = addressData.postCode;
@@ -253,45 +275,64 @@ function createNewMarker(sType, pImageLoaded) {
 
 	json.description = $("#createLocationForm textarea[name=description]").val();
 	
-
+	// Stops the execution until the encoding is done
 	pImageLoaded.then(function(image) {
 	
-	if (image != null) { json.images = [image] }
-	
-	var jsonArray = [json];
+		// If image was set, replace image array -> Only one image is loaded
+		if (image != null) { json.images = [image] }
 		
-	$.ajax({
-		url: "LocationServlet",
-		type: "POST",
-		data: {
-			operation: "create",
-			json: JSON.stringify(jsonArray) //Json file
-
-		},
-		success: function(response) {
-			// Reloading database information;
-			getLocationFromDatabase($("#currentAction").val()); 
+		// Bring the data in a backend compatible format
+		var jsonArray = [json];
 			
-			if(newMarker != null){
-				mymap.removeLayer(newMarker);
+		// Ajax call
+		$.ajax({
+			url: "LocationServlet",
+			type: "POST",
+			data: {
+				operation: "create",
+				json: JSON.stringify(jsonArray) 
+	
+			},
+			success: function(response) {
+				// Reloading location information, so the new marker is shown
+				getLocationFromDatabase($("#currentAction").val()); 
+				
+				// Removes the marker that was used to create the permanent marker
+				if(newMarker != null){
+					mymap.removeLayer(newMarker);
+				}
+				
+				// Close popup
+				unloadPopup();
+				
+				// Status message
+				sendStatusMessage("Neuer Ort erfolgreich erstellt.", "green");
+				
+			},
+			error: function(error) {
+				// Close popup
+				unloadPopup();
+				
+				// Error message
+				sendStatusMessage("Ort konnte nicht angelegt werden.", "red");
 			}
-			
-			unloadPopup();
-			sendStatusMessage("Neuer Ort erfolgreich erstellt.", "green");
-			
-		},
-		error: function(error) {
-			unloadPopup();
-			sendStatusMessage("Ort konnte nicht angelegt werden.", "red");
-		}
+		});
 	});
-});
 }
 
+/**
+ * Changes the marker information and sends the updated marker information to the database
+ * @param markerId {Integer} - Contains the leaflet_id of the marker that has to changend
+ * @param pImageLoaded {Promise} - Contains a promise that return the encoded image
+ * @returns NONE
+ */
 function updateMarker(markerId, pImageLoaded){
+	// Get the required marker
 	var marker = globalLayer.getLayer(markerId);
+	// Get the update json structure
 	var json = getJsonDatastrucutreLocation("update");
 	
+	// parse existing marker information and changes into the new structure
 	json.id = marker.info.id;
 	json.name = $("#updateLocationForm input[name=locationName").val();
 	json.description = $("#updateLocationForm textarea[name=description").val();
@@ -305,10 +346,13 @@ function updateMarker(markerId, pImageLoaded){
 	json.longitude = marker.info.longitude;
 	json.feedback = marker.info.feedback;
 	
+	// Stops the execution until the image is ready
 	pImageLoaded.then(function(image) {
 		
+		// Overrides the image array if a image exists 
 		if (image != null) { json.images = [image] }
 		
+		// Bring the data in a backend compatible format
 		var jsonArray = [json];
 		
 		$.ajax({
@@ -320,7 +364,10 @@ function updateMarker(markerId, pImageLoaded){
 
 			},
 			success: function(response) {
+				// Close popup
 				unloadPopup();
+				
+				// Status message 
 				sendStatusMessage("Ort erfolgreich geändert.", "green");
 			},
 			error: function(error) {
@@ -328,13 +375,20 @@ function updateMarker(markerId, pImageLoaded){
 			}
 		});
 	});
-	
 }
 
+/**
+ * Send a report of the selected location to the database
+ * @param markerId {Integer} - Contains the leaflet_id of the selected marker
+ * @returns NONE
+ */
 function reportLocation(markerId){
+	// Get the selected marker information
 	var marker = globalLayer.getLayer(markerId);
+	// Load the report json structure
 	var json = getJsonDatastrucutreLocation("report");
 	
+	// Insert information into the structure
 	json.id = marker.info.id;
 	json.name = marker.info.name;
 	json.description = marker.info.description;
@@ -347,8 +401,10 @@ function reportLocation(markerId){
 	json.longitude = marker.info.longitude;
 	json.feedback = marker.info.feedback;
 	
+	// Bring the data in a backend compatible format
 	var jsonArray = [json];
 	
+	// Send report
 	$.ajax({
 		url: "LocationServlet",
 		type: "POST",
@@ -367,19 +423,24 @@ function reportLocation(markerId){
 	});
 }
 
-
-
+/**
+ * Loads the routes from the database, based on the search criteria of the user
+ * @param sType {String} - Contains the route type that is searched for in the database
+ * @returns {Boolean} - Returns false, so the page won't be reloaded
+ */
 function getRoute(sType){
+	// Get the criteria from the form
 	var stops = $("#routeForm input[name=spots]").val();
 	var rating = $("#routeForm input[name=rating]").val();
 	var time = $("#routeForm input[name=time]").val()+":00:00";
 	
+	// Make the ajax call
 	$.ajax({
 		url: "RouteServlet",
 		type: "GET",
 		data: {
 			type: sType,
-			boundNorthWestLat: getMap().getBounds().getNorthWest().lat, 
+			boundNorthWestLat: getMap().getBounds().getNorthWest().lat, // Border, so that only visible routes will be loaded
 			boundNorthWestLng: getMap().getBounds().getNorthWest().lng,
 			boundSouthEastLat: getMap().getBounds().getSouthEast().lat,
 			boundSouthEastLng: getMap().getBounds().getSouthEast().lng,
@@ -389,7 +450,10 @@ function getRoute(sType){
 
 		},
 		success: function(response) {
+			// Add all the routes to the route selection panel
 			addRoutesToSelection(response);
+			
+			// Set the global route object to the responded routes 
 			globalRoutes = JSON.parse(response);
 		},
 		error: function(error) {
@@ -400,14 +464,24 @@ function getRoute(sType){
 	return false;
 }
 
+/**
+ * Creates and send a feedback object to the database 
+ * @param type {String} - Contains the information if it is a route or location feedback
+ * @param id {Integer} - Contains the route or location id
+ * @returns NONE
+ */
 function sendFeedback(type, id) {
+	// Load the feedback json structure
 	var json = getDatastructureFeedback();
 	
+	// Insert the information into the structure
 	json.rating = $("#feedbackForm input[name=rating]").val();
 	json.comment = $("#feedbackForm textarea[name=comment]").val();
 	
+	// Bring the data in a backend compatible format
 	var jsonArray = [json];
 	
+	// Make the ajax call
 	$.ajax({
 		url: "FeedbackServlet",
 		type: "POST",
@@ -418,6 +492,7 @@ function sendFeedback(type, id) {
 			json: JSON.stringify(jsonArray)
 		}, 
 		success: function(response) {
+			// Check the type of the feedback and update the information
 			if (type == "Location") {
 				getLocationFromDatabase($("#currentAction").val());
 			} else {
@@ -425,17 +500,24 @@ function sendFeedback(type, id) {
 				loadRouteToPanel(id);
 			}
 			
+			// Status + unload
 			sendStatusMessage("Feedback erfolgreich gespeichert.", "green");
 			unloadPopup();
 		},
 		error: function(error) {
+			// Error if the user has already rated this location
 			$("#popupError").html("Sie haben diesen Ort oder Route bereits bewertet.");
 		}
-		
 	});
-	
 }
 
+/**
+ * Deletes a existing feedback from a route or location
+ * @param type {String} - Contains the information if it is a location or route feedback
+ * @param id {Integer} - Contains the id of the route of location 
+ * @param feedbackId {Integer} - Contains the id of the feedback that should be deleted
+ * @returns NONE
+ */
 function deleteFeedback(type, id, feedbackId) {
 	var json;
 	var feedback;
@@ -443,6 +525,7 @@ function deleteFeedback(type, id, feedbackId) {
 	var indexOfFeedback;
 	var tourIndex;
 	
+	// Get right locatin or route based on type
 	if (type == "Location") {
 		json = globalLayer.getLayer(id).info;
 	} else {
@@ -455,8 +538,10 @@ function deleteFeedback(type, id, feedbackId) {
 		});
 	}
 	
+	// Get the location id form the extracted location / route
 	locationId = json.id;
 	
+	// Find the feedback in the location or route object that should be deleted
 	$.each(json.feedback, function(i,v) {
 		if(v.id == feedbackId){
 			feedback = v;
@@ -465,8 +550,10 @@ function deleteFeedback(type, id, feedbackId) {
 		}
 	});
 	
+	// Bring the data in a backend compatible format
 	var jsonArray = [feedback];
 	
+	// Make the ajax call
 	$.ajax({
 		url: "FeedbackServlet",
 		type: "POST",
@@ -481,34 +568,46 @@ function deleteFeedback(type, id, feedbackId) {
 			if (type == "Location") {
 				// Deletes the recently deleted feedback from the globalLayer
 				globalLayer.getLayer(id).info.feedback.splice(indexOfFeedback, 1);
+				// recalculate the average rating 
 				globalLayer.getLayer(id).info.avgRating = calculateAvgRating(globalLayer.getLayer(id).info);
 			} else {
+				// Deletes the recently deleted feedback from the globalRoutes object
 				globalRoutes[tourIndex].feedback.splice(indexOfFeedback, 1);
+				// Recalculate the average rating 
 				globalRoutes[tourIndex].avgRating = calculateAvgRating(globalRoutes[tourIndex]);
+				// Reload the globalRoutes object and reload the info panel
 				getRoute($("#currentAction").val());
 				loadRouteToPanel(id);
 			}
 			// Reloads the feedback
 			loadFeedbackToPopup({id: id, type: type});
 			
+			// Reload the global layer data
 			refreshLayerData($("#currentAction").val());
 			
+			// Status 
 			sendStatusMessage("Feedback erfolgreich gelöscht.", "green");
 		},
 		error: function(error) {
 			console.log(error);
 		}
-		
 	});
-	
 }
 
+/**
+ * Changes an existing feedback and sends the changed feedback to the database
+ * @param type {String} - Contains the information if it is a location or a route
+ * @param id {Integer} - Contains the id of the location or route
+ * @param feedbackId {Integer} - Contains the id of the feedback that should be changed
+ * @returns NONE
+ */
 function changeFeedback(type, id, feedbackId) {
 	var json;
 	var feedback;
 	var locationId;
 	var tourIndex;
 	
+	// Find the proper route or location based on the type
 	if (type == "Location") {
 		json = globalLayer.getLayer(id).info;
 	} else {
@@ -521,19 +620,24 @@ function changeFeedback(type, id, feedbackId) {
 		});
 	}
 	
+	// Extracts the id from the found route or location
 	locationId = json.id;
 	
+	// Finds the feedback that has to be changed 
 	$.each(json.feedback, function(i,v) {
 		if(v.id == feedbackId){
 			feedback = v;
 		}
 	});
 	
+	// changes the feedback information 
 	feedback.comment = $("#feedbackEditArea").val();
 	feedback.rating = $("#feedbackRatingValue").val();
 	
+	// Bring the data in a backend compatible format
 	var jsonArray = [feedback];
 	
+	// Make the ajax call
 	$.ajax({
 		url: "FeedbackServlet",
 		type: "POST",
@@ -544,6 +648,7 @@ function changeFeedback(type, id, feedbackId) {
 			json: JSON.stringify(jsonArray)
 		}, 
 		success: function(response) {
+			// reload the feedback popup after the change was done
 			if (type == "Location") {
 				loadFeedbackToPopup({id: id, type: type});
 				refreshLayerData($("#currentAction").val());
@@ -553,29 +658,38 @@ function changeFeedback(type, id, feedbackId) {
 				getRoute($("#currentAction").val());
 				loadRouteToPanel(id);
 			}
+			
+			// Status
 			sendStatusMessage("Feedback erfolgreich geändert.", "green");
 		},
 		error: function(error) {
 			console.log(error);
 		}
-		
 	});
-	
 }
 
+/**
+ * Creates a new route and sends it to the database
+ * @param id {Integer} - Contains the leaflet_id of the marker that should be the first location of the route
+ * @param pImageLoaded {Promise} - Contains the a promise that return the encoded image
+ * @returns NONE
+ */
 function createNewRoute(id, pImageLoaded) {
-
+	
 	var data = globalLayer;
 	var location;
+	// Load json route structure
 	var json = getDatastructureRoute();
 	var pConvertedImage;
-		
+	
+	// Find the location that should be added
 	$.each(data._layers, function(i,v) {
 		if (v._leaflet_id == id) {
 			location = v.info;
 		}
 	});
 	
+	// Insert information into the loaded structure
 	json.stops.push(location); //Adding the first location to the new tour
 	json.firstLong = location.longitude;
 	json.firstLat = location.latitude;
@@ -590,12 +704,16 @@ function createNewRoute(id, pImageLoaded) {
 	json.owner.email = null;
 	json.id = null;
 	
+	// Stop code execution until the image is encoded
 	pImageLoaded.then(function(image){
 		
+		// Override the image property
 		if (image != null) { json.images = [image] }
 		
+		// Bring the data in a backend compatible format
 		var jsonArray = [json];
 		
+		// Ajax call
 		$.ajax({
 			url: "RouteServlet",
 			type: "POST",
@@ -604,7 +722,10 @@ function createNewRoute(id, pImageLoaded) {
 				json: JSON.stringify(jsonArray)
 			},
 			success: function(response) {
+				// Reload the userRoute information
 				getUserRoutes($("#currentAction").val(), $("#userId").val());
+				
+				// Unload + status
 				unloadPopup();
 				sendStatusMessage("Route wurde erfolgreich erstellt.", "green");
 			},
@@ -615,12 +736,18 @@ function createNewRoute(id, pImageLoaded) {
 	})
 }
 
+/**
+ * Adds a new location to an existing user route and sends it to the database 
+ * @param locationId {Integer} - Contains the leaflet_id of the location that should be added to the route
+ * @param routeId {Integer} - Contains the id of the route the location should be added to
+ * @returns NONE
+ */
 function addPointToRoute(locationId, routeId) {
-	// Operation 'update'
-	// Komplettes Route Object 
+
 	var route;
 	var location;
 	
+	// Find the user route
 	$.each(userRoutes, function(i,v) {
 		if(v.id == routeId) {
 			route = v;
@@ -628,14 +755,21 @@ function addPointToRoute(locationId, routeId) {
 		}
 	});
 	
+	// Get the location information
 	location = globalLayer.getLayer(locationId).info;
 	
+	// Add the location to the stops array of the route
 	route.stops.push(location);
+	
+	// Edit the number of stops and recalculate the travel time
 	route.numberOfStops = route.numberOfStops + 1;
 	pTimeReturned = calculateTraveltime(route);
 	
+	// Stops code execution until the time was calculated
 	pTimeReturned.then(function(time) {
 		route.time.time = time;
+		
+		// Bring the data in a backend compatible format
 		var jsonArray = [route];
 		
 		$.ajax({
@@ -646,6 +780,7 @@ function addPointToRoute(locationId, routeId) {
 				json: JSON.stringify(jsonArray)
 			},
 			success: function(response) {
+				// Unload + Status
 				unloadPopup();
 				sendStatusMessage("Ort wurder erfolgreich der Route hinzufügt.", "green");
 			},
@@ -656,14 +791,19 @@ function addPointToRoute(locationId, routeId) {
 	});
 }
 
+/**
+ * Remove a location from a user route. Route can not contain less than one location
+ * @param locationId {Integer} - Contains the leaflet_id of the location that should be removed
+ * @param routeId {Integer} - Contains the route id of the route the location should be removed from
+ * @returns NONE
+ */
 function removeFromRoute(locationId, routeId) {
-	// Operation 'update'
-	// Komplettes Route Object 
 	var removeIndex;
 	var route;
 	var location;
 	var pTimeCalculate;
 	
+	// Find the proper user route 
 	$.each(userRoutes, function(i,v) {
 		if(v.id == routeId) {
 			route = v;
@@ -671,26 +811,32 @@ function removeFromRoute(locationId, routeId) {
 		}
 	});
 	
+	// Find the proper location in the stops array
 	$.each(route.stops, function(i,v) {
 		if (v.id == locationId) {
 			removeIndex = i;
 		}
 	});
 	
+	// Check if that stop is the only stop in the array
 	if (route.numberOfStops-1 == 0) {
 		$("#popupError").html("Die Route darf nicht leer sein. Sie können den Punkt nicht löschen!");
 		cancelDeletionOrChange('route');
 		return;
 	}
 	
+	// Remove the location from the stops array
 	route.stops.splice(removeIndex, 1); //Removes the element on index 'removeIndex' in the Array
 	route.numberOfStops = route.numberOfStops-1;
+	// Recalculate trave time
 	pTimeCalculate = calculateTraveltime(route);
 	
+	// Stops code execution until time was calculated 
 	pTimeCalculate.then(function(time) {
 		
 		route.time.time = time;
 		
+		// Bring the data in a backend compatible format
 		var jsonArray = [route];
 		
 		$.ajax({
@@ -701,6 +847,7 @@ function removeFromRoute(locationId, routeId) {
 				json: JSON.stringify(jsonArray)
 			},
 			success: function(response) {
+				// Reload route information + Status
 				changeRouteInformation(routeId);
 				sendStatusMessage("Punkt erfolgreich aus Route gelöscht.", "green");
 			},
@@ -711,9 +858,15 @@ function removeFromRoute(locationId, routeId) {
 	});
 }
 
+/**
+ * Deletes a user route
+ * @param routeId {Integer} - Contains the id of the route that should be deleted
+ * @returns NONE
+ */
 function deleteRoute(routeId) {
 	var route;
 	
+	// Find the route
 	$.each(userRoutes, function(i, v) {
 		if(v.id == routeId) {
 			route = v;
@@ -721,8 +874,10 @@ function deleteRoute(routeId) {
 		}
 	});
 	
+	// Bring the data in a backend compatible format
 	var jsonArray = [route];
 	
+	// Send delete request
 	$.ajax({
 		url: "RouteServlet",
 		type: "POST",
@@ -731,12 +886,15 @@ function deleteRoute(routeId) {
 			json: JSON.stringify(jsonArray)
 		},
 		success: function(response) {
+			// Find the route in the userRoutes object and remove it 
 			$.each(userRoutes, function(i, v) {
 				if(v.id == routeId) {
 					userRoutes.splice(i, 1);
 					return;
 				}
 			});
+			
+			// reload the popup + status
 			loadUserRoutes("show");
 			changeRouteInformation($("#manageRoutesForm select[name=routes]").val());
 			sendStatusMessage("Route wurde erfolgreich gelöscht.", "green");
@@ -747,6 +905,12 @@ function deleteRoute(routeId) {
 	});
 }
 
+/**
+ * Loads the user routes from the database and saves them in a global object
+ * @param sType {String} - Contains information what userRoutes should be loaded
+ * @param userId {Integer} - Contains the user id that have to match the route
+ * @returns
+ */
 function getUserRoutes(sType, userId) {
 	$.ajax({
 		url: "RouteServlet",

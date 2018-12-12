@@ -967,7 +967,7 @@ function editFeedback(feedbackId, element) {
 }
 
 /**
- * Checks if the the user confirmed the change and executes it
+ * Checks if the user confirmed the change and executes it
  * @param feedbackId {Integer} - Contains the id of the feedback that the user wants to change
  * @param element {Object} - Contains the object from where the function was called
  * @returns NONE

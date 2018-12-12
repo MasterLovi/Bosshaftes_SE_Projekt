@@ -200,6 +200,7 @@ $(document).ready(function() {
 	});
 })
 
+// Submit the search bar 
 $(document).ready(function() {
 	$("#routeForm").submit(function() {
 		getRoute($("#currentAction").val()); 
@@ -207,6 +208,7 @@ $(document).ready(function() {
 	});
 })
 
+// Calculates the route
 $(document).ready(function() {
 	$("#buttonLoad").click(function(){
 		calculateRoute($("#tourTypeOnPanle").val());
@@ -218,8 +220,9 @@ $(document).ready(function() {
 	});
 })
 
+// Loads the user routes if the user is logged in
 $(document).ready(function() {
-	if($("#userId").val() == "undefined") {
+	if($("#userId").val() == undefined) {
 		return;
 	} else {
 		getUserRoutes($("#currentAction").val(), $("#userId").val());
