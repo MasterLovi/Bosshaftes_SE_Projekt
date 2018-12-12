@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Route.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (12.12.2018 16:51:33)</a> &gt; <a href="../../index.html" class="el_group">Bosshaftes_SE_Projekt</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">Route.java</span></div><h1>Route.java</h1><pre class="source lang-java linenums">package model;
+
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.google.gson.annotations.Expose;
+
+import util.Time;
+
+/**
+ * This class represents the Route database table as mapped Java object
+ */
+@Entity
+@Table(name = &quot;ROUTE&quot;)
+<span class="fc" id="L28">public class Route {</span>
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = &quot;ID&quot;)
+	@Expose
+	private int id;
+
+	@Expose
+	private String name;
+
+	@Expose
+	private String type;
+
+	private String timeString;
+
+	@Transient
+	@Expose
+	private Time time;
+
+	@Expose
+	private String description;
+
+	private List&lt;byte[]&gt; pictures;
+
+	@Transient
+	@Expose
+	private List&lt;String&gt; images;
+
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+	@JoinColumn(name = &quot;FEEDBACK_ID_R&quot;)
+	@Expose
+	private List&lt;Feedback&gt; feedback;
+
+	@Expose
+	private double avgRating;
+
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(name = &quot;ROUTES_LOCATION&quot;, joinColumns = @JoinColumn(name = &quot;ROUTE_ID&quot;, referencedColumnName = &quot;ID&quot;), inverseJoinColumns = @JoinColumn(name = &quot;LOCATION_ID&quot;, referencedColumnName = &quot;ID&quot;))
+	@Expose
+	private List&lt;Location&gt; stops;
+
+	@Expose
+	private int numberOfStops;
+
+	@Expose
+	private double firstLong;
+
+	@Expose
+	private double firstLat;
+
+	@ManyToOne
+	@JoinColumn(name = &quot;OWNER_ID&quot;)
+	@Expose
+	private Users owner;
+
+	// getter
+	public int getId() {
+<span class="fc" id="L86">		return id;</span>
+	}
+
+	public String getName() {
+<span class="fc" id="L90">		return name;</span>
+	}
+
+	public String getType() {
+<span class="fc" id="L94">		return type;</span>
+	}
+
+	public String getDescription() {
+<span class="fc" id="L98">		return description;</span>
+	}
+
+	public List&lt;String&gt; getImages() {
+<span class="fc" id="L102">		return images;</span>
+	}
+
+	public List&lt;byte[]&gt; getPictures() {
+<span class="fc" id="L106">		return pictures;</span>
+	}
+
+	public List&lt;Location&gt; getStops() {
+<span class="fc" id="L110">		return stops;</span>
+	}
+
+	public int getNumberOfStops() {
+<span class="fc" id="L114">		return numberOfStops;</span>
+	}
+
+	public double getFirstLong() {
+<span class="fc" id="L118">		return firstLong;</span>
+	}
+
+	public double getFirstLat() {
+<span class="fc" id="L122">		return firstLat;</span>
+	}
+
+	public Location getStop(int index) {
+<span class="fc" id="L126">		return stops.get(index);</span>
+	}
+
+	public Users getOwner() {
+<span class="fc" id="L130">		return owner;</span>
+	}
+
+	public Time getTime() {
+<span class="fc" id="L134">		return time;</span>
+	}
+
+	public String getTimeString() {
+<span class="fc" id="L138">		return timeString;</span>
+	}
+
+	public List&lt;Feedback&gt; getFeedback() {
+<span class="fc" id="L142">		return feedback;</span>
+	}
+
+	public double getAvgRating() {
+<span class="fc" id="L146">		return avgRating;</span>
+	}
+
+	// setter
+	public void setId(int id) {
+<span class="fc" id="L151">		this.id = id;</span>
+<span class="fc" id="L152">	}</span>
+
+	public void setName(String name) {
+<span class="fc" id="L155">		this.name = name;</span>
+<span class="fc" id="L156">	}</span>
+
+	public void setType(String type) throws Exception {
+<span class="fc bfc" id="L159" title="All 4 branches covered.">		if (type.equals(&quot;Kultur&quot;) || type.equals(&quot;Party&quot;)) {</span>
+<span class="fc" id="L160">			this.type = type;</span>
+<span class="fc" id="L161">		} else {</span>
+<span class="fc" id="L162">			throw new Exception(&quot;You can only add Routes of type \&quot;Kultur\&quot; or \&quot;Party\&quot;&quot;);</span>
+		}
+<span class="fc" id="L164">	}</span>
+
+	public void setDescription(String description) {
+<span class="fc" id="L167">		this.description = description;</span>
+<span class="fc" id="L168">	}</span>
+
+	public void setStops(List&lt;Location&gt; stops) {
+<span class="fc" id="L171">		this.stops = stops;</span>
+<span class="fc" id="L172">	}</span>
+
+	public void setTimeString(String timeString) {
+<span class="fc" id="L175">		this.timeString = timeString;</span>
+<span class="fc" id="L176">	}</span>
+
+	public void setNumberOfStops(int numberOfStops) {
+<span class="fc" id="L179">		this.numberOfStops = numberOfStops;</span>
+<span class="fc" id="L180">	}</span>
+
+	public void setFirstLong(double firstLong) {
+<span class="fc" id="L183">		this.firstLong = firstLong;</span>
+<span class="fc" id="L184">	}</span>
+
+	public void setFirstLat(double firstLat) {
+<span class="fc" id="L187">		this.firstLat = firstLat;</span>
+<span class="fc" id="L188">	}</span>
+
+	public void setOwner(Users owner) {
+<span class="fc" id="L191">		this.owner = owner;</span>
+<span class="fc" id="L192">	}</span>
+
+	public void setTime(Time time) {
+<span class="fc" id="L195">		this.time = time;</span>
+<span class="fc" id="L196">	}</span>
+
+	public void setImages(List&lt;String&gt; images) {
+<span class="fc" id="L199">		this.images = images;</span>
+<span class="fc" id="L200">	}</span>
+
+	public void setPictures(List&lt;byte[]&gt; pictures) {
+<span class="fc" id="L203">		this.pictures = pictures;</span>
+<span class="fc" id="L204">	}</span>
+
+	public void setFeedback(List&lt;Feedback&gt; feedback) {
+<span class="fc" id="L207">		this.feedback = feedback;</span>
+<span class="fc" id="L208">	}</span>
+
+	public void setAvgRating(double avgRating) {
+<span class="fc" id="L211">		this.avgRating = avgRating;</span>
+<span class="fc" id="L212">	}</span>
+
+	// other methods
+	public void addStop(Location location) {
+<span class="fc" id="L216">		this.stops.add(location);</span>
+<span class="fc" id="L217">	}</span>
+
+	public void removeStop(Location location) {
+<span class="fc" id="L220">		this.stops.remove(location);</span>
+<span class="fc" id="L221">	}</span>
+
+	public void removeStopAtIndex(int index) {
+<span class="fc" id="L224">		this.stops.remove(index);</span>
+<span class="fc" id="L225">	}</span>
+
+	public void addFeedback(Feedback feedback) {
+<span class="fc" id="L228">		this.feedback.add(feedback);</span>
+<span class="fc" id="L229">	}</span>
+
+	public void removeFeedback(Feedback feedback) {
+<span class="fc" id="L232">		this.feedback.remove(feedback);</span>
+<span class="fc" id="L233">	}</span>
+
+	public void removeFeedbackAtIndex(int index) {
+<span class="fc" id="L236">		this.feedback.remove(index);</span>
+<span class="fc" id="L237">	}</span>
+
+	public void addImage(String image) {
+<span class="fc" id="L240">		this.images.add(image);</span>
+<span class="fc" id="L241">	}</span>
+
+	public void removeImage(String image) {
+<span class="fc" id="L244">		this.images.remove(image);</span>
+<span class="fc" id="L245">	}</span>
+
+	public void removeImageAtIndex(int index) {
+<span class="fc" id="L248">		this.images.remove(index);</span>
+<span class="fc" id="L249">	}</span>
+
+	@Override
+	public String toString() {
+<span class="fc" id="L253">		String routeString = &quot;ROUTE= &quot;</span>
+<span class="fc" id="L254">						+ &quot;Id: &quot; + this.id + &quot;, &quot;</span>
+<span class="fc" id="L255">						+ &quot;Name: &quot; + this.name + &quot;, &quot;</span>
+<span class="fc" id="L256">						+ &quot;Type: &quot; + this.type + &quot;, &quot;</span>
+<span class="fc" id="L257">						+ &quot;Time: &quot; + this.time.toString() + &quot;, &quot;</span>
+<span class="fc" id="L258">						+ &quot;Description: &quot; + this.description + &quot;, &quot;</span>
+<span class="fc" id="L259">						+ &quot;|| won't print Feedback and Location here&quot;;</span>
+
+<span class="fc" id="L261">		return routeString;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>AllTests (12.12.2018 16:51:33)</div></body></html>

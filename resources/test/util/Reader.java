@@ -1,4 +1,4 @@
-package test.data;
+package test.util;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

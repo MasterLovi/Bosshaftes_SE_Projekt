@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>RouteServlet.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (12.12.2018 16:51:33)</a> &gt; <a href="../../index.html" class="el_group">Bosshaftes_SE_Projekt</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">servlets</a> &gt; <span class="el_source">RouteServlet.java</span></div><h1>RouteServlet.java</h1><pre class="source lang-java linenums">package servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import model.Feedback;
+import model.Location;
+import model.Route;
+import model.Users;
+import util.Time;
+
+/**
+ * Servlet implementation class RouteServlet - This servlet is responsible for
+ * reading route data from the database, creating new entries, deleting and
+ * updating entries
+ */
+@WebServlet(&quot;/RouteServlet&quot;)
+public class RouteServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public RouteServlet() {
+<span class="fc" id="L43">		super();</span>
+<span class="fc" id="L44">	}</span>
+
+	/**
+	 * Method to read route data from the database
+	 * 
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param type {String} - Type of Location (must be &quot;Kultur&quot; or &quot;Party&quot;)
+	 * @param maxTime {String} - Maximum time that the routes selected should have
+	 * @param minRating {Integer} - Minimal rating that the routes selected should have
+	 * @param maxNoStops {Integer} - Maximum number of stops that the routes selected should have
+	 * @param boundNorthWestLat {Double} - Latitude of upper left corner of the map
+	 * @param boundNorthWestLong {Double} - Longitude of upper left corner of the map
+	 * @param boundSouthEastLat {Double} - Latitude of lower right corner of the map
+	 * @param boundSouthEastLong {Double} - Longitude of lower right corner of the map
+	 * @return {String} - JSONData with found routes; if no entries are found it returns an empty array []
+	 * @exception - Exception if type is null
+	 * @exception - Exception if type is neither &quot;Kultur&quot; nor &quot;Party&quot;
+	 */
+	private static String read(EntityManager em, String type, String maxTime, double minRating, int maxNoStops,
+			double boundNorthWestLat, double boundNorthWestLong, double boundSouthEastLat, double boundSouthEastLong,
+			Integer owner) throws Exception {
+
+<span class="fc bfc" id="L66" title="All 2 branches covered.">		if (type == null) {</span>
+<span class="fc" id="L67">			throw new Exception(&quot;Type cannot be null.&quot;);</span>
+<span class="pc bpc" id="L68" title="1 of 4 branches missed.">		} else if (!(type.equals(&quot;Party&quot;) || type.equals(&quot;Kultur&quot;))) {</span>
+<span class="fc" id="L69">			throw new Exception(&quot;Type can only be \&quot;Party\&quot; or \&quot;Kultur\&quot;.&quot;);</span>
+		}
+		// Build query with given parameters
+<span class="fc" id="L72">		String selectQuery = &quot;SELECT r FROM Route r&quot; + &quot; WHERE r.type = '&quot; + type + &quot;'&quot;;</span>
+
+<span class="fc" id="L74">		String routeParams = &quot; AND r.avgRating &gt;= &quot; + minRating + &quot; AND r.numberOfStops &lt;= &quot; + maxNoStops</span>
+<span class="fc" id="L75">				+ &quot; AND r.firstLat BETWEEN &quot; + boundSouthEastLat + &quot; AND &quot; + boundNorthWestLat</span>
+<span class="fc" id="L76">				+ &quot; AND r.firstLong BETWEEN &quot; + boundNorthWestLong + &quot; AND &quot; + boundSouthEastLong;</span>
+
+<span class="fc bfc" id="L78" title="All 2 branches covered.">		selectQuery = (owner != -1) ? (selectQuery + &quot; AND r.owner.id = &quot; + owner) : selectQuery + routeParams;</span>
+
+		// Select Route from database table
+<span class="fc" id="L81">		Query query = em.createQuery(selectQuery);</span>
+<span class="fc" id="L82">		List&lt;Route&gt; result = query.getResultList();</span>
+
+		String JSONData;
+
+		// check for empty resultList
+<span class="fc bfc" id="L87" title="All 2 branches covered.">		if (result.size() &gt; 0) {</span>
+			
+			// Filter result and remove Routes that are not applicable for the given maxtime
+<span class="fc bfc" id="L90" title="All 2 branches covered.">			for (Iterator&lt;Route&gt; iter = result.iterator(); iter.hasNext();) {</span>
+<span class="fc" id="L91">				Route route = iter.next();</span>
+<span class="fc" id="L92">				Time t = new Time(maxTime);</span>
+<span class="fc" id="L93">				route.setTime(new Time(route.getTimeString()));</span>
+
+<span class="fc bfc" id="L95" title="All 2 branches covered.">				if (route.getTime().IsLessThan(t)) {</span>
+					
+					// Convert and save Images
+<span class="fc" id="L98">					List&lt;String&gt; images = new ArrayList&lt;String&gt;();</span>
+					
+					// convert pictures and data to JSON
+<span class="fc bfc" id="L101" title="All 2 branches covered.">					if (route.getPictures() != null) {</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">						for (byte[] picture : route.getPictures()) {</span>
+<span class="fc" id="L103">							String image64 = new String(picture, &quot;UTF-8&quot;);</span>
+<span class="fc" id="L104">							images.add(image64);</span>
+						}
+<span class="fc" id="L106">						route.setImages(images);</span>
+					}
+					
+					// Set Stops
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">					if (route.getStops() != null) {</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">						for (Location stop : route.getStops()) {</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">							if (stop.getPictures() != null) {</span>
+<span class="fc" id="L113">								images = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">								for (byte[] picture : stop.getPictures()) {</span>
+<span class="fc" id="L115">									String image64 = new String(picture, &quot;UTF-8&quot;);</span>
+<span class="fc" id="L116">									images.add(image64);</span>
+								}
+<span class="fc" id="L118">								stop.setImages(images);</span>
+							}
+						}
+					}
+<span class="fc" id="L122">				} else {</span>
+<span class="fc" id="L123">					iter.remove();</span>
+				}
+			}
+			
+			//Convert to JSON
+<span class="fc" id="L128">			GsonBuilder builder = new GsonBuilder();</span>
+<span class="fc" id="L129">			builder.excludeFieldsWithoutExposeAnnotation();</span>
+<span class="fc" id="L130">			Gson gson = builder.create();</span>
+<span class="fc" id="L131">			JSONData = gson.toJson(result);</span>
+<span class="fc" id="L132">		} else {</span>
+<span class="fc" id="L133">			JSONData = &quot;[]&quot;;</span>
+		}
+		// return results
+<span class="fc" id="L136">		return JSONData;</span>
+	}
+
+	/**
+	 * Method to create new routes in the database
+	 * 
+	 * @param routes {List&lt;Route&gt;} - List of routes that should be created
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param session {HttpSession} - Needed to retrieve the user that creates the route
+	 * @return {String} - &quot;Success&quot; if the routes are successfully created
+	 */
+	private static String create(List&lt;Route&gt; routes, EntityManager em, HttpSession session) throws Exception {
+		// Loop over Routes that should be created
+<span class="fc bfc" id="L149" title="All 2 branches covered.">		for (Route route : routes) {</span>
+			
+			// Set Route Values
+<span class="fc" id="L152">			Route newRoute = new Route();</span>
+<span class="fc" id="L153">			newRoute.setName(route.getName());</span>
+<span class="fc" id="L154">			newRoute.setType(route.getType());</span>
+<span class="fc" id="L155">			newRoute.setTimeString(route.getTime().getTime());</span>
+<span class="fc" id="L156">			newRoute.setFeedback((List&lt;Feedback&gt;) new ArrayList&lt;Feedback&gt;());</span>
+<span class="fc" id="L157">			newRoute.setAvgRating(3);</span>
+<span class="fc" id="L158">			newRoute.setDescription(route.getDescription());</span>
+
+			// Select Route from database table
+<span class="fc" id="L161">			Query query = em</span>
+<span class="fc" id="L162">					.createQuery(&quot;SELECT u FROM Users u WHERE u.username = '&quot; + session.getAttribute(&quot;username&quot;) + &quot;'&quot;);</span>
+<span class="fc" id="L163">			List&lt;Users&gt; result = query.getResultList();</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">			if (result.size() &gt; 0) {</span>
+<span class="fc" id="L165">				Users owner = result.get(0);</span>
+<span class="fc" id="L166">				newRoute.setOwner(result.get(0));</span>
+<span class="fc" id="L167">				owner.addRoute(newRoute);</span>
+<span class="fc" id="L168">			} else {</span>
+<span class="nc" id="L169">				newRoute.setOwner(null);</span>
+			}
+			
+			// Convert and Save images
+<span class="fc" id="L173">			List&lt;byte[]&gt; images = new ArrayList&lt;byte[]&gt;();</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">			if (route.getImages() != null) {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">				for (String sBase64 : route.getImages()) {</span>
+<span class="fc" id="L176">					byte[] image = sBase64.getBytes(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L177">					images.add(image);</span>
+				}
+<span class="fc" id="L179">				newRoute.setPictures(images);</span>
+<span class="fc" id="L180">			} else {</span>
+<span class="fc" id="L181">				newRoute.setPictures(null);</span>
+			}
+<span class="fc" id="L183">			em.persist(newRoute);</span>
+			
+			// Set Locations
+<span class="fc" id="L186">			List&lt;Location&gt; locations = new ArrayList&lt;Location&gt;();</span>
+<span class="pc bpc" id="L187" title="1 of 4 branches missed.">			if (route.getStops() != null &amp;&amp; route.getStops().size() &gt; 0) {</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">				for (Location location : route.getStops()) {</span>
+<span class="fc" id="L189">					Location l = em.find(Location.class, location.getId());</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">					if (l != null) {</span>
+<span class="fc" id="L191">						locations.add(l);</span>
+					}
+				}
+<span class="fc" id="L194">				newRoute.setFirstLong(locations.get(0).getLongitude());</span>
+<span class="fc" id="L195">				newRoute.setFirstLat(locations.get(0).getLatitude());</span>
+			}
+<span class="fc" id="L197">			newRoute.setStops(locations);</span>
+<span class="fc" id="L198">			newRoute.setNumberOfStops(locations.size());</span>
+
+		}
+<span class="fc" id="L201">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to delete routes from database
+	 * 
+	 * @param routes {List&lt;Route&gt;} - List of routes that should be deleted
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @return {String} - &quot;Success&quot; if the routes are successfully deleted
+	 * @exception - Exception if route doesn't exist
+	 */
+	private static String delete(List&lt;Route&gt; routes, EntityManager em) throws Exception {
+		// Loop over Routes that should be deleted
+<span class="fc bfc" id="L214" title="All 2 branches covered.">		for (Route route : routes) {</span>
+<span class="fc" id="L215">			Route result = em.find(Route.class, route.getId());</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">			if (result != null) {</span>
+<span class="fc" id="L217">				em.remove(result);</span>
+<span class="fc" id="L218">			} else {</span>
+<span class="fc" id="L219">				throw new Exception(&quot;Route \&quot;&quot; + route.getName() + &quot;\&quot;does not exist.&quot;);</span>
+			}
+		}
+<span class="fc" id="L222">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to update routes in the database
+	 * 
+	 * @param routes {List&lt;Route&gt;} - List of routes that should be updated
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @return {String} - &quot;Success&quot; if the routes are successfully updated
+	 * @exception - Exception if route doesn't exist
+	 */
+	private static String update(List&lt;Route&gt; routes, EntityManager em) throws Exception {
+
+		// Loop over Routes that should be updated
+<span class="fc bfc" id="L236" title="All 2 branches covered.">		for (Route route : routes) {</span>
+<span class="fc" id="L237">			Route result = em.find(Route.class, route.getId());</span>
+
+<span class="fc bfc" id="L239" title="All 2 branches covered.">			if (result != null) {</span>
+				// Set Route Values
+<span class="fc" id="L241">				result.setName(route.getName());</span>
+<span class="fc" id="L242">				result.setTimeString(route.getTime().getTime());</span>
+<span class="fc" id="L243">				result.setType(route.getType());</span>
+<span class="fc" id="L244">				result.setFeedback(route.getFeedback());</span>
+<span class="fc" id="L245">				result.setOwner(route.getOwner());</span>
+
+				//Update Locations
+<span class="fc" id="L248">				List&lt;Location&gt; locations = new ArrayList&lt;Location&gt;();</span>
+<span class="pc bpc" id="L249" title="2 of 4 branches missed.">				if (route.getStops() != null &amp;&amp; route.getStops().size() &gt; 0) {</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">					for (Location location : route.getStops()) {</span>
+<span class="fc" id="L251">						Location l = em.find(Location.class, location.getId());</span>
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">						if (l != null) {</span>
+<span class="fc" id="L253">							locations.add(l);</span>
+						}
+					}
+<span class="fc" id="L256">					result.setFirstLong(locations.get(0).getLongitude());</span>
+<span class="fc" id="L257">					result.setFirstLat(locations.get(0).getLatitude());</span>
+				}
+<span class="fc" id="L259">				result.setStops(locations);</span>
+<span class="fc" id="L260">				result.setNumberOfStops(locations.size());</span>
+				
+				// Update Images
+<span class="fc" id="L263">				List&lt;byte[]&gt; images = new ArrayList&lt;byte[]&gt;();</span>
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">				if (route.getImages() != null) {</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">					for (String sBase64 : route.getImages()) {</span>
+<span class="fc" id="L266">						byte[] image = sBase64.getBytes(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L267">						images.add(image);</span>
+					}
+				}
+<span class="fc" id="L270">				result.setPictures(images);</span>
+
+<span class="fc" id="L272">			} else {</span>
+<span class="fc" id="L273">				throw new Exception(&quot;Route \&quot;&quot; + route.getName() + &quot;\&quot; does not exist.&quot;);</span>
+			}
+
+		}
+<span class="fc" id="L277">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		// retrieve EntityManagerFactory and create EntityManager
+<span class="fc" id="L288">		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute(&quot;emf&quot;);</span>
+<span class="fc" id="L289">		EntityManager em = emf.createEntityManager();</span>
+		// Define response
+		String res;
+
+		// read Data
+		try {
+			// retrieve all parameters
+<span class="fc" id="L296">			String paramType = request.getParameter(&quot;type&quot;);</span>
+<span class="fc" id="L297">			String paramTime = request.getParameter(&quot;time&quot;);</span>
+
+			Integer paramStops, owner;
+			Double paramRating, paramBoundNorthWestLat, paramBoundNorthWestLong,
+					paramBoundSouthEastLat, paramBoundSouthEastLong;
+			
+			// Check if User Routes or all Routes
+<span class="fc bfc" id="L304" title="All 2 branches covered.">			if (request.getParameter(&quot;rating&quot;) != null) {</span>
+				
+				// Set and Convert Parameters
+<span class="fc" id="L307">				paramRating = Double.valueOf(request.getParameter(&quot;rating&quot;));</span>
+<span class="fc" id="L308">				paramStops = Integer.valueOf(request.getParameter(&quot;stops&quot;));</span>
+<span class="fc" id="L309">				paramBoundNorthWestLat = Double.valueOf(request.getParameter(&quot;boundNorthWestLat&quot;));</span>
+<span class="fc" id="L310">				paramBoundNorthWestLong = Double.valueOf(request.getParameter(&quot;boundNorthWestLng&quot;));</span>
+<span class="fc" id="L311">				paramBoundSouthEastLat = Double.valueOf(request.getParameter(&quot;boundSouthEastLat&quot;));</span>
+<span class="fc" id="L312">				paramBoundSouthEastLong = Double.valueOf(request.getParameter(&quot;boundSouthEastLng&quot;));</span>
+<span class="fc" id="L313">				owner = -1;</span>
+				
+<span class="fc" id="L315">			} else {</span>
+				
+				// Set and Convert Parameters
+<span class="fc" id="L318">				owner = Integer.valueOf(request.getParameter(&quot;owner&quot;));</span>
+<span class="fc" id="L319">				paramRating = -1.0;</span>
+<span class="fc" id="L320">				paramStops = -1;</span>
+<span class="fc" id="L321">				paramBoundNorthWestLat = -1.0;</span>
+<span class="fc" id="L322">				paramBoundNorthWestLong = -1.0;</span>
+<span class="fc" id="L323">				paramBoundSouthEastLat = -1.0;</span>
+<span class="fc" id="L324">				paramBoundSouthEastLong = -1.0;</span>
+			}
+			
+			// Do read operation
+<span class="fc" id="L328">			res = read(em, paramType, paramTime, paramRating, paramStops, paramBoundNorthWestLat,</span>
+<span class="fc" id="L329">					paramBoundNorthWestLong, paramBoundSouthEastLat, paramBoundSouthEastLong, owner);</span>
+
+<span class="fc" id="L331">			response.setStatus(200);</span>
+<span class="fc" id="L332">		} catch (Exception e) {</span>
+			// send back error
+<span class="fc" id="L334">			response.setStatus(500);</span>
+<span class="fc" id="L335">			e.printStackTrace();</span>
+<span class="fc" id="L336">			res = e.getMessage();</span>
+		}
+		// Send Response
+<span class="fc" id="L339">		response.setContentType(&quot;text/html; charset=UTF-8&quot;);</span>
+<span class="fc" id="L340">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L341">		PrintWriter writer = response.getWriter();</span>
+<span class="fc" id="L342">		writer.append(res);</span>
+<span class="fc" id="L343">		em.close();</span>
+<span class="fc" id="L344">	}</span>
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	@Override
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		// retrieve EntityManagerFactory, create EntityManager and retrieve data
+<span class="fc" id="L354">		HttpSession session = request.getSession();</span>
+<span class="fc" id="L355">		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute(&quot;emf&quot;);</span>
+<span class="fc" id="L356">		EntityManager em = emf.createEntityManager();</span>
+<span class="fc" id="L357">		Gson gson = new Gson();</span>
+<span class="fc" id="L358">		List&lt;Route&gt; routes = gson.fromJson(request.getParameter(&quot;json&quot;), new TypeToken&lt;List&lt;Route&gt;&gt;() {</span>
+<span class="fc" id="L359">		}.getType());</span>
+<span class="fc" id="L360">		String res = &quot;&quot;;</span>
+
+<span class="fc" id="L362">		em.getTransaction().begin();</span>
+		
+		// Check for operation and do it
+		try {
+<span class="fc bfc" id="L366" title="All 2 branches covered.">			if ((boolean) session.getAttribute(&quot;loggedin&quot;) != true) {</span>
+<span class="fc" id="L367">				throw new Exception(&quot;You are not logged in.&quot;);</span>
+			}
+<span class="pc bpc" id="L369" title="4 of 10 branches missed.">			switch (request.getParameter(&quot;operation&quot;)) {</span>
+			case &quot;update&quot;:
+<span class="fc" id="L371">				res = update(routes, em);</span>
+<span class="fc" id="L372">				break;</span>
+			case &quot;create&quot;:
+<span class="fc" id="L374">				res = create(routes, em, session);</span>
+<span class="fc" id="L375">				break;</span>
+			case &quot;delete&quot;:
+<span class="fc" id="L377">				res = delete(routes, em);</span>
+				break;
+			}
+			
+			// Create Response
+<span class="fc" id="L382">			response.setStatus(200);</span>
+<span class="fc" id="L383">			em.getTransaction().commit();</span>
+<span class="fc" id="L384">		} catch (Exception e) {</span>
+			// send back error
+<span class="fc" id="L386">			response.setStatus(500);</span>
+<span class="fc" id="L387">			res = e.getMessage();</span>
+<span class="fc" id="L388">			em.getTransaction().rollback();</span>
+		}
+		
+		// Send Response
+<span class="fc" id="L392">		response.setContentType(&quot;text/html; charset=UTF-8&quot;);</span>
+<span class="fc" id="L393">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L394">		PrintWriter writer = response.getWriter();</span>
+<span class="fc" id="L395">		writer.print(res);</span>
+<span class="fc" id="L396">		em.close();</span>
+<span class="fc" id="L397">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>AllTests (12.12.2018 16:51:33)</div></body></html>

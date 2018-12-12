@@ -26,6 +26,6 @@ import test.util.TestTimeClass;
 	TestRouteServlet.class,
 	TestFeedbackServlet.class
 	})
-public class AllTests {
+public class TestSuite {
 
 }

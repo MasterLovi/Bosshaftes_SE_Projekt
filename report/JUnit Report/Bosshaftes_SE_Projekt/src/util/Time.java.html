@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Time.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (12.12.2018 16:51:33)</a> &gt; <a href="../../index.html" class="el_group">Bosshaftes_SE_Projekt</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">util</a> &gt; <span class="el_source">Time.java</span></div><h1>Time.java</h1><pre class="source lang-java linenums">package util;
+
+import java.io.Serializable;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * This class is an individual util class that represents duration.
+ *
+ */
+
+public class Time implements Serializable {
+
+	private static final long serialVersionUID = 1156215663793678712L;
+	@Expose
+	private String time;
+	@Expose
+	private Integer hours;
+	@Expose
+	private Integer minutes;
+	@Expose
+	private Integer seconds;
+
+	/**
+	 * Individual constructor to save a time object with a given String
+	 * 
+	 * @param time Time-String to be converted (format: &quot;HH:MM:SS&quot;)
+	 */
+<span class="fc" id="L29">	public Time(String time) {</span>
+		try {
+<span class="fc bfc" id="L31" title="All 2 branches covered.">			if (time == null) {</span>
+<span class="fc" id="L32">				time = &quot;00:00:00&quot;;</span>
+			}
+<span class="fc" id="L34">			Integer hours = Integer.parseInt(time.substring(0, time.indexOf(&quot;:&quot;)));</span>
+
+<span class="fc" id="L36">			String sMinutes = time.substring(time.indexOf(&quot;:&quot;) + 1);</span>
+			
+<span class="fc" id="L38">			Integer minutes = Integer.parseInt(sMinutes.substring(0, sMinutes.indexOf(&quot;:&quot;)));</span>
+
+<span class="fc" id="L40">			Integer seconds = Integer.parseInt(sMinutes.substring(sMinutes.indexOf(&quot;:&quot;) + 1));</span>
+
+<span class="fc" id="L42">			this.setTime(hours, minutes, seconds);</span>
+<span class="fc" id="L43">		} catch (Exception e) {</span>
+<span class="fc" id="L44">			this.time = &quot;00:00:00&quot;;</span>
+<span class="fc" id="L45">			this.hours = 0;</span>
+<span class="fc" id="L46">			this.minutes = 0;</span>
+<span class="fc" id="L47">			this.seconds = 0;</span>
+		}
+<span class="fc" id="L49">	}</span>
+	
+<span class="fc" id="L51">	public Time() {</span>
+<span class="fc" id="L52">		this.time = &quot;00:00:00&quot;;</span>
+<span class="fc" id="L53">		this.hours = 0;</span>
+<span class="fc" id="L54">		this.minutes = 0;</span>
+<span class="fc" id="L55">		this.seconds = 0;</span>
+<span class="fc" id="L56">	}</span>
+
+	/**
+	 * Individual constructor to save time object with given hours, minutes and
+	 * seconds
+	 * 
+	 * @param hours   Hours of the duration
+	 * @param minutes Minutes of the duration
+	 * @param seconds Seconds of the duration
+	 */
+<span class="fc" id="L66">	public Time(Integer hours, Integer minutes, Integer seconds) {</span>
+<span class="fc" id="L67">		this.setTime(hours, minutes, seconds);</span>
+<span class="fc" id="L68">	}</span>
+
+	private void setTime(Integer hours, Integer minutes, Integer seconds) {
+		// if seconds are &gt; 60 --&gt; change 60 seconds to 1 minute
+<span class="fc bfc" id="L72" title="All 2 branches covered.">		if (seconds &gt;= 60) {</span>
+<span class="fc" id="L73">			minutes = minutes + (seconds / 60);</span>
+<span class="fc" id="L74">			seconds = seconds % 60;</span>
+		}
+		// if minutes are &gt; 60 --&gt; change 60 minutes to 1 hour
+<span class="fc bfc" id="L77" title="All 2 branches covered.">		if (minutes &gt;= 60) {</span>
+<span class="fc" id="L78">			hours = hours + (minutes / 60);</span>
+<span class="fc" id="L79">			minutes = minutes % 60;</span>
+		}
+
+<span class="fc" id="L82">		this.hours = hours;</span>
+<span class="fc" id="L83">		this.minutes = minutes;</span>
+<span class="fc" id="L84">		this.seconds = seconds;</span>
+<span class="fc" id="L85">		this.time = &quot;&quot;;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">		if (hours &lt; 10) {</span>
+<span class="fc" id="L87">			this.time = this.time + 0;</span>
+		}
+<span class="fc" id="L89">		this.time = this.time + hours + &quot;:&quot;;</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">		if (minutes &lt; 10) {</span>
+<span class="fc" id="L91">			this.time = this.time + 0;</span>
+		}
+<span class="fc" id="L93">		this.time = this.time + minutes + &quot;:&quot;;</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">		if (seconds &lt; 10) {</span>
+<span class="fc" id="L95">			this.time = this.time + 0;</span>
+		}
+<span class="fc" id="L97">		this.time = this.time + seconds;</span>
+<span class="fc" id="L98">	}</span>
+
+	public Integer getHours() {
+<span class="fc" id="L101">		return hours;</span>
+	}
+
+	public Integer getMinutes() {
+<span class="fc" id="L105">		return minutes;</span>
+	}
+
+	public Integer getSeconds() {
+<span class="fc" id="L109">		return seconds;</span>
+	}
+
+	public String getTime() {
+<span class="fc" id="L113">		return time;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L118">		return getTime();</span>
+	}
+
+	public Boolean IsLessThan(Time t) {
+<span class="fc bfc" id="L122" title="All 2 branches covered.">		if (this.getHours() &lt; t.getHours()) {</span>
+<span class="fc" id="L123">			return true;</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">		} else if (this.getHours() &gt; t.getHours()) {</span>
+<span class="fc" id="L125">			return false;</span>
+		} else {
+
+<span class="fc bfc" id="L128" title="All 2 branches covered.">			if (this.getMinutes() &lt; t.getMinutes()) {</span>
+<span class="fc" id="L129">				return true;</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">			} else if (this.getMinutes() &gt; t.getMinutes()) {</span>
+<span class="fc" id="L131">				return false;</span>
+			} else {
+
+<span class="fc bfc" id="L134" title="All 2 branches covered.">				if (this.getSeconds() &lt; t.getSeconds()) {</span>
+<span class="fc" id="L135">					return true;</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">				} else if (this.getSeconds() &gt; t.getSeconds()) {</span>
+<span class="fc" id="L137">					return false;</span>
+				} else {
+<span class="fc" id="L139">					return true;</span>
+				}
+
+			}
+
+		}
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>AllTests (12.12.2018 16:51:33)</div></body></html>

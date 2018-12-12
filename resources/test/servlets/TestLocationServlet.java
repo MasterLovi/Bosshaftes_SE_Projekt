@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 
 import model.Location;
 import servlets.LocationServlet;
-import test.data.Reader;
+import test.util.Reader;
 
 /**
  * 

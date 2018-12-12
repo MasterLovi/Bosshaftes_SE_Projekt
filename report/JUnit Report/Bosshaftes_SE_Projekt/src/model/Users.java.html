@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Users.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (12.12.2018 16:51:33)</a> &gt; <a href="../../index.html" class="el_group">Bosshaftes_SE_Projekt</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">Users.java</span></div><h1>Users.java</h1><pre class="source lang-java linenums">package model;
+
+import java.util.Iterator;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * This class represents the Users database table as mapped Java object
+ */
+@Entity
+@Table(name = &quot;USERS&quot;)
+<span class="fc" id="L25">public class Users {</span>
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = &quot;ID&quot;)
+	@Expose
+	private int id;
+
+	@Column(unique = true)
+	@Expose
+	private String username;
+	
+	@Expose
+	private String email;
+	private String password;
+
+	@OneToMany(mappedBy = &quot;owner&quot;, orphanRemoval = true, cascade = CascadeType.ALL)
+	private List&lt;Route&gt; routes;
+
+	@ManyToMany
+	@JoinTable(name = &quot;USERS_ROUTES&quot;, joinColumns = @JoinColumn(name = &quot;USER_ID&quot;, referencedColumnName = &quot;ID&quot;), inverseJoinColumns = @JoinColumn(name = &quot;ROUTE_ID&quot;, referencedColumnName = &quot;ID&quot;))
+	private List&lt;Route&gt; visitedRoutes;
+
+	// getter
+	public int getId() {
+<span class="fc" id="L50">		return id;</span>
+	}
+
+	public String getUsername() {
+<span class="fc" id="L54">		return username;</span>
+	}
+
+	public String getEmail() {
+<span class="fc" id="L58">		return email;</span>
+	}
+
+	public String getPassword() {
+<span class="fc" id="L62">		return password;</span>
+	}
+
+	public List&lt;Route&gt; getVisitedRoutes() {
+<span class="fc" id="L66">		return visitedRoutes;</span>
+	}
+
+	// setter
+	public void setId(int id) {
+<span class="fc" id="L71">		this.id = id;</span>
+<span class="fc" id="L72">	}</span>
+
+	public void setUsername(String username) {
+<span class="fc" id="L75">		this.username = username;</span>
+<span class="fc" id="L76">	}</span>
+
+	public void setEmail(String email) {
+<span class="fc" id="L79">		this.email = email;</span>
+<span class="fc" id="L80">	}</span>
+
+	public void setPassword(String password) {
+<span class="fc" id="L83">		this.password = password;</span>
+<span class="fc" id="L84">	}</span>
+
+	public void setRoutes(List&lt;Route&gt; routes) {
+<span class="fc" id="L87">		this.routes = routes;</span>
+<span class="fc" id="L88">	}</span>
+	
+	public void setVisitedRoutes(List&lt;Route&gt; visitedRoutes) {
+<span class="fc" id="L91">		this.visitedRoutes = visitedRoutes;</span>
+<span class="fc" id="L92">	}</span>
+
+	// other methods
+	public void addRoute(Route route) {
+<span class="fc" id="L96">		this.routes.add(route);</span>
+<span class="fc" id="L97">	}</span>
+	
+	public void removeRoute(Route route) {
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		for (Iterator&lt;Route&gt; iter = this.routes.iterator(); iter.hasNext();) {</span>
+<span class="fc" id="L101">			Route r = iter.next();</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">			if(r.getId() == route.getId()) {</span>
+<span class="fc" id="L103">				iter.remove();</span>
+			}
+		}
+<span class="fc" id="L106">	}</span>
+
+	public List&lt;Route&gt; getRoutes() {
+<span class="fc" id="L109">		return routes;</span>
+	}
+
+	// other methods
+	@Override
+	public String toString() {
+<span class="fc" id="L115">		String userString = &quot;USER= &quot;</span>
+<span class="fc" id="L116">						+ &quot;Id: &quot; + this.id + &quot;, &quot;</span>
+<span class="fc" id="L117">						+ &quot;Username: &quot; + this.username + &quot;, &quot;</span>
+<span class="fc" id="L118">						+ &quot;Email: &quot; + this.email + &quot;, &quot;</span>
+<span class="fc" id="L119">						+ &quot;Password&quot; + this.password;</span>
+
+<span class="fc" id="L121">		return userString;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>AllTests (12.12.2018 16:51:33)</div></body></html>

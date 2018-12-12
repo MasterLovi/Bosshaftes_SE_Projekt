@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>UserSessionServlet.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (12.12.2018 16:51:33)</a> &gt; <a href="../../index.html" class="el_group">Bosshaftes_SE_Projekt</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">servlets</a> &gt; <span class="el_source">UserSessionServlet.java</span></div><h1>UserSessionServlet.java</h1><pre class="source lang-java linenums">package servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import model.Users;
+
+/**
+ * Servlet implementation class UserSessionServlet - This servlet is responsible
+ * for logging a user in and out
+ */
+@WebServlet(&quot;/UserSessionServlet&quot;)
+public class UserSessionServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public UserSessionServlet() {
+<span class="fc" id="L34">		super();</span>
+<span class="fc" id="L35">	}</span>
+
+	/**
+	 * Method to log user out
+	 * 
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// get URI Parameter for logout and retrieve session
+<span class="fc" id="L46">		String sLogout = request.getParameter(&quot;logout&quot;);</span>
+<span class="fc" id="L47">		HttpSession session = request.getSession();</span>
+
+		// check if user needs to be logged out
+<span class="fc bfc" id="L50" title="All 4 branches covered.">		if (sLogout.equals(&quot;true&quot;) &amp;&amp; (boolean) session.getAttribute(&quot;loggedin&quot;)) {</span>
+<span class="fc" id="L51">			session.setAttribute(&quot;userid&quot;, null);</span>
+<span class="fc" id="L52">			session.setAttribute(&quot;username&quot;, null);</span>
+<span class="fc" id="L53">			session.setAttribute(&quot;loggedin&quot;, false);</span>
+<span class="fc" id="L54">			session.invalidate();</span>
+		}
+
+		// forward back to request page
+<span class="fc" id="L58">		response.sendRedirect(request.getHeader(&quot;referer&quot;));</span>
+<span class="fc" id="L59">	}</span>
+
+	/**
+	 * Method to log user in
+	 * 
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	@Override
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<span class="fc" id="L69">		String username = request.getParameter(&quot;username&quot;);</span>
+<span class="fc" id="L70">		String password = request.getParameter(&quot;password&quot;);</span>
+
+		// Obtain a database connection:
+<span class="fc" id="L73">		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute(&quot;emf&quot;);</span>
+<span class="fc" id="L74">		EntityManager em = emf.createEntityManager();</span>
+
+		try {
+			// Search for User
+<span class="fc" id="L78">			Query query = em.createQuery(&quot;SELECT u FROM Users u WHERE u.username = '&quot; + username + &quot;'&quot;);</span>
+<span class="fc" id="L79">			List&lt;Users&gt; resultUser = query.getResultList();</span>
+
+			// retrieve session object
+<span class="fc" id="L82">			HttpSession session = request.getSession();</span>
+
+			// hash user´s password input
+<span class="fc" id="L85">			MessageDigest digest = MessageDigest.getInstance(&quot;SHA-256&quot;);</span>
+<span class="fc" id="L86">			byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L87">			String hashedPW = new String(hash);</span>
+
+			// compare user input with user password in db
+			// set session if user input is correct
+<span class="fc bfc" id="L91" title="All 4 branches covered.">			if (resultUser.size() &gt; 0 &amp;&amp; resultUser.get(0).getPassword().equals(hashedPW)) {</span>
+<span class="fc" id="L92">				Users resUser = resultUser.get(0);</span>
+<span class="fc" id="L93">				session.setAttribute(&quot;userid&quot;, resUser.getId());</span>
+<span class="fc" id="L94">				session.setAttribute(&quot;username&quot;, resUser.getUsername());</span>
+<span class="fc" id="L95">				session.setAttribute(&quot;loggedin&quot;, true);</span>
+<span class="fc" id="L96">			}</span>
+			// otherwise set session false
+			else {
+<span class="fc" id="L99">				session.setAttribute(&quot;loggedin&quot;, false);</span>
+<span class="fc" id="L100">				session.invalidate();</span>
+<span class="fc" id="L101">				throw new Exception(&quot;Password or username is incorrect.&quot;);</span>
+			}
+			
+			// Create and Send Response
+<span class="fc" id="L105">			response.setContentType(&quot;text/html; charset=UTF-8&quot;);</span>
+<span class="fc" id="L106">			response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+			
+<span class="fc" id="L108">			PrintWriter writer = response.getWriter();</span>
+<span class="fc" id="L109">			writer.append(&quot;Success&quot;);</span>
+
+<span class="fc" id="L111">		} catch (Exception e) {</span>
+			
+			// Create and send Error Response
+<span class="fc" id="L114">			response.setStatus(500);</span>
+<span class="fc" id="L115">			response.setContentType(&quot;text/html; charset=UTF-8&quot;);</span>
+<span class="fc" id="L116">			response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+			
+<span class="fc" id="L118">			PrintWriter writer = response.getWriter();</span>
+<span class="fc" id="L119">			writer.append(e.getMessage());</span>
+		}
+<span class="fc" id="L121">		em.close();</span>
+<span class="fc" id="L122">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>AllTests (12.12.2018 16:51:33)</div></body></html>

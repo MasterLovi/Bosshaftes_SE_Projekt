@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Location.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (12.12.2018 16:51:33)</a> &gt; <a href="../../index.html" class="el_group">Bosshaftes_SE_Projekt</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">Location.java</span></div><h1>Location.java</h1><pre class="source lang-java linenums">package model;
+
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.google.gson.annotations.Expose;
+
+import util.Time;
+
+/**
+ * This class represents the Location database table as mapped Java object
+ */
+@Entity
+@Table(name = &quot;LOCATION&quot;)
+<span class="fc" id="L26">public class Location {</span>
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = &quot;ID&quot;)
+	@Expose
+	private int id;
+
+	@Expose
+	private String name;
+
+	@Expose
+	private double longitude;
+
+	@Expose
+	private double latitude;
+
+	@Expose
+	private String type;
+
+	private String timeString;
+
+	@Transient
+	@Expose
+	private Time time;
+
+	@Expose
+	private Integer timesReported;
+
+	@Expose
+	private String description;
+
+	private List&lt;byte[]&gt; pictures;
+
+	@Transient
+	@Expose
+	private List&lt;String&gt; images;
+
+	private List&lt;String&gt; userReports;
+
+	@OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+	@JoinColumn(name = &quot;ADDRESS_ID&quot;)
+	@Expose
+	private Address address;
+
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+	@JoinColumn(name = &quot;FEEDBACK_ID_L&quot;)
+	@Expose
+	private List&lt;Feedback&gt; feedback;
+
+	@Expose
+	private double avgRating;
+
+	// getter
+	public int getId() {
+<span class="fc" id="L81">		return id;</span>
+	}
+
+	public String getName() {
+<span class="fc" id="L85">		return name;</span>
+	}
+
+	public double getLongitude() {
+<span class="fc" id="L89">		return longitude;</span>
+	}
+
+	public double getLatitude() {
+<span class="fc" id="L93">		return latitude;</span>
+	}
+
+	public String getType() {
+<span class="fc" id="L97">		return type;</span>
+	}
+
+	public Time getTime() {
+<span class="fc" id="L101">		return time;</span>
+	}
+
+	public String getTimeString() {
+<span class="fc" id="L105">		return timeString;</span>
+	}
+
+	public int getTimesReported() {
+<span class="fc" id="L109">		return timesReported;</span>
+	}
+
+	public String getDescription() {
+<span class="fc" id="L113">		return description;</span>
+	}
+
+	public List&lt;String&gt; getImages() {
+<span class="fc" id="L117">		return images;</span>
+	}
+
+	public List&lt;String&gt; getUserReports() {
+<span class="fc" id="L121">		return userReports;</span>
+	}
+
+	public Address getAddress() {
+<span class="fc" id="L125">		return address;</span>
+	}
+
+	public List&lt;Feedback&gt; getFeedback() {
+<span class="fc" id="L129">		return feedback;</span>
+	}
+
+	public double getAvgRating() {
+<span class="fc" id="L133">		return avgRating;</span>
+	}
+
+	public List&lt;byte[]&gt; getPictures() {
+<span class="fc" id="L137">		return pictures;</span>
+	}
+
+	// setter
+	public void setId(int id) {
+<span class="fc" id="L142">		this.id = id;</span>
+<span class="fc" id="L143">	}</span>
+
+	public void setTimeString(String timeString) {
+<span class="fc" id="L146">		this.timeString = timeString;</span>
+<span class="fc" id="L147">	}</span>
+
+	public void setPictures(List&lt;byte[]&gt; pictures) {
+<span class="fc" id="L150">		this.pictures = pictures;</span>
+<span class="fc" id="L151">	}</span>
+
+	public void setName(String name) {
+<span class="fc" id="L154">		this.name = name;</span>
+<span class="fc" id="L155">	}</span>
+
+	public void setLongitude(double longitude) {
+<span class="fc" id="L158">		this.longitude = longitude;</span>
+<span class="fc" id="L159">	}</span>
+
+	public void setLatitude(double latitude) {
+<span class="fc" id="L162">		this.latitude = latitude;</span>
+<span class="fc" id="L163">	}</span>
+
+	public void setType(String type) throws Exception {
+<span class="fc bfc" id="L166" title="All 4 branches covered.">		if (type.equals(&quot;Kultur&quot;) || type.equals(&quot;Party&quot;)) {</span>
+<span class="fc" id="L167">			this.type = type;</span>
+<span class="fc" id="L168">		} else {</span>
+<span class="fc" id="L169">			throw new Exception(&quot;You can only add Locations of type \&quot;Kultur\&quot; or \&quot;Party\&quot;&quot;);</span>
+		}
+<span class="fc" id="L171">	}</span>
+
+	public void setTime(Time time) {
+<span class="fc" id="L174">		this.time = time;</span>
+<span class="fc" id="L175">	}</span>
+
+	public void setUserReports(List&lt;String&gt; userReports) {
+<span class="fc" id="L178">		this.userReports = userReports;</span>
+<span class="fc" id="L179">	}</span>
+
+	public void setAddress(Address address) {
+<span class="fc" id="L182">		this.address = address;</span>
+<span class="fc" id="L183">	}</span>
+
+	public void setTimesReported(int timesReported) {
+<span class="fc" id="L186">		this.timesReported = timesReported;</span>
+<span class="fc" id="L187">	}</span>
+
+	public void setDescription(String description) {
+<span class="fc" id="L190">		this.description = description;</span>
+<span class="fc" id="L191">	}</span>
+
+	public void setImages(List&lt;String&gt; images) {
+<span class="fc" id="L194">		this.images = images;</span>
+<span class="fc" id="L195">	}</span>
+
+	public void setFeedback(List&lt;Feedback&gt; feedback) {
+<span class="fc" id="L198">		this.feedback = feedback;</span>
+<span class="fc" id="L199">	}</span>
+
+	// other methods
+	public void addFeedback(Feedback feedback) {
+<span class="fc" id="L203">		this.feedback.add(feedback);</span>
+<span class="fc" id="L204">	}</span>
+
+	public void setAvgRating(double avgRating) {
+<span class="fc" id="L207">		this.avgRating = avgRating;</span>
+<span class="fc" id="L208">	}</span>
+
+	public void removeFeedback(Feedback feedback) {
+<span class="fc" id="L211">		this.feedback.remove(feedback);</span>
+<span class="fc" id="L212">	}</span>
+
+	public void removeFeedbackAtIndex(int index) {
+<span class="fc" id="L215">		this.feedback.remove(index);</span>
+<span class="fc" id="L216">	}</span>
+
+	@Override
+	public String toString() {
+<span class="fc" id="L220">		String locationString = &quot;LOCATION= &quot; + &quot;Id: &quot; + this.id + &quot;, &quot; + &quot;Name: &quot; + this.name + &quot;, &quot; + &quot;Longtitude: &quot;</span>
+<span class="fc" id="L221">						+ this.longitude + &quot;, &quot; + &quot;Latitude: &quot; + this.latitude + &quot;, &quot; + &quot;Type: &quot; + this.type + &quot;, &quot;</span>
+<span class="fc" id="L222">						+ &quot;Time: &quot;</span>
+<span class="fc" id="L223">						+ this.time.toString() + &quot;, &quot; + &quot;TimesReported: &quot; + this.timesReported + &quot;, &quot; + &quot;Description: &quot;</span>
+<span class="fc" id="L224">						+ this.description + &quot;, &quot; + &quot;Address: &quot; + this.address.toString() + &quot;, &quot;</span>
+<span class="fc" id="L225">						+ &quot;Feedback: not gonna print this here&quot;;</span>
+
+<span class="fc" id="L227">		return locationString;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>AllTests (12.12.2018 16:51:33)</div></body></html>

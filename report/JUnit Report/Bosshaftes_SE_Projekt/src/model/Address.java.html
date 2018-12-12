@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Address.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (12.12.2018 16:51:33)</a> &gt; <a href="../../index.html" class="el_group">Bosshaftes_SE_Projekt</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">Address.java</span></div><h1>Address.java</h1><pre class="source lang-java linenums">package model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.google.gson.annotations.Expose;
+
+/**
+ * This class represents the Address database table as mapped Java object
+ */
+@Entity
+@Table(name = &quot;ADDRESS&quot;)
+<span class="fc" id="L17">public class Address {</span>
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = &quot;ID&quot;)
+	@Expose
+	private int id;
+	
+	@Expose
+	private String country;
+	
+	@Expose
+	private int postCode;
+	
+	@Expose
+	private String cityName;
+	
+	@Expose
+	private String streetName;
+	
+	@Expose
+	private int houseNumber;
+
+	// getter
+	public Address getAddress() {
+<span class="fc" id="L42">		return this;</span>
+	}
+
+	public int getId() {
+<span class="fc" id="L46">		return id;</span>
+	}
+
+	public String getCountry() {
+<span class="fc" id="L50">		return country;</span>
+	}
+
+	public int getPostCode() {
+<span class="fc" id="L54">		return postCode;</span>
+	}
+
+	public String getCityName() {
+<span class="fc" id="L58">		return cityName;</span>
+	}
+
+	public String getStreetName() {
+<span class="fc" id="L62">		return streetName;</span>
+	}
+
+	public int getHouseNumber() {
+<span class="fc" id="L66">		return houseNumber;</span>
+	}
+
+	// setter
+	public void setId(int id) {
+<span class="fc" id="L71">		this.id = id;</span>
+<span class="fc" id="L72">	}</span>
+
+	public void setAddress(Address address) {
+<span class="fc" id="L75">		this.country = address.country;</span>
+<span class="fc" id="L76">		this.postCode = address.postCode;</span>
+<span class="fc" id="L77">		this.cityName = address.cityName;</span>
+<span class="fc" id="L78">		this.streetName = address.streetName;</span>
+<span class="fc" id="L79">		this.houseNumber = address.houseNumber;</span>
+<span class="fc" id="L80">	}</span>
+
+	public void setCountry(String country) {
+<span class="fc" id="L83">		this.country = country;</span>
+<span class="fc" id="L84">	}</span>
+
+	public void setPostCode(int postCode) {
+<span class="fc" id="L87">		this.postCode = postCode;</span>
+<span class="fc" id="L88">	}</span>
+
+	public void setCityName(String cityName) {
+<span class="fc" id="L91">		this.cityName = cityName;</span>
+<span class="fc" id="L92">	}</span>
+
+	public void setStreetName(String streetName) {
+<span class="fc" id="L95">		this.streetName = streetName;</span>
+<span class="fc" id="L96">	}</span>
+
+	public void setHouseNumber(int houseNumber) {
+<span class="fc" id="L99">		this.houseNumber = houseNumber;</span>
+<span class="fc" id="L100">	}</span>
+
+	// other methods
+	@Override
+	public String toString() {
+<span class="fc" id="L105">		String addressString = &quot;ADDRESS= &quot;</span>
+<span class="fc" id="L106">						+ &quot;Id: &quot; + this.id + &quot;, &quot;</span>
+<span class="fc" id="L107">						+ this.streetName + &quot; &quot; + this.houseNumber + &quot;, &quot;</span>
+<span class="fc" id="L108">						+ this.postCode + &quot; &quot; + this.cityName + &quot;, &quot;</span>
+<span class="fc" id="L109">						+ this.country;</span>
+
+<span class="fc" id="L111">		return addressString;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>AllTests (12.12.2018 16:51:33)</div></body></html>

@@ -27,7 +27,7 @@ import org.mockito.Mockito;
 import com.google.gson.Gson;
 import model.Route;
 import servlets.RouteServlet;
-import test.data.Reader;
+import test.util.Reader;
 
 /**
  * 

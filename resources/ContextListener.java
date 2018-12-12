@@ -1,21 +1,9 @@
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.List;
-
-import util.Time;
-
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-
-import model.Location;
-import model.Route;
-import model.Users;
 
 /**
  * Application Lifecycle Listener implementation class ContextListener
@@ -53,7 +41,7 @@ public class ContextListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent context) {
 
-		// Decide on the db system directory: <userhome>/.addressbook/
+		// Decide on the db system directory: <userhome>/
 		String userHomeDir = System.getProperty("user.home", ".");
 		String systemDir = userHomeDir + "/.database";
 		// Set the db system directory.

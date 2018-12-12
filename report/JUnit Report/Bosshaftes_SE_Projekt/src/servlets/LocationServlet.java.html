@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>LocationServlet.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (12.12.2018 16:51:33)</a> &gt; <a href="../../index.html" class="el_group">Bosshaftes_SE_Projekt</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">servlets</a> &gt; <span class="el_source">LocationServlet.java</span></div><h1>LocationServlet.java</h1><pre class="source lang-java linenums">package servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import model.Address;
+import model.Feedback;
+import model.Location;
+import util.Time;
+
+/**
+ * Servlet implementation class LocationServlet - This servlet is responsible
+ * for reading location data from the database, creating new entries, deleting
+ * and updating entries, as well as reporting a location (different kind of
+ * update)
+ */
+@WebServlet(&quot;/LocationServlet&quot;)
+public class LocationServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public LocationServlet() {
+<span class="fc" id="L42">		super();</span>
+<span class="fc" id="L43">	}</span>
+
+	/**
+	 * Method to read location data from the database
+	 * 
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param type {String} - Type of Location (must be &quot;Kultur&quot; or &quot;Party&quot;)
+	 * @param boundNorthWestLat {Double} - Latitude of upper left corner of the map
+	 * @param boundNorthWestLong {Double} - Longitude of upper left corner of the map
+	 * @param boundSouthEastLat {Double} - Latitude of lower right corner of the map
+	 * @param boundSouthEastLong {Double} - Longitude of lower right corner of the map
+	 * @return {String} - JSONData with found locations; if no entries are found it returns an empty array []
+	 * @exception - Exception if type is null
+	 * @exception - Exception if type is neither &quot;Kultur&quot; nor &quot;Party&quot;
+	 */
+	private static String read(EntityManager em, String type, double boundNorthWestLat, double boundNorthWestLong,
+			double boundSouthEastLat, double boundSouthEastLong) throws Exception {
+
+		// check if required type parameter is set
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		if (type == null) {</span>
+<span class="fc" id="L63">			throw new Exception(&quot;Type darf nicht null sein!&quot;);</span>
+<span class="fc bfc" id="L64" title="All 4 branches covered.">		} else if (!(type.equals(&quot;Party&quot;) || type.equals(&quot;Kultur&quot;))) {</span>
+<span class="fc" id="L65">			throw new Exception(&quot;Type can only be \&quot;Party\&quot; or \&quot;Kultur\&quot;.&quot;);</span>
+		}
+
+		// Build query with given parameters
+<span class="fc" id="L69">		String selectQuery = &quot;SELECT l FROM Location l &quot; + &quot;WHERE l.type = '&quot; + type + &quot;'&quot; + &quot; AND l.latitude BETWEEN &quot;</span>
+<span class="fc" id="L70">				+ boundSouthEastLat + &quot; AND &quot; + boundNorthWestLat + &quot; AND l.longitude BETWEEN &quot; + boundNorthWestLong</span>
+<span class="fc" id="L71">				+ &quot; AND &quot; + boundSouthEastLong;</span>
+
+		// Select Location from database table
+<span class="fc" id="L74">		Query query = em.createQuery(selectQuery);</span>
+<span class="fc" id="L75">		List&lt;Location&gt; result = query.getResultList();</span>
+
+		String JSONData;
+
+		// check for empty resultList
+<span class="fc bfc" id="L80" title="All 2 branches covered.">		if (result.size() &gt; 0) {</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">			for (Location location : result) {</span>
+<span class="fc" id="L82">				location.setTime(new Time(location.getTimeString()));</span>
+<span class="fc" id="L83">				List&lt;String&gt; images = new ArrayList&lt;String&gt;();</span>
+				// convert pictures and data to JSON
+<span class="fc bfc" id="L85" title="All 2 branches covered.">				if (location.getPictures() != null) {</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">					for (byte[] picture : location.getPictures()) {</span>
+<span class="fc" id="L87">						String image64 = new String(picture, &quot;UTF-8&quot;);</span>
+<span class="fc" id="L88">						images.add(image64);</span>
+					}
+<span class="fc" id="L90">					location.setImages(images);</span>
+//					System.out.println(images);
+<span class="fc" id="L92">				} else {</span>
+<span class="fc" id="L93">					location.setImages(null);</span>
+				}
+			}
+			// Convert Data to JSON
+<span class="fc" id="L97">			GsonBuilder builder = new GsonBuilder();</span>
+<span class="fc" id="L98">			builder.excludeFieldsWithoutExposeAnnotation();</span>
+<span class="fc" id="L99">			Gson gson = builder.create();</span>
+<span class="fc" id="L100">			JSONData = gson.toJson(result);</span>
+<span class="fc" id="L101">		} else {</span>
+<span class="fc" id="L102">			JSONData = &quot;[]&quot;;</span>
+		}
+		// return results
+<span class="fc" id="L105">		return JSONData;</span>
+	}
+
+	/**
+	 * Method to create new locations in the database
+	 * 
+	 * @param locations {List&lt;Location&gt;} - List of locations that should be created
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @return {String} - &quot;Success&quot; if the locations are successfully created
+	 * @exception - Exception if one of the locations is already in the database
+	 */
+	private static String create(List&lt;Location&gt; locations, EntityManager em) throws Exception {
+		// Loop over Routes that should be created
+<span class="fc bfc" id="L118" title="All 2 branches covered.">		for (Location location : locations) {</span>
+
+			// find out if location already exists
+<span class="fc" id="L121">			String selectQuery = &quot;SELECT l from Location l&quot; + &quot; WHERE l.latitude = &quot; + location.getLatitude()</span>
+<span class="fc" id="L122">					+ &quot; AND l.longitude = &quot; + location.getLatitude();</span>
+<span class="fc" id="L123">			Query query = em.createQuery(selectQuery);</span>
+<span class="fc" id="L124">			List&lt;Location&gt; result = query.getResultList();</span>
+
+			// if the locations aren't already in the database, start persisting
+<span class="fc bfc" id="L127" title="All 2 branches covered.">			if (result.size() == 0) {</span>
+				
+				// Set Location Attributes
+<span class="fc" id="L130">				Location newLocation = new Location();</span>
+<span class="fc" id="L131">				newLocation.setName(location.getName());</span>
+<span class="fc" id="L132">				newLocation.setType(location.getType());</span>
+<span class="fc" id="L133">				newLocation.setTimeString(location.getTime().getTime());</span>
+<span class="fc" id="L134">				newLocation.setFeedback((List&lt;Feedback&gt;) new ArrayList&lt;Feedback&gt;());</span>
+<span class="fc" id="L135">				newLocation.setAddress(location.getAddress());</span>
+<span class="fc" id="L136">				newLocation.setLatitude(location.getLatitude());</span>
+<span class="fc" id="L137">				newLocation.setLongitude(location.getLongitude());</span>
+<span class="fc" id="L138">				newLocation.setTimesReported(0);</span>
+<span class="fc" id="L139">				newLocation.setDescription(location.getDescription());</span>
+<span class="fc" id="L140">				newLocation.setUserReports((List&lt;String&gt;) new ArrayList&lt;String&gt;());</span>
+
+				// Convert and save Images
+<span class="fc" id="L143">				List&lt;byte[]&gt; images = new ArrayList&lt;byte[]&gt;();</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">				if (location.getImages() != null) {</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">					for (String sBase64 : location.getImages()) {</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">						if (sBase64 != null) {</span>
+<span class="fc" id="L147">							System.out.println(sBase64);</span>
+<span class="fc" id="L148">							byte[] image = sBase64.getBytes(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L149">							images.add(image);</span>
+						}
+					}
+<span class="fc" id="L152">					newLocation.setPictures(images);</span>
+<span class="fc" id="L153">				} else {</span>
+<span class="fc" id="L154">					newLocation.setPictures(null);</span>
+				}
+				
+				// Persist Location
+<span class="fc" id="L158">				em.persist(newLocation);</span>
+<span class="fc" id="L159">			} else {</span>
+<span class="fc" id="L160">				throw new Exception(&quot;Location \&quot;&quot; + location.getName() + &quot;\&quot; exists already.&quot;);</span>
+			}
+		}
+<span class="fc" id="L163">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to delete locations from the database
+	 * 
+	 * @param locations {List&lt;Location&gt;} - List of locations that should be deleted
+	 * @param em [{EntityManager} - EntityManager manages database operations
+	 * @return {String} - &quot;Success&quot; if locations are successfully deleted
+	 * @exception - Exception if one location that should be deleted doesn't exist in the database
+	 */
+	private static String delete(List&lt;Location&gt; locations, EntityManager em) throws Exception {
+		// Loop over Locations that should be deleted
+<span class="fc bfc" id="L176" title="All 2 branches covered.">		for (Location location : locations) {</span>
+<span class="fc" id="L177">			Location result = em.find(Location.class, location.getId());</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">			if (result != null) {</span>
+<span class="fc" id="L179">				em.remove(result);</span>
+<span class="fc" id="L180">			} else {</span>
+<span class="fc" id="L181">				throw new Exception(&quot;Location \&quot;&quot; + location.getName() + &quot;\&quot; does not exist.&quot;);</span>
+			}
+		}
+<span class="fc" id="L184">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to update locations in the database; all information will be updated,
+	 * there is no check if only some attributes have changed
+	 * 
+	 * @param locations {List&lt;Location&gt;} - List of locations that should be updated
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @return {String} - &quot;Success&quot; if locations are successfully updated
+	 * @exception - Exception if one location that should be updated doesn't exist
+	 */
+	private static String update(List&lt;Location&gt; locations, EntityManager em) throws Exception {
+
+		// Loop over Locations that should be updated
+<span class="fc bfc" id="L199" title="All 2 branches covered.">		for (Location location : locations) {</span>
+<span class="fc" id="L200">			String selectQuery = &quot;SELECT l from Location l WHERE l.id = &quot; + location.getId();</span>
+<span class="fc" id="L201">			Query query = em.createQuery(selectQuery);</span>
+
+<span class="fc" id="L203">			List&lt;Location&gt; result = query.getResultList();</span>
+
+			// If location was found, it should be updated
+<span class="fc bfc" id="L206" title="All 2 branches covered.">			if (result.size() &gt; 0) {</span>
+<span class="fc" id="L207">				Location resultLocation = result.get(0);</span>
+<span class="fc" id="L208">				resultLocation.setName(location.getName());</span>
+<span class="fc" id="L209">				resultLocation.setTimeString(location.getTime().getTime());</span>
+<span class="fc" id="L210">				resultLocation.setType(location.getType());</span>
+<span class="fc" id="L211">				resultLocation.setLatitude(location.getLatitude());</span>
+<span class="fc" id="L212">				resultLocation.setLongitude(location.getLongitude());</span>
+<span class="fc" id="L213">				resultLocation.setDescription(location.getDescription());</span>
+
+				// Convert and update Images
+<span class="fc" id="L216">				List&lt;byte[]&gt; images = new ArrayList&lt;byte[]&gt;();</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">				if (location.getImages() != null) {</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">					for (String sBase64 : location.getImages()) {</span>
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">						if (sBase64 != null) {</span>
+<span class="fc" id="L220">							byte[] image = sBase64.getBytes(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L221">							images.add(image);</span>
+						}
+					}
+<span class="fc" id="L224">					resultLocation.setPictures(images);</span>
+<span class="fc" id="L225">				} else {</span>
+<span class="fc" id="L226">					resultLocation.setPictures(null);</span>
+				}
+
+				// update corresponding Address
+<span class="fc" id="L230">				Address address = location.getAddress();</span>
+<span class="fc" id="L231">				query = em.createQuery(&quot;SELECT a from Address a WHERE&quot; + &quot; a.id = &quot; + address.getId());</span>
+<span class="fc" id="L232">				List&lt;Address&gt; resultAddresses = query.getResultList();</span>
+
+<span class="fc bfc" id="L234" title="All 2 branches covered.">				if (resultAddresses.size() &gt; 0) {</span>
+<span class="fc" id="L235">					Address resultAddress = resultAddresses.get(0);</span>
+<span class="fc" id="L236">					resultAddress.setAddress(address);</span>
+<span class="fc" id="L237">				} else {</span>
+<span class="fc" id="L238">					em.persist(address);</span>
+<span class="fc" id="L239">					resultLocation.setAddress(address);</span>
+				}
+<span class="fc" id="L241">			} else {</span>
+<span class="fc" id="L242">				throw new Exception(&quot;Location \&quot;&quot; + location.getName() + &quot;\&quot; does not exist.&quot;);</span>
+			}
+		}
+<span class="fc" id="L245">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to update the timesReported counter of a location
+	 * 
+	 * @param locations {List&lt;Location&gt;} - List of locations that should be reported
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @return {String} - &quot;Success&quot; if timesReported was successfully updated
+	 * @exception - Exception if the location that should be reported doesn't exist
+	 */
+	private static String report(List&lt;Location&gt; locations, EntityManager em, HttpSession session) throws Exception {
+		// Loop over Locations that should be reported
+<span class="fc bfc" id="L258" title="All 2 branches covered.">		for (Location location : locations) {</span>
+<span class="fc" id="L259">			Query query = em.createQuery(&quot;SELECT l from Location l WHERE l.id = &quot; + location.getId());</span>
+<span class="fc" id="L260">			List&lt;Location&gt; result = query.getResultList();</span>
+
+			// If location was found, it should be updated
+<span class="fc bfc" id="L263" title="All 2 branches covered.">			if (result.size() &gt; 0) {</span>
+<span class="fc" id="L264">				Location resultLocation = result.get(0);</span>
+<span class="fc" id="L265">				int timesReported = resultLocation.getTimesReported();</span>
+
+<span class="fc bfc" id="L267" title="All 2 branches covered.">				for (String username : resultLocation.getUserReports()) {</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">					if (username.equals(session.getAttribute(&quot;username&quot;))) {</span>
+<span class="fc" id="L269">						throw new Exception(&quot;You have already reported this location.&quot;);</span>
+					}
+				}
+
+<span class="fc bfc" id="L273" title="All 2 branches covered.">				if (timesReported == 2) {</span>
+					// delete Location
+<span class="fc" id="L275">					List&lt;Location&gt; deleteLocations = new ArrayList&lt;Location&gt;();</span>
+<span class="fc" id="L276">					deleteLocations.add(location);</span>
+<span class="fc" id="L277">					delete(deleteLocations, em);</span>
+<span class="fc" id="L278">				} else {</span>
+<span class="fc" id="L279">					timesReported++;</span>
+<span class="fc" id="L280">					resultLocation.setTimesReported(timesReported);</span>
+<span class="fc" id="L281">					resultLocation.getUserReports().add((String) session.getAttribute(&quot;username&quot;));</span>
+				}
+
+<span class="fc" id="L284">			} else {</span>
+<span class="fc" id="L285">				throw new Exception(&quot;Location \&quot;&quot; + location.getName() + &quot;\&quot; does not exist.&quot;);</span>
+			}
+
+		}
+<span class="fc" id="L289">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		// retrieve EntityManagerFactory and create EntityManager
+<span class="fc" id="L300">		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute(&quot;emf&quot;);</span>
+<span class="fc" id="L301">		EntityManager em = emf.createEntityManager();</span>
+
+		// Define response
+		String res;
+
+		// read Data
+		try {
+			// retrieve all parameters
+<span class="fc" id="L309">			String paramType = request.getParameter(&quot;type&quot;);</span>
+<span class="fc" id="L310">			double paramBoundNorthWestLat = Double.valueOf(request.getParameter(&quot;boundNorthWestLat&quot;));</span>
+<span class="fc" id="L311">			double paramBoundNorthWestLong = Double.valueOf(request.getParameter(&quot;boundNorthWestLng&quot;));</span>
+<span class="fc" id="L312">			double paramBoundSouthEastLat = Double.valueOf(request.getParameter(&quot;boundSouthEastLat&quot;));</span>
+<span class="fc" id="L313">			double paramBoundSouthEastLong = Double.valueOf(request.getParameter(&quot;boundSouthEastLng&quot;));</span>
+
+			// read with parameters
+<span class="fc" id="L316">			res = read(em, paramType, paramBoundNorthWestLat, paramBoundNorthWestLong, paramBoundSouthEastLat,</span>
+<span class="fc" id="L317">					paramBoundSouthEastLong);</span>
+<span class="fc" id="L318">			response.setStatus(200);</span>
+<span class="fc" id="L319">		} catch (Exception e) {</span>
+			// send back error
+<span class="fc" id="L321">			response.setStatus(500);</span>
+<span class="fc" id="L322">			res = e.getMessage();</span>
+		}
+		// Send Response
+<span class="fc" id="L325">		response.setContentType(&quot;text/html; charset=UTF-8&quot;);</span>
+<span class="fc" id="L326">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L327">		PrintWriter writer = response.getWriter();</span>
+<span class="fc" id="L328">		writer.append(res);</span>
+<span class="fc" id="L329">		em.close();</span>
+<span class="fc" id="L330">	}</span>
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 * @exception Exception if user is not logged in
+	 */
+	@Override
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		// retrieve EntityManagerFactory, create EntityManager and retrieve data (= list
+		// of locations)
+<span class="fc" id="L342">		HttpSession session = request.getSession();</span>
+<span class="fc" id="L343">		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute(&quot;emf&quot;);</span>
+<span class="fc" id="L344">		EntityManager em = emf.createEntityManager();</span>
+<span class="fc" id="L345">		Gson gson = new Gson();</span>
+<span class="fc" id="L346">		List&lt;Location&gt; locations = gson.fromJson(request.getParameter(&quot;json&quot;), new TypeToken&lt;List&lt;Location&gt;&gt;() {</span>
+<span class="fc" id="L347">		}.getType());</span>
+<span class="fc" id="L348">		String res = &quot;&quot;;</span>
+<span class="fc" id="L349">		em.getTransaction().begin();</span>
+		try {
+<span class="fc bfc" id="L351" title="All 2 branches covered.">			if ((boolean) session.getAttribute(&quot;loggedin&quot;) != true) {</span>
+<span class="fc" id="L352">				throw new Exception(&quot;You are not logged in.&quot;);</span>
+			}
+			// get operation parameter and run the corresponding method
+<span class="pc bpc" id="L355" title="5 of 13 branches missed.">			switch (request.getParameter(&quot;operation&quot;)) {</span>
+			case &quot;update&quot;:
+<span class="fc" id="L357">				res = update(locations, em);</span>
+<span class="fc" id="L358">				break;</span>
+			case &quot;create&quot;:
+<span class="fc" id="L360">				res = create(locations, em);</span>
+<span class="fc" id="L361">				break;</span>
+			case &quot;delete&quot;:
+<span class="fc" id="L363">				res = delete(locations, em);</span>
+<span class="fc" id="L364">				break;</span>
+			case &quot;report&quot;:
+<span class="fc" id="L366">				res = report(locations, em, session);</span>
+				break;
+			}
+<span class="fc" id="L369">			response.setStatus(200);</span>
+<span class="fc" id="L370">			em.getTransaction().commit();</span>
+<span class="fc" id="L371">		} catch (Exception e) {</span>
+			// Create Error Response
+<span class="fc" id="L373">			response.setStatus(500);</span>
+<span class="fc" id="L374">			e.printStackTrace();</span>
+<span class="fc" id="L375">			res = e.getMessage();</span>
+<span class="fc" id="L376">			em.getTransaction().rollback();</span>
+		}
+		// Send back Response
+<span class="fc" id="L379">		response.setContentType(&quot;text/html; charset=UTF-8&quot;);</span>
+<span class="fc" id="L380">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L381">		PrintWriter writer = response.getWriter();</span>
+<span class="fc" id="L382">		writer.append(res);</span>
+<span class="fc" id="L383">		em.close();</span>
+<span class="fc" id="L384">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>AllTests (12.12.2018 16:51:33)</div></body></html>

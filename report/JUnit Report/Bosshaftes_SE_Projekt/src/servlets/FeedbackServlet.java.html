@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>FeedbackServlet.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (12.12.2018 16:51:33)</a> &gt; <a href="../../index.html" class="el_group">Bosshaftes_SE_Projekt</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">servlets</a> &gt; <span class="el_source">FeedbackServlet.java</span></div><h1>FeedbackServlet.java</h1><pre class="source lang-java linenums">package servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import model.Feedback;
+import model.Location;
+import model.Route;
+import model.Users;
+
+/**
+ * Servlet implementation class FeedbackServlet
+ */
+@WebServlet(&quot;/FeedbackServlet&quot;)
+public class FeedbackServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public FeedbackServlet() {
+<span class="fc" id="L38">		super();</span>
+<span class="fc" id="L39">	}</span>
+
+	/**
+	 * Method to create new feedback for a route
+	 * 
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of route where feedback should be added
+	 * @param feedbackList {List&lt;Feedback&gt;} - List of feedback that should be created
+	 * @param session {HttpSession} - Needed to retrieve the user that creates the feedback
+	 * @return {String} - &quot;Success&quot; if route feedback has been created successfully
+	 * @exception - Exception if corresponding route is not found
+	 * @exception - Exception if user has already given feedback for this route
+	 */
+	private static String createRouteFeedback(EntityManager em, int id, List&lt;Feedback&gt; feedbackList,
+			HttpSession session) throws Exception {
+
+		// get corresponding route, check if it exists
+<span class="fc" id="L56">		Route route = em.find(Route.class, id);</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">		if (route == null) {</span>
+<span class="fc" id="L58">			throw new Exception(&quot;The corresponding route does not exist.&quot;);</span>
+		}
+
+		// get corresponding user
+<span class="fc" id="L62">		String username = (String) session.getAttribute(&quot;username&quot;);</span>
+<span class="fc" id="L63">		Query query = em.createQuery(&quot;SELECT u from Users u WHERE u.username = '&quot; + username + &quot;'&quot;);</span>
+<span class="fc" id="L64">		List&lt;Users&gt; result = query.getResultList();</span>
+
+<span class="fc bfc" id="L66" title="All 2 branches covered.">		if (result.size() &gt; 0) {</span>
+<span class="fc" id="L67">			Users user = result.get(0);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">			for (Feedback routeFeedback : route.getFeedback()) {</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">				if (routeFeedback.getAuthor().getUsername().equals((String) session.getAttribute(&quot;username&quot;))) {</span>
+<span class="fc" id="L70">					throw new Exception(&quot;This user has already given feedback for this route.&quot;);</span>
+				}
+			}
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">			for (Feedback feedback : feedbackList) {</span>
+				// persist feedback
+<span class="fc" id="L76">				em.persist(feedback);</span>
+<span class="fc" id="L77">				feedback.setAuthor(user);</span>
+<span class="fc" id="L78">				route.getFeedback().add(feedback);</span>
+			}
+<span class="fc" id="L80">			route.setAvgRating(updateAvgRouteRating(route));</span>
+<span class="fc" id="L81">		} else {</span>
+<span class="fc" id="L82">			throw new Exception(&quot;User \&quot;&quot; + username + &quot;\&quot; does not exist.&quot;);</span>
+		}
+<span class="fc" id="L84">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to create feedback for a location
+	 * 
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of Location where feedback should be added
+	 * @param feedbackList {List&lt;Feedback&gt;} - List of feedback that should be created
+	 * @param session {HttpSession} - Needed to retrieve the user that creates the feedback
+	 * @return {String} - &quot;Success&quot; if location feedback has been created successfully
+	 * @exception - Exception if corresponding location is not found
+	 * @exception - Exception if user has already given feedback for this location
+	 */
+	private static String createLocationFeedback(EntityManager em, int id, List&lt;Feedback&gt; feedbackList,
+			HttpSession session) throws Exception {
+
+		// get corresponding location, check if it exists
+<span class="fc" id="L102">		Location location = em.find(Location.class, id);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">		if (location == null) {</span>
+<span class="fc" id="L104">			throw new Exception(&quot;The corresponding location does not exist.&quot;);</span>
+		}
+
+		// get corresponding user
+<span class="fc" id="L108">		String username = (String) session.getAttribute(&quot;username&quot;);</span>
+<span class="fc" id="L109">		Query query = em.createQuery(&quot;SELECT u from Users u WHERE u.username = '&quot; + username + &quot;'&quot;);</span>
+<span class="fc" id="L110">		List&lt;Users&gt; result = query.getResultList();</span>
+
+<span class="fc bfc" id="L112" title="All 2 branches covered.">		if (result.size() &gt; 0) {</span>
+
+<span class="fc bfc" id="L114" title="All 2 branches covered.">			for (Feedback locationFeedback : location.getFeedback()) {</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">				if (locationFeedback.getAuthor().getUsername().equals((String) session.getAttribute(&quot;username&quot;))) {</span>
+<span class="fc" id="L116">					throw new Exception(&quot;This user has already given feedback for this route.&quot;);</span>
+				}
+			}
+
+<span class="fc" id="L120">			Users user = result.get(0);</span>
+
+<span class="fc bfc" id="L122" title="All 2 branches covered.">			for (Feedback feedback : feedbackList) {</span>
+				// persist location
+<span class="fc" id="L124">				em.persist(feedback);</span>
+<span class="fc" id="L125">				feedback.setAuthor(user);</span>
+<span class="fc" id="L126">				location.getFeedback().add(feedback);</span>
+			}
+<span class="fc" id="L128">			location.setAvgRating(updateAvgLocationRating(location));</span>
+<span class="fc" id="L129">		} else {</span>
+<span class="fc" id="L130">			throw new Exception(&quot;User \&quot;&quot; + username + &quot;\&quot; does not exist.&quot;);</span>
+		}
+<span class="fc" id="L132">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to delete feedback of a route
+	 * 
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of route where feedback should be deleted
+	 * @param feedbackList {List&lt;Feedback&gt;} - List of feedback that should be deleted
+	 * @param session {HttpSession} - Needed to retrieve the user that deletes the feedback
+	 * @return {String} - &quot;Success&quot; if route feedback has been deleted successfully
+	 * @exception - Exception if corresponding route doesn't exist
+	 * @exception - Exception if logged in user != author of feedback
+	 */
+	private static String deleteRouteFeedback(EntityManager em, int id, List&lt;Feedback&gt; feedbackList,
+			HttpSession session) throws Exception {
+
+		// get corresponding route, check if it exists
+<span class="fc" id="L150">		Route route = em.find(Route.class, id);</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">		if (route == null) {</span>
+<span class="fc" id="L152">			throw new Exception(&quot;The corresponding route does not exist.&quot;);</span>
+		}
+
+		// get corresponding user
+<span class="fc" id="L156">		String username = (String) session.getAttribute(&quot;username&quot;);</span>
+<span class="fc" id="L157">		Query query = em.createQuery(&quot;SELECT u from Users u WHERE u.username = '&quot; + username + &quot;'&quot;);</span>
+<span class="fc" id="L158">		List&lt;Users&gt; result = query.getResultList();</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">		if (result.size() &gt; 0) {</span>
+<span class="fc" id="L160">			Users user = result.get(0);</span>
+
+<span class="fc bfc" id="L162" title="All 2 branches covered.">			for (Feedback feedback : feedbackList) {</span>
+
+				// get feedback
+<span class="fc" id="L165">				feedback = em.find(Feedback.class, feedback.getId());</span>
+
+				// check if the feedback belongs to the user
+<span class="fc bfc" id="L168" title="All 2 branches covered.">				if (feedback.getAuthor().getUsername().equals(user.getUsername())) {</span>
+
+<span class="fc" id="L170">					List&lt;Feedback&gt; ratings = route.getFeedback();</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">					for (Iterator&lt;Feedback&gt; iter = ratings.iterator(); iter.hasNext();) {</span>
+<span class="fc" id="L172">						Feedback rating = iter.next();</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">						if (rating.getId() == feedback.getId()) {</span>
+<span class="fc" id="L174">							iter.remove();</span>
+						}
+					}
+					// if everything went fine, delete feedback
+<span class="fc" id="L178">					em.remove(feedback);</span>
+<span class="fc" id="L179">				} else {</span>
+<span class="fc" id="L180">					throw new Exception(&quot;You can only delete your own feedback.&quot;);</span>
+				}
+			}
+<span class="fc" id="L183">			route.setAvgRating(updateAvgRouteRating(route));</span>
+<span class="fc" id="L184">		} else {</span>
+<span class="fc" id="L185">			throw new Exception(&quot;User \&quot;&quot; + username + &quot;\&quot; does not exist.&quot;);</span>
+		}
+<span class="fc" id="L187">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to delete feedback of a location
+	 * 
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of location where feedback should be deleted
+	 * @param feedbackList {List&lt;Feedback&gt;} - List of feedback that should be deleted
+	 * @param session {HttpSession} - Needed to retrieve the user that deletes the feedback
+	 * @return {String} - &quot;Success&quot; if location feedback has been deleted successfully
+	 * @exception - Exception if corresponding location doesn't exist
+	 * @exception - Exception if logged in user != author of feedback
+	 */
+	private static String deleteLocationFeedback(EntityManager em, int id, List&lt;Feedback&gt; feedbackList,
+			HttpSession session) throws Exception {
+
+		// get corresponding location, check if it exists
+<span class="fc" id="L205">		Location location = em.find(Location.class, id);</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">		if (location == null) {</span>
+<span class="fc" id="L207">			throw new Exception(&quot;The corresponding location does not exist.&quot;);</span>
+		}
+
+		// get corresponding user
+<span class="fc" id="L211">		String username = (String) session.getAttribute(&quot;username&quot;);</span>
+<span class="fc" id="L212">		Query query = em.createQuery(&quot;SELECT u from Users u WHERE u.username = '&quot; + username + &quot;'&quot;);</span>
+<span class="fc" id="L213">		List&lt;Users&gt; result = query.getResultList();</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">		if (result.size() &gt; 0) {</span>
+<span class="fc" id="L215">			Users user = result.get(0);</span>
+
+<span class="fc bfc" id="L217" title="All 2 branches covered.">			for (Feedback feedback : feedbackList) {</span>
+				// get feedback
+<span class="fc" id="L219">				feedback = em.find(Feedback.class, feedback.getId());</span>
+
+				// check if the feedback belongs to the user
+<span class="fc bfc" id="L222" title="All 2 branches covered.">				if (feedback.getAuthor().getUsername().equals(user.getUsername())) {</span>
+<span class="fc" id="L223">					List&lt;Feedback&gt; ratings = location.getFeedback();</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">					for (Iterator&lt;Feedback&gt; iter = ratings.iterator(); iter.hasNext();) {</span>
+<span class="fc" id="L225">						Feedback rating = iter.next();</span>
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">						if (rating.getId() == feedback.getId()) {</span>
+<span class="fc" id="L227">							iter.remove();</span>
+						}
+					}
+					// if everything went fine, delete feedback
+<span class="fc" id="L231">					em.remove(feedback);</span>
+<span class="fc" id="L232">				} else {</span>
+<span class="fc" id="L233">					throw new Exception(&quot;You can only delete your own feedback.&quot;);</span>
+				}
+			}
+<span class="fc" id="L236">			location.setAvgRating(updateAvgLocationRating(location));</span>
+<span class="fc" id="L237">		} else {</span>
+<span class="fc" id="L238">			throw new Exception(&quot;User \&quot;&quot; + username + &quot;\&quot; does not exist.&quot;);</span>
+		}
+<span class="fc" id="L240">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to update feedback of a route
+	 * 
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of route where feedback should be updated
+	 * @param feedbackList {List&lt;Feedback&gt;} - List of feedback that should be deleted
+	 * @param session {HttpSession} - Needed to retrieve the user that deletes the feedback
+	 * @return {String} - &quot;Success&quot; if route feedback has been updated successfully
+	 * @exception - Exception if corresponding route doesn't exist
+	 * @exception - Exception if logged in user != author of feedback
+	 */
+	private static String updateRouteFeedback(EntityManager em, int id, List&lt;Feedback&gt; feedbackList,
+			HttpSession session) throws Exception {
+
+		// get corresponding route, check if it exists
+<span class="fc" id="L258">		Route route = em.find(Route.class, id);</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">		if (route == null) {</span>
+<span class="fc" id="L260">			throw new Exception(&quot;The corresponding route does not exist.&quot;);</span>
+		}
+
+		// get corresponding user
+<span class="fc" id="L264">		String username = (String) session.getAttribute(&quot;username&quot;);</span>
+<span class="fc" id="L265">		Query query = em.createQuery(&quot;SELECT u from Users u WHERE u.username = '&quot; + username + &quot;'&quot;);</span>
+<span class="fc" id="L266">		List&lt;Users&gt; result = query.getResultList();</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">		if (result.size() &gt; 0) {</span>
+<span class="fc" id="L268">			Users user = result.get(0);</span>
+
+<span class="fc bfc" id="L270" title="All 2 branches covered.">			for (Feedback feedback : feedbackList) {</span>
+				// check if the feedback belongs to the user
+<span class="fc bfc" id="L272" title="All 2 branches covered.">				if (feedback.getAuthor().getUsername().equals(user.getUsername())) {</span>
+					// if yes, update feedback
+<span class="fc" id="L274">					Feedback resultFeedback = em.find(Feedback.class, feedback.getId());</span>
+<span class="fc" id="L275">					resultFeedback.setComment(feedback.getComment());</span>
+<span class="fc" id="L276">					resultFeedback.setRating(feedback.getRating());</span>
+<span class="fc" id="L277">				} else {</span>
+<span class="fc" id="L278">					throw new Exception(&quot;You can only modify your own feedback.&quot;);</span>
+				}
+			}
+<span class="fc" id="L281">			route.setAvgRating(updateAvgRouteRating(route));</span>
+<span class="fc" id="L282">		} else {</span>
+<span class="fc" id="L283">			throw new Exception(&quot;User \&quot;&quot; + username + &quot;\&quot; does not exist.&quot;);</span>
+		}
+<span class="fc" id="L285">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to update feedback of a location
+	 * 
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of location where feedback should be updated
+	 * @param feedbackList {List&lt;Feedback&gt;} - List of feedback that should be deleted
+	 * @param session {HttpSession} - Needed to retrieve the user that updates the feedback
+	 * @return {String} - &quot;Success&quot; if location feedback has been updated successfully
+	 * @exception - Exception if corresponding location doesn't exist
+	 * @exception - Exception if logged in user != author of feedback
+	 */
+	private static String updateLocationFeedback(EntityManager em, int id, List&lt;Feedback&gt; feedbackList,
+			HttpSession session) throws Exception {
+
+		// get corresponding location, check if it exists
+<span class="fc" id="L303">		Location location = em.find(Location.class, id);</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">		if (location == null) {</span>
+<span class="fc" id="L305">			throw new Exception(&quot;The corresponding location does not exist.&quot;);</span>
+		}
+
+		// get corresponding user
+<span class="fc" id="L309">		String username = (String) session.getAttribute(&quot;username&quot;);</span>
+<span class="fc" id="L310">		Query query = em.createQuery(&quot;SELECT u from Users u WHERE u.username = '&quot; + username + &quot;'&quot;);</span>
+<span class="fc" id="L311">		List&lt;Users&gt; result = query.getResultList();</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">		if (result.size() &gt; 0) {</span>
+
+<span class="fc" id="L314">			Users user = result.get(0);</span>
+
+<span class="fc bfc" id="L316" title="All 2 branches covered.">			for (Feedback feedback : feedbackList) {</span>
+				// check if the feedback belongs to the user
+<span class="fc bfc" id="L318" title="All 2 branches covered.">				if (feedback.getAuthor().getUsername().equals(user.getUsername())) {</span>
+					// if yes, update feedback
+<span class="fc" id="L320">					Feedback resultFeedback = em.find(Feedback.class, feedback.getId());</span>
+<span class="fc" id="L321">					resultFeedback.setComment(feedback.getComment());</span>
+<span class="fc" id="L322">					resultFeedback.setRating(feedback.getRating());</span>
+<span class="fc" id="L323">				} else {</span>
+<span class="fc" id="L324">					throw new Exception(&quot;You can only modify your own feedback.&quot;);</span>
+				}
+			}
+<span class="fc" id="L327">			location.setAvgRating(updateAvgLocationRating(location));</span>
+<span class="fc" id="L328">		} else {</span>
+<span class="fc" id="L329">			throw new Exception(&quot;User \&quot;&quot; + username + &quot;\&quot; does not exist.&quot;);</span>
+		}
+<span class="fc" id="L331">		return &quot;Success&quot;;</span>
+	}
+
+	/**
+	 * Method to calculate the new average rating of a route as soon as anything has
+	 * changed
+	 * 
+	 * @param route {Route} - Route of which the average rating should be updated
+	 * @return avgRating {Double} - Returns new average rating of the route
+	 * @exception - Exception when a wrong number format is used
+	 */
+	private static double updateAvgRouteRating(Route route) throws Exception {
+		// get current feedback from route
+<span class="fc" id="L344">		List&lt;Feedback&gt; routeFeedback = route.getFeedback();</span>
+<span class="fc" id="L345">		double avgRating = 0;</span>
+
+		// update avg rating
+<span class="pc bpc" id="L348" title="1 of 4 branches missed.">		if (routeFeedback != null &amp;&amp; routeFeedback.size() &gt; 0) {</span>
+<span class="fc bfc" id="L349" title="All 2 branches covered.">			for (Feedback feedback : routeFeedback) {</span>
+<span class="fc" id="L350">				avgRating = avgRating + feedback.getRating();</span>
+			}
+<span class="fc" id="L352">			avgRating = avgRating / routeFeedback.size();</span>
+<span class="fc" id="L353">			avgRating = Math.round(avgRating * Math.pow(10, 1)) / Math.pow(10, 1);</span>
+<span class="fc" id="L354">		} else {</span>
+<span class="fc" id="L355">			avgRating = 3;</span>
+		}
+<span class="fc" id="L357">		return avgRating;</span>
+	}
+
+	/**
+	 * Method to calculate the new average rating of a location as soon as anything
+	 * has changed
+	 * 
+	 * @param location {Location} - Location of which the average rating should be updated
+	 * @return avgRating {Double} - Returns new average rating of the location
+	 * @exception - Exception when a wrong number format is used
+	 */
+	private static double updateAvgLocationRating(Location location) throws Exception {
+		// get current feedback from route
+<span class="fc" id="L370">		List&lt;Feedback&gt; locationFeedback = location.getFeedback();</span>
+<span class="fc" id="L371">		double avgRating = 0;</span>
+
+		// update avg rating
+<span class="pc bpc" id="L374" title="1 of 4 branches missed.">		if (locationFeedback != null &amp;&amp; locationFeedback.size() &gt; 0) {</span>
+<span class="fc bfc" id="L375" title="All 2 branches covered.">			for (Feedback feedback : locationFeedback) {</span>
+<span class="fc" id="L376">				avgRating = avgRating + feedback.getRating();</span>
+			}
+<span class="fc" id="L378">			avgRating = avgRating / locationFeedback.size();</span>
+<span class="fc" id="L379">			avgRating = Math.round(avgRating * Math.pow(10, 1)) / Math.pow(10, 1);</span>
+<span class="fc" id="L380">		} else {</span>
+<span class="fc" id="L381">			avgRating = 3;</span>
+		}
+<span class="fc" id="L383">		return avgRating;</span>
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 * @exception - Exception if user is not logged in
+	 * @exception - Exception if type is neither &quot;Route&quot; nor &quot;Location&quot;
+	 */
+	@Override
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// retrieve EntityManagerFactory, create EntityManager and retrieve data
+<span class="fc" id="L395">		HttpSession session = request.getSession();</span>
+<span class="fc" id="L396">		EntityManagerFactory emf = (EntityManagerFactory) getServletContext().getAttribute(&quot;emf&quot;);</span>
+<span class="fc" id="L397">		EntityManager em = emf.createEntityManager();</span>
+<span class="fc" id="L398">		String JSONData = request.getParameter(&quot;json&quot;);</span>
+<span class="fc" id="L399">		Gson gson = new Gson();</span>
+<span class="fc" id="L400">		List&lt;Feedback&gt; feedbackList = gson.fromJson(JSONData, new TypeToken&lt;List&lt;Feedback&gt;&gt;() {</span>
+<span class="fc" id="L401">		}.getType());</span>
+<span class="fc" id="L402">		String res = &quot;&quot;;</span>
+
+<span class="fc" id="L404">		String type = request.getParameter(&quot;type&quot;);</span>
+<span class="fc" id="L405">		int id = Integer.parseInt(request.getParameter(&quot;id&quot;));</span>
+
+		try {
+<span class="fc" id="L408">			em.getTransaction().begin();</span>
+<span class="fc bfc" id="L409" title="All 2 branches covered.">			if ((boolean) session.getAttribute(&quot;loggedin&quot;) != true) {</span>
+<span class="fc" id="L410">				throw new Exception(&quot;You are not logged in.&quot;);</span>
+			}
+<span class="fc bfc" id="L412" title="All 2 branches covered.">			if (type.equals(&quot;Route&quot;)) {</span>
+<span class="pc bpc" id="L413" title="4 of 10 branches missed.">				switch (request.getParameter(&quot;operation&quot;)) {</span>
+				case &quot;update&quot;:
+<span class="fc" id="L415">					res = updateRouteFeedback(em, id, feedbackList, session);</span>
+<span class="fc" id="L416">					break;</span>
+				case &quot;create&quot;:
+<span class="fc" id="L418">					res = createRouteFeedback(em, id, feedbackList, session);</span>
+<span class="fc" id="L419">					break;</span>
+				case &quot;delete&quot;:
+<span class="fc" id="L421">					res = deleteRouteFeedback(em, id, feedbackList, session);</span>
+					break;
+				}
+<span class="fc bfc" id="L424" title="All 2 branches covered.">			} else if (type.equals(&quot;Location&quot;)) {</span>
+<span class="pc bpc" id="L425" title="4 of 10 branches missed.">				switch (request.getParameter(&quot;operation&quot;)) {</span>
+				case &quot;update&quot;:
+<span class="fc" id="L427">					res = updateLocationFeedback(em, id, feedbackList, session);</span>
+<span class="fc" id="L428">					break;</span>
+				case &quot;create&quot;:
+<span class="fc" id="L430">					res = createLocationFeedback(em, id, feedbackList, session);</span>
+<span class="fc" id="L431">					break;</span>
+				case &quot;delete&quot;:
+<span class="fc" id="L433">					res = deleteLocationFeedback(em, id, feedbackList, session);</span>
+					break;
+				}
+<span class="fc" id="L436">			} else {</span>
+<span class="fc" id="L437">				throw new Exception(&quot;Type can only be \&quot;Route\&quot; or \&quot;Location\&quot;.&quot;);</span>
+			}
+<span class="fc" id="L439">			em.getTransaction().commit();</span>
+<span class="fc" id="L440">			response.setStatus(200);</span>
+<span class="fc" id="L441">		} catch (Exception e) {</span>
+			// send back error
+<span class="fc" id="L443">			response.setStatus(500);</span>
+<span class="fc" id="L444">			res = e.getMessage();</span>
+<span class="fc" id="L445">			em.getTransaction().rollback();</span>
+		}
+<span class="fc" id="L447">		response.setContentType(&quot;text/html; charset=UTF-8&quot;);</span>
+<span class="fc" id="L448">		response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L449">		PrintWriter writer = response.getWriter();</span>
+<span class="fc" id="L450">		writer.append(res);</span>
+<span class="fc" id="L451">		em.close();</span>
+<span class="fc" id="L452">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>AllTests (12.12.2018 16:51:33)</div></body></html>
