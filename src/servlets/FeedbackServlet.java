@@ -41,13 +41,13 @@ public class FeedbackServlet extends HttpServlet {
 	/**
 	 * Method to create new feedback for a route
 	 * 
-	 * @param em           EntityManager manages database operations
-	 * @param id           Id of route where feedback should be added
-	 * @param feedbackList List of feedback that should be created
-	 * @param session      Needed to retrieve the user that creates the feedback
-	 * @return "Success" if route feedback has been created successfully
-	 * @exception Exception if corresponding route is not found
-	 * @exception Exception if user has already given feedback for this route
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of route where feedback should be added
+	 * @param feedbackList {List<Feedback>} - List of feedback that should be created
+	 * @param session {HttpSession} - Needed to retrieve the user that creates the feedback
+	 * @return {String} - "Success" if route feedback has been created successfully
+	 * @exception - Exception if corresponding route is not found
+	 * @exception - Exception if user has already given feedback for this route
 	 */
 	private static String createRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
 			HttpSession session) throws Exception {
@@ -87,13 +87,13 @@ public class FeedbackServlet extends HttpServlet {
 	/**
 	 * Method to create feedback for a location
 	 * 
-	 * @param em           EntityManager manages database operations
-	 * @param id           Id of location where feedback should be added
-	 * @param feedbackList List of feedback that should be created
-	 * @param session      Needed to retrieve the user that creates the feedback
-	 * @return "Success" if location feedback has been created successfully
-	 * @exception Exception if corresponding location is not found
-	 * @exception Exception if user has already given feedback for this location
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of Location where feedback should be added
+	 * @param feedbackList {List<Feedback>} - List of feedback that should be created
+	 * @param session {HttpSession} - Needed to retrieve the user that creates the feedback
+	 * @return {String} - "Success" if location feedback has been created successfully
+	 * @exception - Exception if corresponding location is not found
+	 * @exception - Exception if user has already given feedback for this location
 	 */
 	private static String createLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
 			HttpSession session) throws Exception {
@@ -135,13 +135,13 @@ public class FeedbackServlet extends HttpServlet {
 	/**
 	 * Method to delete feedback of a route
 	 * 
-	 * @param em           EntityManager manages database operations
-	 * @param id           Id of route where feedback should be deleted
-	 * @param feedbackList List of feedback that should be deleted
-	 * @param session      Needed to retrieve the user that deletes the feedback
-	 * @return "Success" if route feedback has been deleted successfully
-	 * @exception Exception if corresponding route doesn't exist
-	 * @exception Exception if logged in user != author of feedback
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of route where feedback should be deleted
+	 * @param feedbackList {List<Feedback>} - List of feedback that should be deleted
+	 * @param session {HttpSession} - Needed to retrieve the user that deletes the feedback
+	 * @return {String} - "Success" if route feedback has been deleted successfully
+	 * @exception - Exception if corresponding route doesn't exist
+	 * @exception - Exception if logged in user != author of feedback
 	 */
 	private static String deleteRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
 			HttpSession session) throws Exception {
@@ -190,13 +190,13 @@ public class FeedbackServlet extends HttpServlet {
 	/**
 	 * Method to delete feedback of a location
 	 * 
-	 * @param em           EntityManager manages database operations
-	 * @param id           Id of location where feedback should be deleted
-	 * @param feedbackList List of feedback that should be deleted
-	 * @param session      Needed to retrieve the user that deletes the feedback
-	 * @return "Success" if location feedback has been deleted successfully
-	 * @exception Exception if corresponding location doesn't exist
-	 * @exception Exception if logged in user != author of feedback
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of location where feedback should be deleted
+	 * @param feedbackList {List<Feedback>} - List of feedback that should be deleted
+	 * @param session {HttpSession} - Needed to retrieve the user that deletes the feedback
+	 * @return {String} - "Success" if location feedback has been deleted successfully
+	 * @exception - Exception if corresponding location doesn't exist
+	 * @exception - Exception if logged in user != author of feedback
 	 */
 	private static String deleteLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
 			HttpSession session) throws Exception {
@@ -243,13 +243,13 @@ public class FeedbackServlet extends HttpServlet {
 	/**
 	 * Method to update feedback of a route
 	 * 
-	 * @param em           EntityManager manages database operations
-	 * @param id           Id of route where feedback should be updated
-	 * @param feedbackList List of feedback that should be updated
-	 * @param session      Needed to retrieve the user that updates the feedback
-	 * @return "Success" if route feedback has been updated successfully
-	 * @exception Exception if corresponding route doesn't exist
-	 * @exception Exception if logged in user != author of feedback
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of route where feedback should be updated
+	 * @param feedbackList {List<Feedback>} - List of feedback that should be deleted
+	 * @param session {HttpSession} - Needed to retrieve the user that deletes the feedback
+	 * @return {String} - "Success" if route feedback has been updated successfully
+	 * @exception - Exception if corresponding route doesn't exist
+	 * @exception - Exception if logged in user != author of feedback
 	 */
 	private static String updateRouteFeedback(EntityManager em, int id, List<Feedback> feedbackList,
 			HttpSession session) throws Exception {
@@ -288,13 +288,13 @@ public class FeedbackServlet extends HttpServlet {
 	/**
 	 * Method to update feedback of a location
 	 * 
-	 * @param em           EntityManager manages database operations
-	 * @param id           Id of location where feedback should be updated
-	 * @param feedbackList List of feedback that should be updated
-	 * @param session      Needed to retrieve the user that updates the feedback
-	 * @return "Success" if location feedback has been updated successfully
-	 * @exception Exception if corresponding location doesn't exist
-	 * @exception Exception if logged in user != author of feedback
+	 * @param em {EntityManager} - EntityManager manages database operations
+	 * @param id {Integer} - Id of location where feedback should be updated
+	 * @param feedbackList {List<Feedback>} - List of feedback that should be deleted
+	 * @param session {HttpSession} - Needed to retrieve the user that updates the feedback
+	 * @return {String} - "Success" if location feedback has been updated successfully
+	 * @exception - Exception if corresponding location doesn't exist
+	 * @exception - Exception if logged in user != author of feedback
 	 */
 	private static String updateLocationFeedback(EntityManager em, int id, List<Feedback> feedbackList,
 			HttpSession session) throws Exception {
@@ -335,9 +335,9 @@ public class FeedbackServlet extends HttpServlet {
 	 * Method to calculate the new average rating of a route as soon as anything has
 	 * changed
 	 * 
-	 * @param route Route of which the average rating should be updated
-	 * @return avgRating Returns new average rating of the route
-	 * @exception Exception when a wrong number format is used
+	 * @param route {Route} - Route of which the average rating should be updated
+	 * @return avgRating {Double} - Returns new average rating of the route
+	 * @exception - Exception when a wrong number format is used
 	 */
 	private static double updateAvgRouteRating(Route route) throws Exception {
 		// get current feedback from route
@@ -361,9 +361,9 @@ public class FeedbackServlet extends HttpServlet {
 	 * Method to calculate the new average rating of a location as soon as anything
 	 * has changed
 	 * 
-	 * @param location Location of which the average rating should be updated
-	 * @return avgRating Returns new average rating of the location
-	 * @exception Exception when a wrong number format is used
+	 * @param location {Location} - Location of which the average rating should be updated
+	 * @return avgRating {Double} - Returns new average rating of the location
+	 * @exception - Exception when a wrong number format is used
 	 */
 	private static double updateAvgLocationRating(Location location) throws Exception {
 		// get current feedback from route
@@ -386,8 +386,8 @@ public class FeedbackServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
-	 * @exception Exception if user is not logged in
-	 * @exception Exception if type is neither "Route" nor "Location"
+	 * @exception - Exception if user is not logged in
+	 * @exception - Exception if type is neither "Route" nor "Location"
 	 */
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
