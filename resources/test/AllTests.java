@@ -11,6 +11,11 @@ import test.servlets.TestRouteServlet;
 import test.servlets.TestUserSessionServlet;
 import test.util.TestTimeClass;
 
+/**
+ * 
+ * Test Suite to run all Test Classes at once and to build the code coverage.
+ *
+ */
 @RunWith(Suite.class)
 @SuiteClasses({
 	TestJPAClasses.class,
