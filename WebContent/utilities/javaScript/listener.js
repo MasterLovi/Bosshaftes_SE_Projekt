@@ -40,6 +40,7 @@ $(document).ready(function(){
 	var on = true;
 	var stars = ["star1", "star2", "star3", "star4", "star5"];
 	
+	// Activate and Deactivate stars based on user click
 	id = $(this).attr("id");
 	for(var i = 0; i < stars.length; i++){
 		if(stars[i] == id){

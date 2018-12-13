@@ -929,3 +929,40 @@ function getUserRoutes(sType, userId) {
 		}
 	});
 }
+
+function changeRouteName(){
+	var route;
+	
+	var id = $("#manageRouteForm select[name=routes]");
+	
+	$.each(userRoutes, function(i,v) {
+		if (id == v.id) {
+			route = v;
+			v.name = $("#modifiedRouteName").val()
+			return;
+		}
+	});
+	
+	route.name = $("#modifiedRouteName").val();
+	
+	var jsonArray = [route];
+	
+	$.ajax({
+		url: "RouteServlet",
+		type: "POST",
+		data: {
+			operation: "update",
+			json: JSON.stringify(jsonArray)
+		},
+		success: function(response) {
+			// Unload + Status
+			getUserRoutes($("#currentAction").val(), $("#userId").val())
+			loadUserRoutePopup();
+			sendStatusMessage("Name wurde erfolgreich geändert", "green");
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+	
+}

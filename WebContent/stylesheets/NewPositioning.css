@@ -510,6 +510,17 @@ td .inputSubmit{
 	
 }
 
+#editRouteName{
+	position: relative;
+	left: 95%;
+	cursor: pointer;
+}
+
+#modifiedRouteName{
+	margin-bottom: 10px;
+	width: 85%;
+}
+
 .absolute{
 	position: absolute;
 }
@@ -762,10 +773,12 @@ td .inputSubmit{
 
 
 .red{
+	vertical-align: middle;
 	color: red;
 }
 
 .green{
+	vertical-align: middle;
 	color: green;
 }
 

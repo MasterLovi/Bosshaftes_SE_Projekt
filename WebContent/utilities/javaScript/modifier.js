@@ -1019,3 +1019,47 @@ function calculateAvgRating(obj) {
 		return ratingTotal / elementCount;
 	}
 }
+
+var prevRouteContent;
+
+function confirmationNameChange(routeId){
+	var element;
+	var route;
+	
+	$.each(userRoutes, function(i,v) {
+		if (v.id == routeId) {
+			route = v;
+			return;
+		}
+	});
+	
+	element = $("#editNameWrapper");
+	
+	prevRouteContent = element.html();
+	
+	// Disable the select field
+	$("#routeSelect").prop("disabled",true);
+	
+	element.html("<input id=\"modifiedRouteName\">" +
+			"<div style=\"position: relative; float: right\">" +
+				"<i class=\"material-icons green clickable\" onClick=\"changeRouteName()\">done</i>" +
+				"<i class=\"material-icons red clickable\" onClick=\"cancelRouteNameChange()\">close</i>" +
+			"</div>");
+	
+	$("#modifiedRouteName").val(route.name);
+}
+
+function cancelRouteNameChange() {
+	var element;
+	
+	element = $("#editNameWrapper");
+	
+	$("#routeSelect").prop("disabled",false);
+	
+	element.html(prevRouteContent);
+	
+	// Set the click function again
+	$("#editRouteName").click(function(){
+		confirmationNameChange($("#manageRouteForm select[name=routes]").val());
+	});
+}

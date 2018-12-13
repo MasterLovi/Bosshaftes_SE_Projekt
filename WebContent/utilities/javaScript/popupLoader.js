@@ -178,6 +178,7 @@ function loadPopupContent(popupType) {
 		"<p class=\"centered infoHeader\">Route auswählen</p>" +
 		"<select id=\"routeSelect\" name=\"routes\">" +
 		"</select>" +
+		"<div id=\"editNameWrapper\"><i class=\"material-icons\" id=\"editRouteName\">edit</i></div>" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
 		"<ul id=\"tourStopsPopup\"></ul>" +
 		"<p class=\"centered infoHeader\">Bild ändern</p>" +
@@ -349,6 +350,10 @@ function loadPopupContent(popupType) {
 		
 		$("#manageRouteForm select[name=routes]").change(function() {
 			changeRouteInformation($("#manageRouteForm select[name=routes] option:selected").val());
+		});
+		
+		$("#editRouteName").click(function(){
+			confirmationNameChange($("#manageRouteForm select[name=routes]").val());
 		});
 	};
 	break;
