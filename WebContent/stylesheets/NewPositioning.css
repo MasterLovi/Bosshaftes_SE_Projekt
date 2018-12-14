@@ -494,9 +494,9 @@ td .inputSubmit{
 	background-color: white;
 	position: absolute;
 	bottom: -50px;
-	width: 25%;
+	width: 30%;
 	height: 50px;
-	left: 38.5%;
+	left: 35%;
 	border: 1px solid #bbb;
 	box-shadow: 2px 2px 2px #bbb;
 	z-index: 801;
@@ -519,6 +519,10 @@ td .inputSubmit{
 #modifiedRouteName{
 	margin-bottom: 10px;
 	width: 85%;
+}
+
+#infoTourPics{
+	heigh: 80px;
 }
 
 .absolute{
@@ -803,7 +807,7 @@ td .inputSubmit{
 }
 
 .popupMarkerHeader{
-	font-size: 24px;
+	font-size: 15px;
 	margin-bottom: 10px;
 }
 

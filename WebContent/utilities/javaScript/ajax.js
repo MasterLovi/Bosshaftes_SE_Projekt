@@ -767,7 +767,12 @@ function addPointToRoute(locationId, routeId) {
 	
 	// Stops code execution until the time was calculated
 	pTimeReturned.then(function(time) {
-		route.time.time = time;
+		
+		if (route.type == "Kultur"){
+			route.time.time = calculateTotalTravelTime(route, time);
+		} else {
+			route.time.time = time;
+		}
 		
 		// Bring the data in a backend compatible format
 		var jsonArray = [route];
@@ -828,13 +833,17 @@ function removeFromRoute(locationId, routeId) {
 	// Remove the location from the stops array
 	route.stops.splice(removeIndex, 1); //Removes the element on index 'removeIndex' in the Array
 	route.numberOfStops = route.numberOfStops-1;
-	// Recalculate trave time
+	// Recalculate travel time
 	pTimeCalculate = calculateTraveltime(route);
 	
 	// Stops code execution until time was calculated 
 	pTimeCalculate.then(function(time) {
 		
-		route.time.time = time;
+		if (route.type == "Kultur"){
+			route.time.time = calculateTotalTravelTime(route, time);
+		} else {
+			route.time.time = time;
+		}
 		
 		// Bring the data in a backend compatible format
 		var jsonArray = [route];
@@ -943,7 +952,12 @@ function changeRouteName(){
 		}
 	});
 	
-	route.name = $("#modifiedRouteName").val();
+	if ($("#modifiedRouteName").val().length != 0){
+		route.name = $("#modifiedRouteName").val();
+	} else {
+		$("#popupError").html("Der Name darf nicht leer sein.");
+		return;
+	}
 	
 	var jsonArray = [route];
 	
@@ -964,5 +978,42 @@ function changeRouteName(){
 			console.log(error);
 		}
 	});
+}
+
+function updateRouteImage(pImageLoaded) {
+	var route;
 	
+	var id = $("#manageRouteForm select[name=routes]").val();
+	
+	$.each(userRoutes, function(i,v) {
+		if (id == v.id) {
+			route = v;
+			return;
+		}
+	});
+	
+	pImageLoaded.then(function(image){
+		
+		if (image != null) { route.images = [image] }
+		
+		var jsonArray = [route];
+		
+		$.ajax({
+			url: "RouteServlet",
+			type: "POST",
+			data: {
+				operation: "update",
+				json: JSON.stringify(jsonArray)
+			},
+			success: function(response) {
+				// Unload + Status
+				getUserRoutes($("#currentAction").val(), $("#userId").val())
+				loadUserRoutePopup();
+				sendStatusMessage("Bild wurde erfolgreich geändert", "green");
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
+	});
 }

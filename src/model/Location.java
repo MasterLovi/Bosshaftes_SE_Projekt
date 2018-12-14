@@ -42,7 +42,8 @@ public class Location {
 
 	@Expose
 	private String type;
-
+	
+	@Expose
 	private String timeString;
 
 	@Transient

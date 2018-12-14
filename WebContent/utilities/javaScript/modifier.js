@@ -206,7 +206,13 @@ function addRoutesToSelection(data) {
 	toursClickEvent();
 	toursHoverEvent();
 
-	$("#tours").show();
+	if($("#tourList").children().length == 0) {
+		sendStatusMessage("Keine Route gefunden, die den Kriterien entspricht", "red");
+		$("#tourInfoPanel").css("display", "none");
+		$("#tours").css("display", "none");
+	} else {
+		$("#tours").show();
+	}
 }
 
 /**
@@ -295,6 +301,7 @@ function toursHoverEvent() {
 function loadRouteToPanel(tour) {
 	var tourObj;
 	var ratingElement;
+	var defaultImage = $("#currentAction").val() == "Party" ? "utilities/pic/PartyDefault.png" : "utilities/pic/KulturDefault.png";
 	
 	// Find the route in the globalRoutes object.
 	$.each(globalRoutes, function(i, v) {
@@ -328,6 +335,8 @@ function loadRouteToPanel(tour) {
 	$("#infoTourRating").html(ratingElement);
 	
 	$("#infoTourTime").html(tourObj.time.time);
+	
+	$("#infoTourPics").html("<img class='tourIcon' style=\"margin: auto;\" src='"	+ (tourObj.images[0] != undefined ? tourObj.images[0] : defaultImage) + "'>");
 
 	$("#tourStops").empty();
 
@@ -336,11 +345,14 @@ function loadRouteToPanel(tour) {
 		if (v.id == tour) {
 			$.each(v.stops, function(i, v) {
 				$("#tourStops").append(
-						"<li class='infotext'><i class=\"material-icons\">place</i><p class=\"inline\">" + v.name
-								+ "</p></li><hr>");
+						"<li class='infotext stopMarker' value='{\"coords\": ["+v.latitude+", "+ v.longitude+"]}'><i class=\"material-icons\">place</i><p class=\"inline\">" + v.name
+						+ "</p></li><hr>"
+				);
 			});
 		}
 	});
+	
+	stopsHoverEvent();
 }
 
 /**
@@ -613,6 +625,10 @@ function loadUserRoutes(type) {
 					"<option value=" + v.id + ">" + v.name + "</option>");
 		}
 	});
+	
+	if ($("#manageRouteForm select[name=routes]").val() == null) {
+		$("#editNameWrapper").html("");
+	}
 }
 
 /**
@@ -691,6 +707,10 @@ function convertImageToBase64(input) {
  * @returns
  */
 function loadUserRoutePopup() {
+	var url = window.location.href
+	if(url.indexOf("index") > 0){
+		window.location = "NewMap.jsp?type=Party";
+	}
 	loadPopupContent("manageRoutes");
 	loadUserRoutes("show");
 }
@@ -704,6 +724,7 @@ function showUserRouteOnInfo(id) {
 	
 	var tour = id; // Contains the id of the route we are looking for 
 	var tourObj; // Will contain the route object if the one is found
+	var defaultImage = $("#currentAction").val() == "Party" ? "utilities/pic/PartyDefault.png" : "utilities/pic/KulturDefault.png";
 
 	var ratingElement;
 	
@@ -739,16 +760,20 @@ function showUserRouteOnInfo(id) {
 	$("#infoTourRating").html(ratingElement);
 	
 	$("#infoTourTime").html(tourObj.time.time);
+	
+	$("#infoTourPics").html("<img class='tourIcon' style=\"margin: auto;\" src='"	+ (tourObj.images[0] != undefined ? tourObj.images[0] : defaultImage) + "'>");
 
 	$("#tourStops").empty();
 
 	// Loads all the stop to the info panel stops list
 	$.each(tourObj.stops, function(i, v) {
 		$("#tourStops").append(
-				"<li class='infotext'>" + v.name
-						+ "</li><hr>");
+				"<li class='infotext stopMarker' value='{\"coords\": ["+v.latitude+", "+ v.longitude+"]}'><i class=\"material-icons\">place</i><p class=\"inline\">" + v.name
+				+ "</p></li><hr>");
 	});
 
+	stopsHoverEvent();
+	
 	$("#tourInfoPanel").css("display", "block");
 
 }
@@ -1062,4 +1087,83 @@ function cancelRouteNameChange() {
 	$("#editRouteName").click(function(){
 		confirmationNameChange($("#manageRouteForm select[name=routes]").val());
 	});
+}
+
+function calculateTotalTravelTime(route, waytime) {
+	var totalTime = "00:00:00";
+	
+	$.each(route.stops, function(i,v) {
+		totalTime = addTimes(totalTime, v.timeString);
+	});
+	
+	totalTime = addTimes(totalTime, waytime);
+	
+	return totalTime;
+}
+
+/**
+ * 
+ * @param startTime
+ * @param endTime
+ * @returns
+ */
+function addTimes (startTime, endTime) {
+	  var times = [ 0, 0, 0 ]
+	  var max = times.length
+
+	  var a = (startTime || '').split(':')
+	  var b = (endTime || '').split(':')
+
+	  // normalize time values
+	  for (var i = 0; i < max; i++) {
+	    a[i] = isNaN(parseInt(a[i])) ? 0 : parseInt(a[i])
+	    b[i] = isNaN(parseInt(b[i])) ? 0 : parseInt(b[i])
+	  }
+
+	  // store time values
+	  for (var i = 0; i < max; i++) {
+	    times[i] = a[i] + b[i]
+	  }
+
+	  var hours = times[0]
+	  var minutes = times[1]
+	  var seconds = times[2]
+
+	  if (seconds >= 60) {
+	    var m = (seconds / 60) << 0
+	    minutes += m
+	    seconds -= 60 * m
+	  }
+
+	  if (minutes >= 60) {
+	    var h = (minutes / 60) << 0
+	    hours += h
+	    minutes -= 60 * h
+	  }
+
+	  return ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':' + ('0' + seconds).slice(-2)
+	}
+
+function stopsHoverEvent() {
+	var layer;
+	$(".stopMarker").mouseenter(function() {
+				var json = $(this).attr("value");
+				var obj = JSON.parse(json);
+				
+
+				// Load the marker of the first location of the route 
+				// this one is displayed as long as the user has its mouse over the tour element
+				layer = L.marker(obj.coords, {
+					icon : L.mapquest.icons.marker({
+						primaryColor : '#111111',
+						secondaryColor : '#ff0000'
+					})
+				}).addTo(getMap());
+				layer._icon.style.zIndex = 1001;
+			});
+
+	$(".stopMarker").mouseleave(function() {
+		// Removes the marker when the user is done is not hovering over the element anymore.
+		getMap().removeLayer(layer);
+	})
 }

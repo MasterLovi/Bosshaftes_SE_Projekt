@@ -182,7 +182,7 @@ function loadPopupContent(popupType) {
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
 		"<ul id=\"tourStopsPopup\"></ul>" +
 		"<p class=\"centered infoHeader\">Bild ändern</p>" +
-		"<input type=\"file\" class=\"imageSelectorRoute\" accept=\"image/jpeg, image/png, image/jpg\" name=\"tourImage\"><br>" +
+		"<input type=\"file\" class=\"imageSelectorRoute\" accept=\"image/jpeg, image/png, image/jpg\" name=\"tourImage\"><button type=\"button\" id=\"uploadNewRouteImage\" class=\"button buttonStandardSize floatRight\">Hochladen</button><br>" +
 		"<input type=\"submit\" class=\"button buttonStandardSize\" value=\"Anzeigen\">" +
 		"<button type=\"button\" id=\"deleteRouteBtn\" class=\"button buttonStandardSize\">Löschen</button>" + //type has to be set so that the button does not submit the form
 		"</form>";
@@ -348,6 +348,17 @@ function loadPopupContent(popupType) {
 			}
 		});
 		
+		$("#uploadNewRouteImage").click(function() {
+			if (!$("#manageRouteForm input[name=tourImage]").prop("files")[0]) {
+				$("#popupError").html("Sie haben keine Datei ausgewählt");
+				return false;
+			}
+			
+			var pImageLoaded = convertImageToBase64($("#manageRouteForm input[name=tourImage]"));
+			
+			updateRouteImage(pImageLoaded);
+		});
+		
 		$("#manageRouteForm select[name=routes]").change(function() {
 			changeRouteInformation($("#manageRouteForm select[name=routes] option:selected").val());
 		});
@@ -355,6 +366,7 @@ function loadPopupContent(popupType) {
 		$("#editRouteName").click(function(){
 			confirmationNameChange($("#manageRouteForm select[name=routes]").val());
 		});
+		
 	};
 	break;
 	};

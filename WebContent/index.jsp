@@ -12,6 +12,7 @@
         <link rel="stylesheet" type="text/css" href="stylesheets/icon.css">
      	
    	    <script src="utilities/javaScript/jquery-ui.min.js"></script>
+   	    <script src="utilities/javaScript/modifier.js"></script>
     </head>
 
     <body>

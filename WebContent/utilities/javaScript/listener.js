@@ -152,6 +152,10 @@ $(document).ready(function() {
 			window.history.pushState("","", "NewMap.jsp?type=Kultur");
 			unloadPopup();
 			getLocationFromDatabase($("#currentAction").val()); 
+			$("#tourInfoPanel").css("display", "none");
+			$("#tours").css("display", "none");
+			if(permLayer != null){getMap().removeLayer(permLayer)};
+			removeCurrentRoute();
 		} else {
 			$("#headerIconMiddle").html("chevron_left");
 			
@@ -165,6 +169,10 @@ $(document).ready(function() {
 			window.history.pushState("","", "NewMap.jsp?type=Party");
 			unloadPopup();
 			getLocationFromDatabase($("#currentAction").val()); 
+			$("#tourInfoPanel").css("display", "none");
+			$("#tours").css("display", "none");
+			if(permLayer != null){getMap().removeLayer(permLayer)};
+			removeCurrentRoute();
 		}
 	});
 	
@@ -182,6 +190,10 @@ $(document).ready(function() {
 		window.history.pushState("","", "NewMap.jsp?type=Party");
 		unloadPopup();
 		getLocationFromDatabase($("#currentAction").val()); 
+		$("#tourInfoPanel").css("display", "none");
+		$("#tours").css("display", "none");
+		if(permLayer != null){getMap().removeLayer(permLayer)};
+		removeCurrentRoute();
 	});
 	
 	$("#cultureText").click(function() {
@@ -198,6 +210,10 @@ $(document).ready(function() {
 		window.history.pushState("","", "NewMap.jsp?type=Kultur");
 		unloadPopup();
 		getLocationFromDatabase($("#currentAction").val()); 
+		$("#tourInfoPanel").css("display", "none");
+		$("#tours").css("display", "none");
+		if(permLayer != null){getMap().removeLayer(permLayer)};
+		removeCurrentRoute();
 	});
 })
 
