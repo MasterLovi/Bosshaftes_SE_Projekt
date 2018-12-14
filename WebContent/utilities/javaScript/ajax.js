@@ -933,7 +933,7 @@ function getUserRoutes(sType, userId) {
 function changeRouteName(){
 	var route;
 	
-	var id = $("#manageRouteForm select[name=routes]");
+	var id = $("#manageRouteForm select[name=routes]").val();
 	
 	$.each(userRoutes, function(i,v) {
 		if (id == v.id) {
