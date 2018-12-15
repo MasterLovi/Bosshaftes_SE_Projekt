@@ -939,6 +939,10 @@ function getUserRoutes(sType, userId) {
 	});
 }
 
+/**
+ * Changes the name of the route and send it to the database
+ * @returns NONE
+ */
 function changeRouteName(){
 	var route;
 	
@@ -980,6 +984,11 @@ function changeRouteName(){
 	});
 }
 
+/**
+ * Updates the image of a route and sends it to the database
+ * @param pImageLoaded {Promise} - Contains the promise for the encoded image 
+ * @returns NONE
+ */
 function updateRouteImage(pImageLoaded) {
 	var route;
 	

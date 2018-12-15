@@ -1,3 +1,7 @@
+/**
+ * Validates the feedback form
+ * @returns {String/Boolean} - If there was an error, return error otherwise return false
+ */
 function feedbackValidation() {
 	var comment = $("#feedbackForm textarea[name=comment]").val(); 
 	var error;
@@ -13,6 +17,10 @@ function feedbackValidation() {
 	}
 }
 
+/**
+ * Validates the location form
+ * @returns {String/Boolean} - If there was an error, return error otherwise return false
+ */
 function locationValidation(type, operation) {
 	var name;
 	var description;
@@ -69,6 +77,10 @@ function locationValidation(type, operation) {
 	}
 }
 
+/**
+ * Validates the new route form
+ * @returns {String/Boolean} - If there was an error, return error otherwise return false
+ */
 function newRouteValidation() {
 	var name;
 	var description;
@@ -92,6 +104,10 @@ function newRouteValidation() {
 	}
 }
 
+/**
+ * Validates the update route form
+ * @returns {String/Boolean} - If there was an error, return error otherwise return false
+ */
 function updateRouteValidation() {
 	var selection = "";
 	var error;
@@ -109,6 +125,10 @@ function updateRouteValidation() {
 	}
 }
 
+/**
+ * Validates the manage route form
+ * @returns {String/Boolean} - If there was an error, return error otherwise return false
+ */
 function manageRouteValidation() {
 	var selection = "";
 	var error;

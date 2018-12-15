@@ -1,3 +1,9 @@
+/**
+ * Get the address information through a api request
+ * @param lat {Double} - Latitude
+ * @param lng {Double} - Longitude
+ * @returns {Object} - Address data
+ */
 function getAddress(lat, lng) {
 		// Makes sure that everything will be loaded before the function is terminated 
 		$.ajaxSetup({
@@ -29,6 +35,11 @@ function getAddress(lat, lng) {
 		return returnVals;
 }
 
+/**
+ * Calculates the travel time of the given route
+ * @param tourObj {Object} - Contains the route object 
+ * @returns {String} - Total travel time
+ */
 function calculateTraveltime(tourObj){
 	return new Promise(function(resolve, reject) {
 		var time;

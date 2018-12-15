@@ -1,3 +1,8 @@
+/**
+ * Returns the valid json structure of the specific action
+ * @param type {String} - Contains the name of the action that should be executed
+ * @returns {Object} - Required Structure
+ */
 function getJsonDatastrucutreLocation(type) {
 	var json;
 	switch (type) {
@@ -75,12 +80,20 @@ function getJsonDatastrucutreLocation(type) {
 	return json;
 }
 
+/**
+ * Returns the valid json structure of the specific action
+ * @returns {Object} - Required Structure
+ */
 function getRoutingJsonStructure(){
 	var json = { locations: [] };
 
 	return json;
 }
 
+/**
+ * Returns the valid json structure of the specific action
+ * @returns {Object} - Required Structure
+ */
 function getDatastructureRoute() {
 	var json = {  
 			id: "",
@@ -107,6 +120,10 @@ function getDatastructureRoute() {
 	return json;
 }
 
+/**
+ * Returns the valid json structure of the specific action
+ * @returns {Object} - Required Structure
+ */
 function getDatastructureFeedback() {
 	var json = {
 			comment: "",

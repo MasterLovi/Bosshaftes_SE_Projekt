@@ -1047,6 +1047,11 @@ function calculateAvgRating(obj) {
 
 var prevRouteContent;
 
+/**
+ * Changes the edit icon to the confirmation icons. 
+ * @param routeId {Integer} - Contains the id of the route of which the name should be changed
+ * @returns NONE
+ */
 function confirmationNameChange(routeId){
 	var element;
 	var route;
@@ -1074,6 +1079,10 @@ function confirmationNameChange(routeId){
 	$("#modifiedRouteName").val(route.name);
 }
 
+/**
+ * Cancels the name change of the route
+ * @returns NONE
+ */
 function cancelRouteNameChange() {
 	var element;
 	
@@ -1089,6 +1098,12 @@ function cancelRouteNameChange() {
 	});
 }
 
+/**
+ * Calculates the total travel time of culture routes
+ * @param route {Object} - Contains the culture route object
+ * @param waytime {String} - Contains the time string of the waytime
+ * @returns {String} - Contains the total time needed
+ */
 function calculateTotalTravelTime(route, waytime) {
 	var totalTime = "00:00:00";
 	
@@ -1102,10 +1117,10 @@ function calculateTotalTravelTime(route, waytime) {
 }
 
 /**
- * 
- * @param startTime
- * @param endTime
- * @returns
+ * Adds two time strings together
+ * @param startTime {String} - Starting time
+ * @param endTime {String} - Time that should be added
+ * @returns {String} - Returns the sum of the time strings
  */
 function addTimes (startTime, endTime) {
 	  var times = [ 0, 0, 0 ]
@@ -1144,6 +1159,10 @@ function addTimes (startTime, endTime) {
 	  return ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':' + ('0' + seconds).slice(-2)
 	}
 
+/**
+ * Enables the hover event for the tour stops on the info panel
+ * @returns NONE
+ */
 function stopsHoverEvent() {
 	var layer;
 	$(".stopMarker").mouseenter(function() {

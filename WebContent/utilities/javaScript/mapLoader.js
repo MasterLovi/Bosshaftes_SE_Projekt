@@ -39,7 +39,10 @@ $(document).ready(function() {
 })
 
 // ----- Setting the getMap function so myMap can be used globaly	
-	
+/**
+ * Returns the map object
+ * @returns {Object} - Returns the map
+ */
 function getMap(){
 	return mymap;
 }

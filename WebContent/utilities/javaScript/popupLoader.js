@@ -1,3 +1,8 @@
+/**
+ * Loads the popup content and enables the buttons 
+ * @param popupType {String} - Contains the name of the popup that should be loaded
+ * @returns
+ */
 function loadPopupContent(popupType) {
 	var content = "<span class=\"close\">&times;</span>";
 	
