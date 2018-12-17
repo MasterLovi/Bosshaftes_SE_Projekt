@@ -371,7 +371,6 @@ public class LocationServlet extends HttpServlet {
 		} catch (Exception e) {
 			// Create Error Response
 			response.setStatus(500);
-			e.printStackTrace();
 			res = e.getMessage();
 			em.getTransaction().rollback();
 		}

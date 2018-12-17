@@ -138,7 +138,7 @@
 
 				<tr>
 					<td class="infoHeader">
-						Bilder
+						Bild
 					</td>
 				</tr>
 				
@@ -160,7 +160,7 @@
 				</tr>
 			</table>
 			<div id="tourStopsWrapper">
-				<p class="infoHeader">Stops</p>
+				<p class="infoHeader">Spots</p>
 				<ul id="tourStops">
 					
 					
@@ -192,7 +192,7 @@
 		</div>
 		
 		<div id="statusMessage">
-			<p id="statusMessageText">test</p>
+			<p id="statusMessageText"></p>
 		</div>
 	</body>
 </html>

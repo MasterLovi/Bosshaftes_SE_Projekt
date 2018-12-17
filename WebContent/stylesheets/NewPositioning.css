@@ -516,7 +516,18 @@ td .inputSubmit{
 	cursor: pointer;
 }
 
+#editRouteDescription{
+	position: relative;
+	left: 95%;
+	cursor: pointer;
+}
+
 #modifiedRouteName{
+	margin-bottom: 10px;
+	width: 85%;
+}
+
+#modifiedRouteDescription{
 	margin-bottom: 10px;
 	width: 85%;
 }

@@ -644,10 +644,12 @@ function changeRouteInformation(routeId) {
 		return;
 	}
 	
+
 	// Creates and adds all the stops from the selected user route to the user route stops list.
 	// Every element has functionality to delete it. 
 	$.each(userRoutes, function(i, v) {
 		if (v.id == routeId) {
+			$("#userRouteDescription").html(v.description);
 			$.each(v.stops,
 					function(i, v) {
 				$("#tourStopsPopup").append(
@@ -1095,6 +1097,46 @@ function cancelRouteNameChange() {
 	// Set the click function again
 	$("#editRouteName").click(function(){
 		confirmationNameChange($("#manageRouteForm select[name=routes]").val());
+	});
+}
+
+var prevRouteDescription
+
+function editRouteDescription(routeId) {
+	var element;
+	var route;
+	
+	$.each(userRoutes, function(i,v) {
+		if (v.id == routeId) {
+			route = v;
+			return;
+		}
+	});
+	
+	element = $("#editDescriptionWrapper");
+	
+	prevRouteDescription = element.html();
+	
+	
+	element.html("<textarea style=\"height: 50px; resize: none\" id=\"modifiedRouteDescription\"></textarea>" +
+			"<div style=\"position: relative; float: right\">" +
+				"<i class=\"material-icons green clickable\" onClick=\"updateRouteDescription()\">done</i>" +
+				"<i class=\"material-icons red clickable\" onClick=\"cancelRouteDescriptionChange()\">close</i>" +
+			"</div>");
+	
+	$("#modifiedRouteDescription").val(route.description);
+}
+
+function cancelRouteDescriptionChange() {
+	var element;
+	
+	element = $("#editDescriptionWrapper");
+
+	element.html(prevRouteDescription);
+	
+	// Set the click function again
+	$("#editRouteDescription").click(function(){
+		editRouteDescription($("#manageRouteForm select[name=routes]").val());
 	});
 }
 

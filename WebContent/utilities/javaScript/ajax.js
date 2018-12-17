@@ -1026,3 +1026,44 @@ function updateRouteImage(pImageLoaded) {
 		});
 	});
 }
+
+function updateRouteDescription() {
+	var route;
+	
+	var id = $("#manageRouteForm select[name=routes]").val();
+	
+	$.each(userRoutes, function(i,v) {
+		if (id == v.id) {
+			route = v;
+			v.description = $("#modifiedRouteDescription").val();
+			return;
+		}
+	});	
+	
+	if ($("#modifiedRouteDescription").val().length != 0){
+		route.description = $("#modifiedRouteDescription").val();
+	} else {
+		$("#popupError").html("Die Beschreibung darf nicht leer sein!");
+		return;
+	}
+
+	var jsonArray = [route];
+	
+	$.ajax({
+		url: "RouteServlet",
+		type: "POST",
+		data: {
+			operation: "update",
+			json: JSON.stringify(jsonArray)
+		},
+		success: function(response) {
+			// Unload + Status
+			getUserRoutes($("#currentAction").val(), $("#userId").val())
+			loadUserRoutePopup();
+			sendStatusMessage("Beschreibung erfolgreich geändert", "green");
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+}

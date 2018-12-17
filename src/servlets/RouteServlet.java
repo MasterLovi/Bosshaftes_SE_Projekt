@@ -239,6 +239,7 @@ public class RouteServlet extends HttpServlet {
 			if (result != null) {
 				// Set Route Values
 				result.setName(route.getName());
+				result.setDescription(route.getDescription());
 				result.setTimeString(route.getTime().getTime());
 				result.setType(route.getType());
 				result.setFeedback(route.getFeedback());
@@ -332,7 +333,6 @@ public class RouteServlet extends HttpServlet {
 		} catch (Exception e) {
 			// send back error
 			response.setStatus(500);
-			e.printStackTrace();
 			res = e.getMessage();
 		}
 		// Send Response

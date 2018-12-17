@@ -185,6 +185,9 @@ function loadPopupContent(popupType) {
 		"</select>" +
 		"<div id=\"editNameWrapper\"><i class=\"material-icons\" id=\"editRouteName\">edit</i></div>" +
 		"<p class=\"centered infoHeader\">Beschreibung</p>" +
+		"<p class=\"infoText\" id=\"userRouteDescription\"></p>"+
+		"<div id=\"editDescriptionWrapper\"><i class=\"material-icons\" id=\"editRouteDescription\">edit</i></div>" +
+		"<p class=\"centered infoHeader\">Spots</p>" +
 		"<ul id=\"tourStopsPopup\"></ul>" +
 		"<p class=\"centered infoHeader\">Bild ändern</p>" +
 		"<input type=\"file\" class=\"imageSelectorRoute\" accept=\"image/jpeg, image/png, image/jpg\" name=\"tourImage\"><button type=\"button\" id=\"uploadNewRouteImage\" class=\"button buttonStandardSize floatRight\">Hochladen</button><br>" +
@@ -370,6 +373,10 @@ function loadPopupContent(popupType) {
 		
 		$("#editRouteName").click(function(){
 			confirmationNameChange($("#manageRouteForm select[name=routes]").val());
+		});
+		
+		$("#editRouteDescription").click(function(){
+			editRouteDescription($("#manageRouteForm select[name=routes]").val());
 		});
 		
 	};
