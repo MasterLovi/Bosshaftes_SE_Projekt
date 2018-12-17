@@ -1,0 +1,4384 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>  | Documentation</title>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <link href='assets/bass.css' type='text/css' rel='stylesheet' />
+  <link href='assets/style.css' type='text/css' rel='stylesheet' />
+  <link href='assets/github.css' type='text/css' rel='stylesheet' />
+  <link href='assets/split.css' type='text/css' rel='stylesheet' />
+</head>
+<body class='documentation m0'>
+    <div class='flex'>
+      <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
+        <div class='py1 px2'>
+          <h3 class='mb0 no-anchor'></h3>
+          <div class='mb1'><code></code></div>
+          <input
+            placeholder='Filter'
+            id='filter-input'
+            class='col12 block input'
+            type='text' />
+          <div id='toc'>
+            <ul class='list-reset h5 py1-ul'>
+              
+                
+                <li><a
+                  href='#reguser'
+                  class="">
+                  regUser
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#userlogin'
+                  class="">
+                  userLogin
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getlocation'
+                  class="">
+                  getLocation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#refreshlayerdata'
+                  class="">
+                  refreshLayerData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getlocationfromdatabase'
+                  class="">
+                  getLocationFromDatabase
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#createnewmarker'
+                  class="">
+                  createNewMarker
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#updatemarker'
+                  class="">
+                  updateMarker
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#reportlocation'
+                  class="">
+                  reportLocation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getroute'
+                  class="">
+                  getRoute
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#sendfeedback'
+                  class="">
+                  sendFeedback
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#deletefeedback'
+                  class="">
+                  deleteFeedback
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#changefeedback'
+                  class="">
+                  changeFeedback
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#createnewroute'
+                  class="">
+                  createNewRoute
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addpointtoroute'
+                  class="">
+                  addPointToRoute
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#removefromroute'
+                  class="">
+                  removeFromRoute
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#deleteroute'
+                  class="">
+                  deleteRoute
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getuserroutes'
+                  class="">
+                  getUserRoutes
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#clearinput'
+                  class="">
+                  clearInput
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#shownewpointpopup'
+                  class="">
+                  showNewPointPopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#showupdatepointpopup'
+                  class="">
+                  showUpdatePointPopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loaddatatoupdateform'
+                  class="">
+                  loadDataToUpdateForm
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loadmarkerinfotosubmitform'
+                  class="">
+                  loadMarkerinfoToSubmitForm
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#ready'
+                  class="">
+                  ready
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#ready'
+                  class="">
+                  ready
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#showposition'
+                  class="">
+                  showPosition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#tourelistleftshift'
+                  class="">
+                  toureListLeftShift
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#tourelistrightshift'
+                  class="">
+                  toureListRightShift
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addroutestoselection'
+                  class="">
+                  addRoutesToSelection
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#tourssliderright'
+                  class="">
+                  toursSliderRight
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#toursclickevent'
+                  class="">
+                  toursClickEvent
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#tourshoverevent'
+                  class="">
+                  toursHoverEvent
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loadroutetopanel'
+                  class="">
+                  loadRouteToPanel
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#calculateroute'
+                  class="">
+                  calculateRoute
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#removecurrentroute'
+                  class="">
+                  removeCurrentRoute
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#feedbackroute'
+                  class="">
+                  feedbackRoute
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#feedbacklocation'
+                  class="">
+                  feedbackLocation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loadfeedbacktopopup'
+                  class="">
+                  loadFeedbackToPopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#shownewroutepopup'
+                  class="">
+                  showNewRoutePopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#showupdateroutepopup'
+                  class="">
+                  showUpdateRoutePopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#showfeedbackpopup'
+                  class="">
+                  showFeedbackPopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#unloadpopup'
+                  class="">
+                  unloadPopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loaduserroutes'
+                  class="">
+                  loadUserRoutes
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#changerouteinformation'
+                  class="">
+                  changeRouteInformation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#convertimagetobase64'
+                  class="">
+                  convertImageToBase64
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loaduserroutepopup'
+                  class="">
+                  loadUserRoutePopup
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#showuserrouteoninfo'
+                  class="">
+                  showUserRouteOnInfo
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#islocationinroute'
+                  class="">
+                  isLocationInRoute
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#confirmationroutepartdeletion'
+                  class="">
+                  confirmationRoutePartDeletion
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#confirmationfeedbackdeletion'
+                  class="">
+                  confirmationFeedbackDeletion
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#canceldeletionorchange'
+                  class="">
+                  cancelDeletionOrChange
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#editfeedback'
+                  class="">
+                  editFeedback
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#confirmationfeedbackchange'
+                  class="">
+                  confirmationFeedbackChange
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#sendstatusmessage'
+                  class="">
+                  sendStatusMessage
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#calculateavgrating'
+                  class="">
+                  calculateAvgRating
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addtimes'
+                  class="">
+                  addTimes
+                  
+                </a>
+                
+                </li>
+              
+            </ul>
+          </div>
+          <div class='mt1 h6 quiet'>
+            <a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+          </div>
+        </div>
+      </div>
+      <div id='split-right' class='relative overflow-auto height-viewport-100'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='reguser'>
+      regUser
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Reads the information form the registration page and send them to the backend.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>regUser(): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='userlogin'>
+      userLogin
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Send a login request to the backend</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>userLogin(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        Contains either an error or not
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getlocation'>
+      getLocation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Call the mapquest geocode api. API return a location object.
+Centers the map based on the give inputs.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getLocation(searchString: any, map: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>searchString</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the searchinput from the user
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>map</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains the map object where the centering should take place
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='refreshlayerdata'>
+      refreshLayerData
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Reloads the information of the displayed markers without reloading them</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>refreshLayerData(sType: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sType</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the type of markers that will be loaded from the database
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getlocationfromdatabase'>
+      getLocationFromDatabase
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads all the markers from the database that are visible to the user and creates these marker on the map</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getLocationFromDatabase(sType: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sType</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the type of markers that will be loaded from the database
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='createnewmarker'>
+      createNewMarker
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Creates a new marker information object and sends it to the database</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>createNewMarker(sType: any, pImageLoaded: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sType</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the marker type
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pImageLoaded</span> <code class='quiet'>(any)</code>
+	    {Promise} - Contains a promise that will return the encoded image
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='updatemarker'>
+      updateMarker
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Changes the marker information and sends the updated marker information to the database</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>updateMarker(markerId: any, pImageLoaded: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>markerId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the marker that has to changend
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pImageLoaded</span> <code class='quiet'>(any)</code>
+	    {Promise} - Contains a promise that return the encoded image
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='reportlocation'>
+      reportLocation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Send a report of the selected location to the database</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>reportLocation(markerId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>markerId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the selected marker
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getroute'>
+      getRoute
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads the routes from the database, based on the search criteria of the user</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getRoute(sType: any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sType</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the route type that is searched for in the database
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        Returns false, so the page won't be reloaded
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='sendfeedback'>
+      sendFeedback
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Creates and send a feedback object to the database</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>sendFeedback(type: any, id: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the information if it is a route or location feedback
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the route or location id
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='deletefeedback'>
+      deleteFeedback
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Deletes a existing feedback from a route or location</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>deleteFeedback(type: any, id: any, feedbackId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the information if it is a location or route feedback
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the route of location
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>feedbackId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the feedback that should be deleted
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='changefeedback'>
+      changeFeedback
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Changes an existing feedback and sends the changed feedback to the database</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>changeFeedback(type: any, id: any, feedbackId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the information if it is a location or a route
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the location or route
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>feedbackId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the feedback that should be changed
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='createnewroute'>
+      createNewRoute
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Creates a new route and sends it to the database</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>createNewRoute(id: any, pImageLoaded: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the marker that should be the first location of the route
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pImageLoaded</span> <code class='quiet'>(any)</code>
+	    {Promise} - Contains the a promise that return the encoded image
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addpointtoroute'>
+      addPointToRoute
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Adds a new location to an existing user route and sends it to the database</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>addPointToRoute(locationId: any, routeId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>locationId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the location that should be added to the route
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>routeId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the route the location should be added to
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='removefromroute'>
+      removeFromRoute
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Remove a location from a user route. Route can not contain less than one location</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>removeFromRoute(locationId: any, routeId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>locationId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the location that should be removed
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>routeId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the route id of the route the location should be removed from
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='deleteroute'>
+      deleteRoute
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Deletes a user route</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>deleteRoute(routeId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>routeId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the route that should be deleted
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getuserroutes'>
+      getUserRoutes
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads the user routes from the database and saves them in a global object</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getUserRoutes(sType: any, userId: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sType</span> <code class='quiet'>(any)</code>
+	    {String} - Contains information what userRoutes should be loaded
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>userId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the user id that have to match the route
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='clearinput'>
+      clearInput
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Clears the value of a specific input field</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>clearInput(inputId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>inputId</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the name of the element that has to be cleared
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='shownewpointpopup'>
+      showNewPointPopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Creates and fills the popup that is needed to create a new location on the map</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>showNewPointPopup(marker: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>marker</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains a complete marker object
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='showupdatepointpopup'>
+      showUpdatePointPopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Creates and fills  the popup that is needed to change the content of a marker</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>showUpdatePointPopup(markerId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>markerId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the marker the user wants to update
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='loaddatatoupdateform'>
+      loadDataToUpdateForm
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Fills in the content of the specific marker into the update popup</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>loadDataToUpdateForm(markerId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>markerId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the marker the user want to update
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='loadmarkerinfotosubmitform'>
+      loadMarkerinfoToSubmitForm
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads the marker coordinates to the popup that is used to create a new location</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>loadMarkerinfoToSubmitForm(marker: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>marker</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains a complete marker object
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='ready'>
+      ready
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads the position of the user as soon as he enters the page.
+User has to accept this in the first place.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>ready</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='ready'>
+      ready
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Checks the GET parameter for the information, what the user wants to see. If there is no selection. The default "Party" will be set</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>ready</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='showposition'>
+      showPosition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Creates a marker on the map if the user enable location tracking</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>showPosition(position: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>position</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains a position object that contains the user coordinates
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='tourelistleftshift'>
+      toureListLeftShift
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Shifts the route list to the left, if the user clicked a button</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>toureListLeftShift(): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='tourelistrightshift'>
+      toureListRightShift
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Shifts the route to the right, if the user clicked a button</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>toureListRightShift(): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addroutestoselection'>
+      addRoutesToSelection
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Creates the route elements that are added to the route list</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>addRoutesToSelection(data: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains route data that was loaded from the server
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='tourssliderright'>
+      toursSliderRight
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Checks if there are enough route element in the list that the right scroll is needed</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>toursSliderRight(): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='toursclickevent'>
+      toursClickEvent
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>This function will set a temporary marker on the map after clicking on a route in the route list. If there is another marker
+of this type, it will be removed before the new marker is set</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>toursClickEvent(): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='tourshoverevent'>
+      toursHoverEvent
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Show the starting location of a route from the route list on the map and loads it to the info panel, if the user hovers over it.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>toursHoverEvent(): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='loadroutetopanel'>
+      loadRouteToPanel
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Finds the route in the global route object and loads its information to the info panel.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>loadRouteToPanel(tour: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>tour</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the route the user selected
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='calculateroute'>
+      calculateRoute
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Sends the stops information from a specific rounte to the mapquest direction API and draw the route on the map.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>calculateRoute(type: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the information where to search for the selected route.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='removecurrentroute'>
+      removeCurrentRoute
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Checks all layers on the map if they have something to with the route that was draw on the map. If so they will be removed from the map.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>removeCurrentRoute(): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='feedbackroute'>
+      feedbackRoute
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads and shows the feedback of the currently selected route in the feedback popup</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>feedbackRoute()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='feedbacklocation'>
+      feedbackLocation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads and shows the feedback of the selected location in the feedback popup</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>feedbackLocation(markerId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>markerId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the selected location
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='loadfeedbacktopopup'>
+      loadFeedbackToPopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Creates the feedback element for a specific location or route and adds them to the feedback list on the popup.
+If there is no feedback found a default message will be displayed.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>loadFeedbackToPopup(param: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>param</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains the id of the element that the user wants to see the feedback of and the type of the feedback (route or location)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='shownewroutepopup'>
+      showNewRoutePopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Show the popup window for a new route.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>showNewRoutePopup(id: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the first location that will be added to the route.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='showupdateroutepopup'>
+      showUpdateRoutePopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Show the popup window that is used to add new locations to existing routes.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>showUpdateRoutePopup(id: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    {Interger} - Contains the leaflet_id of the location that the user wants to add to his route
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='showfeedbackpopup'>
+      showFeedbackPopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Manages the popup for feedback. Makes sure that the right information is loaded to the popup</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>showFeedbackPopup(id: any, type: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains either the id of a route or the leaflet_id of a location
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the information if the id is form a route or location
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='unloadpopup'>
+      unloadPopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Unloads the popup</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>unloadPopup(): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='loaduserroutes'>
+      loadUserRoutes
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads the user routes to the select field in the manage route or add to route popup</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>loadUserRoutes(type: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the information if the selection should be filled in the manage or in the add popup
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='changerouteinformation'>
+      changeRouteInformation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads the stops of a specific route to the stop list on the popup. Adds several buttons to it</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>changeRouteInformation(routeId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>routeId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the route id of which the stops should be loaded
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='convertimagetobase64'>
+      convertImageToBase64
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Converts the input image of the user into a base 64 encode URL</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>convertImageToBase64(input: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>input</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains the input file
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='loaduserroutepopup'>
+      loadUserRoutePopup
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads the popup for handling the user routes</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>loadUserRoutePopup()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='showuserrouteoninfo'>
+      showUserRouteOnInfo
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads the selected user route to the info panel.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>showUserRouteOnInfo(id: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the route the user selected.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='islocationinroute'>
+      isLocationInRoute
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Checks if a location was already added to a specific route</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>isLocationInRoute(locationId: any, routeId: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>locationId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the location that should be added to the route.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>routeId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the route that user wants to the location to.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        returns an error if the location was already added
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='confirmationroutepartdeletion'>
+      confirmationRoutePartDeletion
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Changes the bin icon to a hook and a cross icon in order to give the user the possibility to confirm his deletion</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>confirmationRoutePartDeletion(locationId: any, element: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>locationId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the leaflet_id of the location
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>element</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains the HTML Element that is changed
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='confirmationfeedbackdeletion'>
+      confirmationFeedbackDeletion
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Changes the bin icon into a hook and a cross icon in order to give the user the possible to confirm or cancel the deletion of the feedback</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>confirmationFeedbackDeletion(feedbackId: any, element: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>feedbackId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the feedback that should be modified
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>element</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains the unmodified element of the feedback
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='canceldeletionorchange'>
+      cancelDeletionOrChange
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Reverts all the changes if the user decides to cancel the change or deletion of any element</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>cancelDeletionOrChange(type: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the information about what the changes have to be reverted
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='editfeedback'>
+      editFeedback
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Changes the pen icon into the hook and cross icon. Also changes the paragraph into a textarea where the user can make direct changes.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>editFeedback(feedbackId: any, element: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>feedbackId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the feedback that the user wants to change
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>element</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains the element from where the call was made
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='confirmationfeedbackchange'>
+      confirmationFeedbackChange
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Checks if the user confirmed the change and executes it</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>confirmationFeedbackChange(feedbackId: any, element: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>feedbackId</span> <code class='quiet'>(any)</code>
+	    {Integer} - Contains the id of the feedback that the user wants to change
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>element</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains the object from where the function was called
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='sendstatusmessage'>
+      sendStatusMessage
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Loads a text to a frame that is shown for a few seconds to confirm an action to the user</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>sendStatusMessage(message: any, color: any): any</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>message</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the displayed text
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>color</span> <code class='quiet'>(any)</code>
+	    {String} - Contains the color in which the text will be displayed
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        NONE
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='calculateavgrating'>
+      calculateAvgRating
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Calculates the average feedback rating of the object that was given to it</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>calculateAvgRating(obj: any): Integer</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>obj</span> <code class='quiet'>(any)</code>
+	    {Object} - Contains the object of which the average rating should be calculated.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>Integer</code>:
+        The calculated rating will be returned
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addtimes'>
+      addTimes
+    </h3>
+    
+    
+  </div>
+  
+
+  
+ 
+  
+    <div class='pre p1 fill-light mt0'>addTimes(startTime: any, endTime: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>startTime</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>endTime</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+      </div>
+    </div>
+  <script src='assets/anchor.js'></script>
+  <script src='assets/split.js'></script>
+  <script src='assets/site.js'></script>
+</body>
+</html>

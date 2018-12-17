@@ -1,0 +1,53 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mymap</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  2</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">newMarker</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="COMM">// Global map variable</span><span class="WHIT">
+<span class='line'>  4</span> 
+<span class='line'>  5</span> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="NAME">document</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">ready</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  6</span> </span><span class="WHIT">	</span><span class="NAME">L.mapquest.key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'y7O2leMmoJWVGxhiWASiuAOCqUjYrzd6'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  7</span> 
+<span class='line'>  8</span> </span><span class="WHIT">	 </span><span class="NAME">mymap</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">L.mapquest.map</span><span class="PUNC">(</span><span class="STRN">'map'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="WHIT">		</span><span class="NAME">center</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">49.4775206</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">8.4219807</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">		</span><span class="NAME">layers</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">L.mapquest.tileLayer</span><span class="PUNC">(</span><span class="STRN">'map'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="WHIT">		</span><span class="NAME">zoom</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">12</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 13</span> 
+<span class='line'> 14</span> </span><span class="WHIT">	</span><span class="NAME">getLocationFromDatabase</span><span class="PUNC">(</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"#currentAction"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 15</span> 
+<span class='line'> 16</span> </span><span class="COMM">//	----- Setting the Map Listener for new Points</span><span class="WHIT">
+<span class='line'> 17</span> 
+<span class='line'> 18</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"#userId"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">val</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="WHIT">		</span><span class="NAME">mymap.on</span><span class="PUNC">(</span><span class="STRN">'click'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">			</span><span class="COMM">//Remove the last set marker if it was not safed </span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">newMarker</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="NAME">mymap.removeLayer</span><span class="PUNC">(</span><span class="NAME">newMarker</span><span class="PUNC">)</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">			</span><span class="COMM">// Creates a new marker and gives it a popup</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">			</span><span class="NAME">newMarker</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">L.marker</span><span class="PUNC">(</span><span class="NAME">e.latlng</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">icon</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">L.mapquest.icons.marker</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">primaryColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'#111111'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">secondaryColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'#00cc00'</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">addTo</span><span class="PUNC">(</span><span class="NAME">mymap</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">			</span><span class="PUNC">.</span><span class="NAME">bindPopup</span><span class="PUNC">(</span><span class="STRN">"&lt;p>Kennen Sie diesen Ort?&lt;/p>&lt;button class=\"fullSize button\" onClick='showNewPointPopup(newMarker)'>Hinzufügen&lt;/button>"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">openPopup</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">			</span><span class="PUNC">.</span><span class="NAME">on</span><span class="PUNC">(</span><span class="STRN">'click'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">				</span><span class="COMM">// This has to be checked since the marker will be set to null if it is added to the map.</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">				</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">newMarker</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">					</span><span class="NAME">mymap.removeLayer</span><span class="PUNC">(</span><span class="NAME">newMarker</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">				</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">			</span><span class="COMM">// Adds a layer so it can be removed later on</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">			</span><span class="NAME">mymap.addLayer</span><span class="PUNC">(</span><span class="NAME">newMarker</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 40</span> 
+<span class='line'> 41</span> </span><span class="COMM">// ----- Setting the getMap function so myMap can be used globaly	</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">getMap</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">mymap</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 46</span> </span></pre></body></html>
