@@ -596,7 +596,7 @@ td .inputSubmit{
 
 .tourdata{
 	margin-right: 10px;
-	max-width: 170px;
+	max-width: 160px;
 	overflow: hidden;
 }
 
@@ -828,4 +828,10 @@ td .inputSubmit{
 
 .imageSelectorRoute {
 	margin-bottom: 10px;
+}
+
+.stopMarker{
+	text-align: center;
+	text-align: -moz-center;
+	text-align: -webkit-center;
 }

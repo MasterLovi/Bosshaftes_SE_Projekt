@@ -185,7 +185,7 @@ function addRoutesToSelection(data) {
 		var listelement = "<li class='inline tourdata'>"
 				+ "<input type='hidden' class='startingPoint' value='{\"coordinates\": ["+ json[i].firstLat	+ ", " + json[i].firstLong + "]}'>"
 				+ "<input type='hidden' class='tourId' value='"	+ json[i].id + "'>"
-				+ "<p>"	+ json[i].name + "</p>"
+				+ "<p "+ (json[i].name.length > 15 ? "title='"+ json[i].name + "'" : "") + ">" + (json[i].name.length > 15 ? json[i].name.substring(0,15) + "..." : json[i].name) + "</p>"
 				+ "<div class='centered'>"
 					+ "<i class='material-icons " + (json[i].avgRating >= 1 ? "activeStar" : "") + "'>grade</i>" // This part set the rating to the element
 					+ "<i class='material-icons " + (json[i].avgRating >= 2 ? "activeStar" : "") + "'>grade</i>"
@@ -207,7 +207,7 @@ function addRoutesToSelection(data) {
 	toursHoverEvent();
 
 	if($("#tourList").children().length == 0) {
-		sendStatusMessage("Keine Route gefunden, die den Kriterien entspricht", "red");
+		sendStatusMessage("Es konnte keine Route gefunden werden", "red");
 		$("#tourInfoPanel").css("display", "none");
 		$("#tours").css("display", "none");
 	} else {
@@ -345,7 +345,7 @@ function loadRouteToPanel(tour) {
 		if (v.id == tour) {
 			$.each(v.stops, function(i, v) {
 				$("#tourStops").append(
-						"<li class='infotext stopMarker' value='{\"coords\": ["+v.latitude+", "+ v.longitude+"]}'><i class=\"material-icons\">place</i><br><p class=\"inline\">" + v.name
+						"<li class='infotext stopMarker' value='{\"coords\": ["+v.latitude+", "+ v.longitude+"]}'><i class=\"material-icons centered\">place</i><br><p class=\"inline\">" + v.name
 						+ "</p></li><hr>"
 				);
 			});
@@ -771,7 +771,7 @@ function showUserRouteOnInfo(id) {
 	// Loads all the stop to the info panel stops list
 	$.each(tourObj.stops, function(i, v) {
 		$("#tourStops").append(
-				"<li class='infotext stopMarker' value='{\"coords\": ["+v.latitude+", "+ v.longitude+"]}'><i class=\"material-icons\">place</i><br><p class=\"inline\">" + v.name
+				"<li class='infotext stopMarker' value='{\"coords\": ["+v.latitude+", "+ v.longitude+"]}'><i class=\"material-icons centered\">place</i><br><p class=\"inline\">" + v.name
 				+ "</p></li><hr>");
 	});
 

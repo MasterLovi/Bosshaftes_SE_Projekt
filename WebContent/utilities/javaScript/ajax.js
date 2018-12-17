@@ -224,7 +224,7 @@ function getLocationFromDatabase(sType) {
 								"<i class='material-icons " + (json[i].avgRating >= 3 ? "activeStar" : "") + "'>grade</i>" +
 								"<i class='material-icons " + (json[i].avgRating >= 4 ? "activeStar" : "") + "'>grade</i>" +
 								"<i class='material-icons " + (json[i].avgRating >= 5 ? "activeStar" : "") + "'>grade</i>" +
-								"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup(" + marker._leaflet_id + "´, 'Location')\"><i class='material-icons'>info_outline</i></a>" +
+								"<a class=\"feedbackInfo\" onClick=\"showFeedbackPopup(" + marker._leaflet_id + ", 'Location')\"><i class='material-icons'>info_outline</i></a>" +
 							"</div>" +
 							"<p>Beschreibung</p>" +
 							"<p>"+json[i].description+"</p>");
