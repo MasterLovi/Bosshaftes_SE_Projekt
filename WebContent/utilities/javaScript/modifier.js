@@ -345,7 +345,7 @@ function loadRouteToPanel(tour) {
 		if (v.id == tour) {
 			$.each(v.stops, function(i, v) {
 				$("#tourStops").append(
-						"<li class='infotext stopMarker' value='{\"coords\": ["+v.latitude+", "+ v.longitude+"]}'><i class=\"material-icons\">place</i><p class=\"inline\">" + v.name
+						"<li class='infotext stopMarker' value='{\"coords\": ["+v.latitude+", "+ v.longitude+"]}'><i class=\"material-icons\">place</i><br><p class=\"inline\">" + v.name
 						+ "</p></li><hr>"
 				);
 			});
@@ -628,6 +628,7 @@ function loadUserRoutes(type) {
 	
 	if ($("#manageRouteForm select[name=routes]").val() == null) {
 		$("#editNameWrapper").html("");
+		$("#editDescriptionWrapper").html("");
 	}
 }
 
@@ -770,7 +771,7 @@ function showUserRouteOnInfo(id) {
 	// Loads all the stop to the info panel stops list
 	$.each(tourObj.stops, function(i, v) {
 		$("#tourStops").append(
-				"<li class='infotext stopMarker' value='{\"coords\": ["+v.latitude+", "+ v.longitude+"]}'><i class=\"material-icons\">place</i><p class=\"inline\">" + v.name
+				"<li class='infotext stopMarker' value='{\"coords\": ["+v.latitude+", "+ v.longitude+"]}'><i class=\"material-icons\">place</i><br><p class=\"inline\">" + v.name
 				+ "</p></li><hr>");
 	});
 

@@ -156,6 +156,7 @@ $(document).ready(function() {
 			$("#tours").css("display", "none");
 			if(permLayer != null){getMap().removeLayer(permLayer)};
 			removeCurrentRoute();
+			getUserRoutes($("#currentAction").val(), $("#userId").val());
 		} else {
 			$("#headerIconMiddle").html("chevron_left");
 			
@@ -173,6 +174,7 @@ $(document).ready(function() {
 			$("#tours").css("display", "none");
 			if(permLayer != null){getMap().removeLayer(permLayer)};
 			removeCurrentRoute();
+			getUserRoutes($("#currentAction").val(), $("#userId").val());
 		}
 	});
 	
@@ -194,6 +196,7 @@ $(document).ready(function() {
 		$("#tours").css("display", "none");
 		if(permLayer != null){getMap().removeLayer(permLayer)};
 		removeCurrentRoute();
+		getUserRoutes($("#currentAction").val(), $("#userId").val());
 	});
 	
 	$("#cultureText").click(function() {
@@ -214,6 +217,7 @@ $(document).ready(function() {
 		$("#tours").css("display", "none");
 		if(permLayer != null){getMap().removeLayer(permLayer)};
 		removeCurrentRoute();
+		getUserRoutes($("#currentAction").val(), $("#userId").val());
 	});
 })
 

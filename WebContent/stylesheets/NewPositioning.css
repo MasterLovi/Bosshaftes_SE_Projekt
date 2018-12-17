@@ -596,6 +596,8 @@ td .inputSubmit{
 
 .tourdata{
 	margin-right: 10px;
+	max-width: 170px;
+	overflow: hidden;
 }
 
 .tourIcon{
@@ -611,6 +613,7 @@ td .inputSubmit{
 	text-align: center;
 	text-align: -moz-center;
 	text-align: -webkit-center;
+	margin: auto;
 	width: 156px;
 	height: 80px;
 }

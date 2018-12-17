@@ -787,7 +787,7 @@ function addPointToRoute(locationId, routeId) {
 			success: function(response) {
 				// Unload + Status
 				unloadPopup();
-				sendStatusMessage("Ort wurder erfolgreich der Route hinzufügt.", "green");
+				sendStatusMessage("Ort wurde erfolgreich der Route hinzugefügt.", "green");
 			},
 			error: function(error) {
 				console.log(error);
@@ -858,7 +858,7 @@ function removeFromRoute(locationId, routeId) {
 			success: function(response) {
 				// Reload route information + Status
 				changeRouteInformation(routeId);
-				sendStatusMessage("Punkt erfolgreich aus Route gelöscht.", "green");
+				sendStatusMessage("Spot erfolgreich aus Route gelöscht.", "green");
 			},
 			error: function(error) {
 				console.log(error);
@@ -1058,7 +1058,7 @@ function updateRouteDescription() {
 		},
 		success: function(response) {
 			// Unload + Status
-			getUserRoutes($("#currentAction").val(), $("#userId").val())
+			getUserRoutes($("#currentAction").val(), $("#userId").val())<
 			loadUserRoutePopup();
 			sendStatusMessage("Beschreibung erfolgreich geändert", "green");
 		},
